@@ -333,8 +333,19 @@ export function InteractiveHandpan() {
   }
 
   return (
-    <div className="layout-designer space-y-6 fade-in">
-      <div className="designer-header glass-surface p-6 rounded-xl border border-white/10">
+    <div className="relative min-h-screen">
+      <div className="spline-container absolute top-0 left-0 w-full h-full -z-10">
+        <iframe
+          src="https://my.spline.design/ventura2copy-QlljPuDvQWfMiAnUXFOrCrsY"
+          frameBorder="0"
+          width="100%"
+          height="100%"
+          id="aura-spline"
+          title="3D Background"
+        />
+      </div>
+      <div className="layout-designer space-y-6 fade-in relative z-10">
+        <div className="designer-header glass-surface p-6 rounded-xl border border-white/10">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
             <h2 className="text-3xl font-bold tracking-tight">Interactive Handpan Layout Designer</h2>
@@ -1020,6 +1031,7 @@ export function InteractiveHandpan() {
           </Card>
         </div>
       )}
+      </div>
     </div>
   )
 }

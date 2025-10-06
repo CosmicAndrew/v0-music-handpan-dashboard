@@ -3,7 +3,7 @@
 import { useState } from "react"
 
 interface SettingsProps {
-  theme: "light" | "dark"
+  theme: "light" | "dark" | "system"
   setTheme: (theme: "light" | "dark" | "system") => void
 }
 
@@ -14,8 +14,18 @@ export function Settings({ theme, setTheme }: SettingsProps) {
   const [autoSave, setAutoSave] = useState(true)
 
   return (
-    <div className="min-h-screen p-6">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="relative min-h-screen p-6">
+      <div className="spline-container absolute top-0 left-0 w-full h-full -z-10">
+        <iframe
+          src="https://my.spline.design/ventura2copy-QlljPuDvQWfMiAnUXFOrCrsY"
+          frameBorder="0"
+          width="100%"
+          height="100%"
+          id="aura-spline"
+          title="3D Background"
+        />
+      </div>
+      <div className="max-w-6xl mx-auto space-y-6 relative z-10">
         {/* Header */}
         <div className="glass-elevated p-8 rounded-2xl">
           <h1

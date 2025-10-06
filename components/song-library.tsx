@@ -105,17 +105,16 @@ export function SongLibrary() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-full -z-10">
+      <div className="spline-container absolute top-0 left-0 w-full h-full -z-10">
         <iframe
           src="https://my.spline.design/ventura2copy-QlljPuDvQWfMiAnUXFOrCrsY"
           frameBorder="0"
           width="100%"
           height="100%"
           id="aura-spline"
-          className="w-full h-full"
+          title="3D Background"
         />
       </div>
-
       <div className="space-y-6 relative z-10">
         <div className="glass-surface-frosty p-8 rounded-2xl space-y-4 border-2 border-white/30">
           <div>
