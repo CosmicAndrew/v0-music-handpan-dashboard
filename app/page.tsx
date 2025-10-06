@@ -83,7 +83,6 @@ export default function Home() {
 
   return (
     <main className="app-container min-h-screen relative overflow-hidden" data-theme={resolvedTheme}>
-      {console.log("[v0] Rendering with theme:", resolvedTheme)}
       <div className="spline-container absolute top-0 left-0 w-full h-full -z-10">
         <iframe
           src="https://my.spline.design/ventura2copy-QlljPuDvQWfMiAnUXFOrCrsY"
