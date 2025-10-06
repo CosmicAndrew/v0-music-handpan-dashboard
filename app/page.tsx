@@ -2,7 +2,6 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import dynamic from "next/dynamic"
 import { InteractiveHandpan } from "@/components/interactive-handpan"
 import { SongLibrary } from "@/components/song-library"
 import { Devotions } from "@/components/devotions"
@@ -10,10 +9,6 @@ import { ExportProgress } from "@/components/export-progress"
 import { RecentlyPlayed } from "@/components/recently-played"
 import { Settings } from "@/components/settings"
 import { useTheme } from "@/hooks/use-theme"
-import { PWAManager } from "@/components/pwa-manager"
-
-// Only MobileNavigation needs to be client-only to prevent hydration mismatch
-const MobileNavigation = dynamic(() => import("@/components/mobile-navigation").then(mod => mod.MobileNavigation), { ssr: false })
 
 type Section = "dashboard" | "handpan" | "songs" | "devotions" | "settings" | "export"
 
@@ -88,6 +83,7 @@ export default function Home() {
 
   return (
     <main className="app-container min-h-screen relative overflow-hidden" data-theme={resolvedTheme}>
+      {console.log("[v0] Rendering with theme:", resolvedTheme)}
       <div className="spline-container absolute top-0 left-0 w-full h-full -z-10">
         <iframe
           src="https://my.spline.design/ventura2copy-QlljPuDvQWfMiAnUXFOrCrsY"
@@ -639,8 +635,6 @@ export default function Home() {
         {activeSection === "devotions" && <Devotions />}
         {activeSection === "export" && <ExportProgress />}
       </div>
-      <PWAManager />
-      <MobileNavigation activeSection={activeSection} setActiveSection={setActiveSection} />
     </main>
   )
 }

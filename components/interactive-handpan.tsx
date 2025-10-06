@@ -2,11 +2,9 @@
 
 import { useState, useEffect, useRef } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Volume2, VolumeX, Play, Pause } from "lucide-react"
+import { Volume2, VolumeX, Play, Pause } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
-import { mobileAudio, touchOptimizer, hapticFeedback } from "@/lib/mobile-audio"
-import * as Tone from "tone"
 
 // Layout: clockwise from 6:00 position: A3, Bb3, D4, F4, A4, C5, G4, E4, C4
 const handpanNotes = {
@@ -129,9 +127,8 @@ export function InteractiveHandpan() {
   const [recordedNotes, setRecordedNotes] = useState<Array<{ note: string; time: number }>>([])
   const recordingStartTimeRef = useRef<number>(0)
 
-  const synthRef = useRef<Tone.Synth | null>(null)
+  const audioContextRef = useRef<AudioContext | null>(null)
   const patternTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const [isAudioReady, setIsAudioReady] = useState(false)
 
   const centerX = 400
   const centerY = 400
@@ -141,56 +138,14 @@ export function InteractiveHandpan() {
   const nonagonPositions = calculateNonagonPositions(centerX, centerY, outerRadius)
 
   useEffect(() => {
-    const initAudio = async () => {
-      try {
-        await mobileAudio.initializeAudioContext()
-        
-        // Initialize Tone.js synth for 432Hz handpan sound
-        synthRef.current = new Tone.Synth({
-          oscillator: { type: "sine" },
-          envelope: {
-            attack: 0.01,
-            decay: 0.3,
-            sustain: 0.4,
-            release: 2
-          }
-        }).toDestination()
+    if (typeof window !== "undefined") {
+      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)()
 
-        // Handle first user interaction for mobile audio unlock
-        const handleUserGesture = async () => {
-          await mobileAudio.unlockAudioContext()
-          await mobileAudio.preloadHandpanSamples()
-          setIsAudioReady(true)
-          document.removeEventListener("touchstart", handleUserGesture)
-          document.removeEventListener("click", handleUserGesture)
-        }
-
-        document.addEventListener("touchstart", handleUserGesture, { once: true })
-        document.addEventListener("click", handleUserGesture, { once: true })
-
-        const savedVolume = localStorage.getItem("handpan-volume")
-        if (savedVolume) setVolume(Number.parseInt(savedVolume))
-
-        // Handle visibility changes for mobile
-        const handleVisibility = () => {
-          mobileAudio.handleVisibilityChange(!document.hidden)
-        }
-        document.addEventListener("visibilitychange", handleVisibility)
-
-        return () => {
-          document.removeEventListener("visibilitychange", handleVisibility)
-        }
-      } catch (error) {
-        console.error("[Handpan] Failed to initialize audio:", error)
-      }
+      const savedVolume = localStorage.getItem("handpan-volume")
+      if (savedVolume) setVolume(Number.parseInt(savedVolume))
     }
-
-    initAudio()
-
     return () => {
-      if (synthRef.current) {
-        synthRef.current.dispose()
-      }
+      audioContextRef.current?.close()
       if (patternTimeoutRef.current) clearTimeout(patternTimeoutRef.current)
     }
   }, [])
@@ -200,23 +155,30 @@ export function InteractiveHandpan() {
   }, [volume])
 
   const playNote = (frequency: number, note: string, x?: number, y?: number) => {
-    if (isMuted || !isAudioReady || !synthRef.current) return
+    if (isMuted || !audioContextRef.current) return
 
-    // Play haptic feedback on mobile
-    hapticFeedback.playNoteStrike('medium')
+    const ctx = audioContextRef.current
+    const oscillator = ctx.createOscillator()
+    const gainNode = ctx.createGain()
 
-    // Use Tone.js for better mobile audio performance
+    const reverbGain = ctx.createGain()
+    reverbGain.gain.value = reverb / 100
+
+    oscillator.connect(gainNode)
+    gainNode.connect(reverbGain)
+    reverbGain.connect(ctx.destination)
+
+    oscillator.frequency.value = frequency
+    oscillator.type = "sine"
+
     const adjustedVolume = (volume / 100) * 0.3
-    Tone.Master.volume.value = -20 + (volume / 100) * 20 // -20dB to 0dB range
+    const sustainTime = (sustain / 100) * 3 + 1 // 1-4 seconds based on sustain
 
-    // Configure synth for this note
-    synthRef.current.envelope.sustain = sustain / 100
-    synthRef.current.envelope.release = (sustain / 100) * 3 + 1
+    gainNode.gain.setValueAtTime(adjustedVolume, ctx.currentTime)
+    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + sustainTime)
 
-    // Play the note with 432Hz tuning
-    synthRef.current.triggerAttackRelease(frequency, "8n")
-    
-    const sustainTime = (sustain / 100) * 3 + 1
+    oscillator.start(ctx.currentTime)
+    oscillator.stop(ctx.currentTime + sustainTime)
 
     setActiveNote(note)
     setTimeout(() => setActiveNote(null), sustainTime * 1000)
@@ -303,14 +265,14 @@ export function InteractiveHandpan() {
   }
 
   const playChord = (chordKey: string) => {
-    if (isMuted || !isAudioReady || !synthRef.current) return
+    if (isMuted || !audioContextRef.current) return
 
     const chord = chordDefinitions[chordKey]
     if (!chord) return
 
     console.log("[v0] Playing chord:", chordKey, "with notes:", chord.notes)
-    
-    hapticFeedback.playNoteStrike('heavy')
+
+    const ctx = audioContextRef.current
     setActiveChord(chordKey)
     setHighlightedNotes(chord.notes)
 
@@ -371,19 +333,8 @@ export function InteractiveHandpan() {
   }
 
   return (
-    <div className="relative min-h-screen">
-      <div className="spline-container absolute top-0 left-0 w-full h-full -z-10">
-        <iframe
-          src="https://my.spline.design/ventura2copy-QlljPuDvQWfMiAnUXFOrCrsY"
-          frameBorder="0"
-          width="100%"
-          height="100%"
-          id="aura-spline"
-          title="3D Background"
-        />
-      </div>
-      <div className="layout-designer space-y-6 fade-in relative z-10">
-        <div className="designer-header glass-surface p-6 rounded-xl border border-white/10">
+    <div className="layout-designer space-y-6 fade-in">
+      <div className="designer-header glass-surface p-6 rounded-xl border border-white/10">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
             <h2 className="text-3xl font-bold tracking-tight">Interactive Handpan Layout Designer</h2>
@@ -1069,7 +1020,6 @@ export function InteractiveHandpan() {
           </Card>
         </div>
       )}
-      </div>
     </div>
   )
 }

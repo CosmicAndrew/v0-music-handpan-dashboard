@@ -22,18 +22,8 @@ export function ExportProgress() {
   ]
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center px-4 py-12">
-      <div className="spline-container absolute top-0 left-0 w-full h-full -z-10">
-        <iframe
-          src="https://my.spline.design/ventura2copy-QlljPuDvQWfMiAnUXFOrCrsY"
-          frameBorder="0"
-          width="100%"
-          height="100%"
-          id="aura-spline"
-          title="3D Background"
-        />
-      </div>
-      <div className="max-w-6xl w-full space-y-8 relative z-10">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12">
+      <div className="max-w-6xl w-full space-y-8">
         {/* Header */}
         <div className="text-center space-y-4 fade-up">
           <Badge variant="outline" className="glass-surface border-white/20 text-white/90">
