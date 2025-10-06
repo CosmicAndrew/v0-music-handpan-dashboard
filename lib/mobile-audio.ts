@@ -1,5 +1,3 @@
-'use client'
-
 // Mobile Audio Optimization for iOS Safari and Android Chrome
 // Handles unlock, low-latency setup, and 432Hz tuning preservation
 
