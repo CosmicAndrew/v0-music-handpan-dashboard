@@ -357,8 +357,13 @@ export function InteractiveHandpan() {
               🎯 Practice Mode
               <span className="text-xs block">Learn & Record</span>
             </Button>
-            <Button variant="outline" size="icon" onClick={() => setIsMuted(!isMuted)} className="glass-button">
-              {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setIsMuted(!isMuted)}
+              className="glass-button bg-white/90 hover:bg-white"
+            >
+              {isMuted ? <VolumeX className="w-4 h-4 text-gray-900" /> : <Volume2 className="w-4 h-4 text-gray-900" />}
             </Button>
           </div>
         </div>
@@ -704,8 +709,8 @@ export function InteractiveHandpan() {
                       color: activeChord === "F" ? "white" : "#1f2937",
                     }}
                   >
-                    <span className="font-bold text-base">F</span>
-                    <span className="text-[10px] opacity-70">Major</span>
+                    <span className="font-bold text-lg">F</span>
+                    <span className="text-xs text-muted-foreground">Major</span>
                   </Button>
                   <Button
                     onClick={() => playChord("C")}
@@ -722,8 +727,8 @@ export function InteractiveHandpan() {
                       color: activeChord === "C" ? "white" : "#1f2937",
                     }}
                   >
-                    <span className="font-bold text-base">C</span>
-                    <span className="text-[10px] opacity-70">Major</span>
+                    <span className="font-bold text-lg">C</span>
+                    <span className="text-xs text-muted-foreground">Major</span>
                   </Button>
                   <Button
                     onClick={() => playChord("Bb")}
@@ -740,8 +745,8 @@ export function InteractiveHandpan() {
                       color: activeChord === "Bb" ? "white" : "#1f2937",
                     }}
                   >
-                    <span className="font-bold text-base">Bb</span>
-                    <span className="text-[10px] opacity-70">Major</span>
+                    <span className="font-bold text-lg">Bb</span>
+                    <span className="text-xs text-muted-foreground">Major</span>
                   </Button>
 
                   {/* Row 2 - Minor Chords */}
@@ -760,8 +765,8 @@ export function InteractiveHandpan() {
                       color: activeChord === "G" ? "white" : "#1f2937",
                     }}
                   >
-                    <span className="font-bold text-base">G</span>
-                    <span className="text-[10px] opacity-70">Major</span>
+                    <span className="font-bold text-lg">G</span>
+                    <span className="text-xs text-muted-foreground">Major</span>
                   </Button>
                   <Button
                     onClick={() => playChord("Dm")}
@@ -778,8 +783,8 @@ export function InteractiveHandpan() {
                       color: activeChord === "Dm" ? "white" : "#1f2937",
                     }}
                   >
-                    <span className="font-bold text-base">Dm</span>
-                    <span className="text-[10px] opacity-70">Minor</span>
+                    <span className="font-bold text-lg">Dm</span>
+                    <span className="text-xs text-muted-foreground">Minor</span>
                   </Button>
                   <Button
                     onClick={() => playChord("Am")}
@@ -796,8 +801,8 @@ export function InteractiveHandpan() {
                       color: activeChord === "Am" ? "white" : "#1f2937",
                     }}
                   >
-                    <span className="font-bold text-base">Am</span>
-                    <span className="text-[10px] opacity-70">Minor</span>
+                    <span className="font-bold text-lg">Am</span>
+                    <span className="text-xs text-muted-foreground">Minor</span>
                   </Button>
 
                   {/* Row 3 - Seventh Chords */}
@@ -816,8 +821,8 @@ export function InteractiveHandpan() {
                       color: activeChord === "Dm7" ? "white" : "#1f2937",
                     }}
                   >
-                    <span className="font-bold text-base">Dm7</span>
-                    <span className="text-[10px] opacity-70">Min 7</span>
+                    <span className="font-bold text-lg">Dm7</span>
+                    <span className="text-xs text-muted-foreground">Min 7</span>
                   </Button>
                   <Button
                     onClick={() => playChord("Fmaj7")}
@@ -835,8 +840,8 @@ export function InteractiveHandpan() {
                       color: activeChord === "Fmaj7" ? "white" : "#1f2937",
                     }}
                   >
-                    <span className="font-bold text-base">Fmaj7</span>
-                    <span className="text-[10px] opacity-70">Maj 7</span>
+                    <span className="font-bold text-lg">Fmaj7</span>
+                    <span className="text-xs text-muted-foreground">Maj 7</span>
                   </Button>
                   <Button
                     onClick={() => playChord("Bbmaj7")}
@@ -854,8 +859,8 @@ export function InteractiveHandpan() {
                       color: activeChord === "Bbmaj7" ? "white" : "#1f2937",
                     }}
                   >
-                    <span className="font-bold text-base">Bbmaj7</span>
-                    <span className="text-[10px] opacity-70">Maj 7</span>
+                    <span className="font-bold text-lg">Bbmaj7</span>
+                    <span className="text-xs text-muted-foreground">Maj 7</span>
                   </Button>
 
                   {/* Row 4 - Extended Chords */}
@@ -875,8 +880,8 @@ export function InteractiveHandpan() {
                       color: activeChord === "Cmaj7" ? "white" : "#1f2937",
                     }}
                   >
-                    <span className="font-bold text-base">Cmaj7</span>
-                    <span className="text-[10px] opacity-70">Maj 7</span>
+                    <span className="font-bold text-lg">Cmaj7</span>
+                    <span className="text-xs text-muted-foreground">Maj 7</span>
                   </Button>
                   <Button
                     onClick={() => playChord("Fsus2")}
@@ -894,8 +899,8 @@ export function InteractiveHandpan() {
                       color: activeChord === "Fsus2" ? "white" : "#1f2937",
                     }}
                   >
-                    <span className="font-bold text-base">Fsus2</span>
-                    <span className="text-[10px] opacity-70">Sus 2</span>
+                    <span className="font-bold text-lg">Fsus2</span>
+                    <span className="text-xs text-muted-foreground">Sus 2</span>
                   </Button>
                   <Button
                     onClick={() => playChord("Csus4")}
@@ -913,8 +918,8 @@ export function InteractiveHandpan() {
                       color: activeChord === "Csus4" ? "white" : "#1f2937",
                     }}
                   >
-                    <span className="font-bold text-base">Csus4</span>
-                    <span className="text-[10px] opacity-70">Sus 4</span>
+                    <span className="font-bold text-lg">Csus4</span>
+                    <span className="text-xs text-muted-foreground">Sus 4</span>
                   </Button>
 
                   {/* Row 5 - Power Chords & Extended */}
@@ -933,8 +938,8 @@ export function InteractiveHandpan() {
                       color: activeChord === "Dm9" ? "white" : "#1f2937",
                     }}
                   >
-                    <span className="font-bold text-base">Dm9</span>
-                    <span className="text-[10px] opacity-70">Min 9</span>
+                    <span className="font-bold text-lg">Dm9</span>
+                    <span className="text-xs text-muted-foreground">Min 9</span>
                   </Button>
                   <Button
                     onClick={() => playChord("D5")}
@@ -951,8 +956,8 @@ export function InteractiveHandpan() {
                       color: activeChord === "D5" ? "white" : "#1f2937",
                     }}
                   >
-                    <span className="font-bold text-base">D5</span>
-                    <span className="text-[10px] opacity-70">Power</span>
+                    <span className="font-bold text-lg">D5</span>
+                    <span className="text-xs text-muted-foreground">Power</span>
                   </Button>
                   <Button
                     onClick={() => playChord("A5")}
@@ -969,8 +974,8 @@ export function InteractiveHandpan() {
                       color: activeChord === "A5" ? "white" : "#1f2937",
                     }}
                   >
-                    <span className="font-bold text-base">A5</span>
-                    <span className="text-[10px] opacity-70">Power</span>
+                    <span className="font-bold text-lg">A5</span>
+                    <span className="text-xs text-muted-foreground">Power</span>
                   </Button>
                 </div>
               </div>

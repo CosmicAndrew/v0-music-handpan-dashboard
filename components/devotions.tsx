@@ -75,14 +75,14 @@ export function Devotions() {
                   <p className="italic text-foreground leading-relaxed">{devotion.verse}</p>
                 </div>
 
-                <div>
-                  <h4 className="font-semibold mb-2">Reflection</h4>
-                  <p className="text-muted-foreground leading-relaxed">{devotion.reflection}</p>
+                <div className="p-4 rounded-lg bg-background/60 backdrop-blur-sm">
+                  <h4 className="font-semibold mb-2 text-foreground">Reflection</h4>
+                  <p className="text-foreground/90 leading-relaxed">{devotion.reflection}</p>
                 </div>
 
-                <div>
-                  <h4 className="font-semibold mb-2">Application</h4>
-                  <p className="text-muted-foreground leading-relaxed">{devotion.application}</p>
+                <div className="p-4 rounded-lg bg-background/60 backdrop-blur-sm">
+                  <h4 className="font-semibold mb-2 text-foreground">Application</h4>
+                  <p className="text-foreground/90 leading-relaxed">{devotion.application}</p>
                 </div>
               </CardContent>
             </Card>
