@@ -5,7 +5,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Volume2, VolumeX, Play, Pause } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
-import { MobileAudioManager } from "@/lib/mobile-audio"
 
 // Layout: clockwise from 6:00 position: A3, Bb3, D4, F4, A4, C5, G4, E4, C4
 const handpanNotes = {
@@ -130,8 +129,6 @@ export function InteractiveHandpan() {
 
   const audioContextRef = useRef<AudioContext | null>(null)
   const patternTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const [audioReady, setAudioReady] = useState(false)
-  const mobileAudioManager = useRef<MobileAudioManager>(MobileAudioManager.getInstance())
 
   const centerX = 400
   const centerY = 400
@@ -150,42 +147,15 @@ export function InteractiveHandpan() {
     return () => {
       audioContextRef.current?.close()
       if (patternTimeoutRef.current) clearTimeout(patternTimeoutRef.current)
-      mobileAudioManager.current.cleanup()
     }
   }, [])
-  
-  // Initialize audio on first user interaction (required for iOS)
-  const initializeAudioOnGesture = async () => {
-    if (!audioReady && MobileAudioManager.isMobileDevice()) {
-      const success = await mobileAudioManager.current.initializeOnUserGesture()
-      
-      // CRITICAL: Also resume the handpan's own AudioContext (iOS requirement)
-      if (success && audioContextRef.current && audioContextRef.current.state === 'suspended') {
-        try {
-          await audioContextRef.current.resume()
-          console.log("[Mobile Audio] Handpan AudioContext resumed successfully")
-        } catch (error) {
-          console.error("[Mobile Audio] Failed to resume handpan AudioContext:", error)
-        }
-      }
-      
-      if (success) {
-        setAudioReady(true)
-      }
-    }
-  }
 
   useEffect(() => {
     localStorage.setItem("handpan-volume", volume.toString())
   }, [volume])
 
-  const playNote = async (frequency: number, note: string, x?: number, y?: number) => {
+  const playNote = (frequency: number, note: string, x?: number, y?: number) => {
     if (isMuted || !audioContextRef.current) return
-
-    // Initialize audio on mobile if not already done
-    if (MobileAudioManager.isMobileDevice() && !audioReady) {
-      await initializeAudioOnGesture()
-    }
 
     const ctx = audioContextRef.current
     const oscillator = ctx.createOscillator()

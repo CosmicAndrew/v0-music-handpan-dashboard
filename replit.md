@@ -16,27 +16,6 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-### October 6, 2025 - iOS Mobile App Conversion (Latest)
-- **Converted web app to native iOS mobile app** using Capacitor framework
-- Configured Next.js for static export with extended timeout (180s) to support mobile packaging
-- Installed Capacitor CLI and iOS platform with app metadata (com.handpan.worship)
-- **Created mobile audio lifecycle manager** (`lib/mobile-audio.ts`) for iOS Web Audio API compliance:
-  - Handles iOS user gesture requirement for audio playback
-  - Manages AudioContext resumption on visibility changes
-  - Provides mobile device detection utilities
-- **Fixed critical iOS audio issue**: Both Tone.js context AND handpan's AudioContext now properly resume on user gesture
-- Added mobile viewport configuration and iOS web app metadata in `app/layout.tsx`
-- Created custom 404 page (`app/not-found.tsx`) for App Router compatibility
-- Successfully built static export and synced to iOS platform (`ios/` directory)
-- **App Store ready**: Created comprehensive deployment guide in `IOS_APP_GUIDE.md`
-- Mobile app tested and verified with successful build output
-
-**Technical Notes**:
-- Used Capacitor wrapper approach (not React Native) to preserve existing Next.js/Tone.js/Spline functionality
-- Mobile audio manager ensures audio plays after first user tap (iOS requirement)
-- Build process takes ~200 seconds due to app complexity
-- iOS project location: `ios/App/App.xcworkspace` (requires Mac with Xcode for final steps)
-
 ### October 6, 2025 - Vercel to Replit Migration & Spline 3D Integration
 - Migrated project from Vercel to Replit hosting environment
 - Updated package.json scripts to bind Next.js to port 5000 and host 0.0.0.0 for Replit compatibility

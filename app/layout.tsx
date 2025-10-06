@@ -14,25 +14,10 @@ const inter = Inter({
 const geistSans = GeistSans
 
 export const metadata: Metadata = {
-  title: "Handpan Worship",
+  title: "Handpan Worship Suite - 432 Hz D Kurd 10",
   description:
     "Interactive handpan worship experience with YataoPan D Kurd 10 tuned to 432 Hz. Includes worship songs, devotional content, and authentic handpan playing interface.",
   generator: "v0.app",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "black-translucent",
-    title: "Handpan Worship",
-  },
-  formatDetection: {
-    telephone: false,
-  },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-    viewportFit: "cover",
-  },
 }
 
 export default function RootLayout({

@@ -6,15 +6,9 @@
     "build": "next build",
     "dev": "next dev -p 5000 -H 0.0.0.0",
     "lint": "next lint",
-    "start": "next start -p 5000 -H 0.0.0.0",
-    "export": "next build",
-    "mobile:sync": "pnpm run export && npx cap sync",
-    "mobile:ios": "pnpm run mobile:sync && npx cap open ios"
+    "start": "next start -p 5000 -H 0.0.0.0"
   },
   "dependencies": {
-    "@capacitor/cli": "^7.4.3",
-    "@capacitor/core": "^7.4.3",
-    "@capacitor/ios": "^7.4.3",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "1.2.2",
     "@radix-ui/react-alert-dialog": "1.1.4",
