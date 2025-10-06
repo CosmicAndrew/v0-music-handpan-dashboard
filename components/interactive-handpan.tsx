@@ -6,6 +6,8 @@ import { Volume2, VolumeX, Play, Pause } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { MobileAudioManager } from "@/lib/mobile-audio"
+import { audioEngine } from "@/lib/audio-engine"
+import * as Tone from "tone"
 
 // Layout: clockwise from 6:00 position: A3, Bb3, D4, F4, A4, C5, G4, E4, C4
 const handpanNotes = {
@@ -128,10 +130,10 @@ export function InteractiveHandpan() {
   const [recordedNotes, setRecordedNotes] = useState<Array<{ note: string; time: number }>>([])
   const recordingStartTimeRef = useRef<number>(0)
 
-  const audioContextRef = useRef<AudioContext | null>(null)
   const patternTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [audioReady, setAudioReady] = useState(false)
   const mobileAudioManager = useRef<MobileAudioManager>(MobileAudioManager.getInstance())
+  const [isInitialized, setIsInitialized] = useState(false)
 
   const centerX = 400
   const centerY = 400
@@ -141,14 +143,25 @@ export function InteractiveHandpan() {
   const nonagonPositions = calculateNonagonPositions(centerX, centerY, outerRadius)
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)()
-
-      const savedVolume = localStorage.getItem("handpan-volume")
-      if (savedVolume) setVolume(Number.parseInt(savedVolume))
+    const initAudio = async () => {
+      try {
+        await audioEngine.initialize()
+        setIsInitialized(true)
+        
+        const savedVolume = localStorage.getItem("handpan-volume")
+        if (savedVolume) {
+          const vol = Number.parseInt(savedVolume)
+          setVolume(vol)
+          audioEngine.setVolume(vol / 100 * -20)
+        }
+      } catch (error) {
+        console.error("[v0] Failed to initialize audio:", error)
+      }
     }
+
+    initAudio()
+
     return () => {
-      audioContextRef.current?.close()
       if (patternTimeoutRef.current) clearTimeout(patternTimeoutRef.current)
       mobileAudioManager.current.cleanup()
     }
@@ -159,56 +172,36 @@ export function InteractiveHandpan() {
     if (!audioReady && MobileAudioManager.isMobileDevice()) {
       const success = await mobileAudioManager.current.initializeOnUserGesture()
       
-      // CRITICAL: Also resume the handpan's own AudioContext (iOS requirement)
-      if (success && audioContextRef.current && audioContextRef.current.state === 'suspended') {
-        try {
-          await audioContextRef.current.resume()
-          console.log("[Mobile Audio] Handpan AudioContext resumed successfully")
-        } catch (error) {
-          console.error("[Mobile Audio] Failed to resume handpan AudioContext:", error)
-        }
-      }
-      
       if (success) {
         setAudioReady(true)
+        if (!isInitialized) {
+          await audioEngine.initialize()
+          setIsInitialized(true)
+        }
       }
     }
   }
 
   useEffect(() => {
     localStorage.setItem("handpan-volume", volume.toString())
+    audioEngine.setVolume(volume / 100 * -20)
   }, [volume])
 
   const playNote = async (frequency: number, note: string, x?: number, y?: number) => {
-    if (isMuted || !audioContextRef.current) return
+    if (isMuted || !isInitialized) return
 
     // Initialize audio on mobile if not already done
     if (MobileAudioManager.isMobileDevice() && !audioReady) {
       await initializeAudioOnGesture()
     }
 
-    const ctx = audioContextRef.current
-    const oscillator = ctx.createOscillator()
-    const gainNode = ctx.createGain()
-
-    const reverbGain = ctx.createGain()
-    reverbGain.gain.value = reverb / 100
-
-    oscillator.connect(gainNode)
-    gainNode.connect(reverbGain)
-    reverbGain.connect(ctx.destination)
-
-    oscillator.frequency.value = frequency
-    oscillator.type = "sine"
-
-    const adjustedVolume = (volume / 100) * 0.3
-    const sustainTime = (sustain / 100) * 3 + 1 // 1-4 seconds based on sustain
-
-    gainNode.gain.setValueAtTime(adjustedVolume, ctx.currentTime)
-    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + sustainTime)
-
-    oscillator.start(ctx.currentTime)
-    oscillator.stop(ctx.currentTime + sustainTime)
+    const sustainTime = (sustain / 100) * 3 + 1
+    
+    try {
+      audioEngine.playNote(frequency, "2n")
+    } catch (error) {
+      console.error("[v0] Failed to play note:", error)
+    }
 
     setActiveNote(note)
     setTimeout(() => setActiveNote(null), sustainTime * 1000)
@@ -232,9 +225,7 @@ export function InteractiveHandpan() {
       "at frequency:",
       frequency,
       "Hz",
-      "with reverb:",
-      reverb,
-      "sustain:",
+      "with sustain:",
       sustain,
     )
   }
@@ -275,7 +266,7 @@ export function InteractiveHandpan() {
   }
 
   const playScale = () => {
-    if (isMuted || !audioContextRef.current) return
+    if (isMuted || !isInitialized) return
 
     const scaleNotes = [
       handpanNotes.center,
@@ -295,45 +286,35 @@ export function InteractiveHandpan() {
   }
 
   const playChord = (chordKey: string) => {
-    if (isMuted || !audioContextRef.current) return
+    if (isMuted || !isInitialized) return
 
-    const chord = chordDefinitions[chordKey]
+    const chord = chordDefinitions[chordKey as keyof typeof chordDefinitions]
     if (!chord) return
 
     console.log("[v0] Playing chord:", chordKey, "with notes:", chord.notes)
 
-    const ctx = audioContextRef.current
     setActiveChord(chordKey)
     setHighlightedNotes(chord.notes)
 
-    chord.notes.forEach((noteName, index) => {
-      setTimeout(() => {
-        const noteData =
-          noteName === handpanNotes.center.note
-            ? handpanNotes.center
-            : handpanNotes.outerRing.find((n) => n.note === noteName)
+    const frequencies: number[] = []
+    
+    chord.notes.forEach((noteName) => {
+      const noteData =
+        noteName === handpanNotes.center.note
+          ? handpanNotes.center
+          : handpanNotes.outerRing.find((n) => n.note === noteName)
 
-        if (noteData) {
-          const oscillator = ctx.createOscillator()
-          const gainNode = ctx.createGain()
-
-          oscillator.connect(gainNode)
-          gainNode.connect(ctx.destination)
-
-          oscillator.frequency.value = noteData.frequency
-          oscillator.type = "sine"
-
-          const adjustedVolume = (volume / 100) * 0.25
-          gainNode.gain.setValueAtTime(adjustedVolume, ctx.currentTime)
-          gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 3)
-
-          oscillator.start(ctx.currentTime)
-          oscillator.stop(ctx.currentTime + 3)
-
-          console.log("[v0] Chord note:", noteName, "at", noteData.frequency, "Hz")
-        }
-      }, index * 150)
+      if (noteData) {
+        frequencies.push(noteData.frequency)
+        console.log("[v0] Chord note:", noteName, "at", noteData.frequency, "Hz")
+      }
     })
+
+    try {
+      audioEngine.playChord(frequencies, "2n")
+    } catch (error) {
+      console.error("[v0] Failed to play chord:", error)
+    }
 
     setTimeout(() => {
       setActiveChord(null)
@@ -512,8 +493,8 @@ export function InteractiveHandpan() {
                     r={centerRadius}
                     fill={
                       isNoteHighlighted(handpanNotes.center.note)
-                        ? activeChord && chordDefinitions[activeChord]
-                          ? chordDefinitions[activeChord].color
+                        ? activeChord && chordDefinitions[activeChord as keyof typeof chordDefinitions]
+                          ? chordDefinitions[activeChord as keyof typeof chordDefinitions].color
                           : "#fbbf24"
                         : activeNote === handpanNotes.center.note
                           ? "#fbbf24"
@@ -572,8 +553,8 @@ export function InteractiveHandpan() {
                         r={noteRadius}
                         fill={
                           isHighlighted
-                            ? activeChord && chordDefinitions[activeChord]
-                              ? chordDefinitions[activeChord].color
+                            ? activeChord && chordDefinitions[activeChord as keyof typeof chordDefinitions]
+                              ? chordDefinitions[activeChord as keyof typeof chordDefinitions].color
                               : "#fbbf24"
                             : activeNote === noteData.note
                               ? "#fbbf24"
