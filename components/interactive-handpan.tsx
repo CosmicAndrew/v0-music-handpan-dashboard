@@ -2,9 +2,11 @@
 
 import { useState, useEffect, useRef } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Volume2, VolumeX, Play, Pause } from "@/components/icons"
+import { Volume2, VolumeX, Play, Pause } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
+import { mobileAudio, touchOptimizer, hapticFeedback } from "@/lib/mobile-audio"
+import * as Tone from "tone"
 
 // Layout: clockwise from 6:00 position: A3, Bb3, D4, F4, A4, C5, G4, E4, C4
 const handpanNotes = {
@@ -127,8 +129,9 @@ export function InteractiveHandpan() {
   const [recordedNotes, setRecordedNotes] = useState<Array<{ note: string; time: number }>>([])
   const recordingStartTimeRef = useRef<number>(0)
 
-  const audioContextRef = useRef<AudioContext | null>(null)
+  const synthRef = useRef<Tone.Synth | null>(null)
   const patternTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const [isAudioReady, setIsAudioReady] = useState(false)
 
   const centerX = 400
   const centerY = 400
@@ -138,14 +141,56 @@ export function InteractiveHandpan() {
   const nonagonPositions = calculateNonagonPositions(centerX, centerY, outerRadius)
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)()
+    const initAudio = async () => {
+      try {
+        await mobileAudio.initializeAudioContext()
+        
+        // Initialize Tone.js synth for 432Hz handpan sound
+        synthRef.current = new Tone.Synth({
+          oscillator: { type: "sine" },
+          envelope: {
+            attack: 0.01,
+            decay: 0.3,
+            sustain: 0.4,
+            release: 2
+          }
+        }).toDestination()
 
-      const savedVolume = localStorage.getItem("handpan-volume")
-      if (savedVolume) setVolume(Number.parseInt(savedVolume))
+        // Handle first user interaction for mobile audio unlock
+        const handleUserGesture = async () => {
+          await mobileAudio.unlockAudioContext()
+          await mobileAudio.preloadHandpanSamples()
+          setIsAudioReady(true)
+          document.removeEventListener("touchstart", handleUserGesture)
+          document.removeEventListener("click", handleUserGesture)
+        }
+
+        document.addEventListener("touchstart", handleUserGesture, { once: true })
+        document.addEventListener("click", handleUserGesture, { once: true })
+
+        const savedVolume = localStorage.getItem("handpan-volume")
+        if (savedVolume) setVolume(Number.parseInt(savedVolume))
+
+        // Handle visibility changes for mobile
+        const handleVisibility = () => {
+          mobileAudio.handleVisibilityChange(!document.hidden)
+        }
+        document.addEventListener("visibilitychange", handleVisibility)
+
+        return () => {
+          document.removeEventListener("visibilitychange", handleVisibility)
+        }
+      } catch (error) {
+        console.error("[Handpan] Failed to initialize audio:", error)
+      }
     }
+
+    initAudio()
+
     return () => {
-      audioContextRef.current?.close()
+      if (synthRef.current) {
+        synthRef.current.dispose()
+      }
       if (patternTimeoutRef.current) clearTimeout(patternTimeoutRef.current)
     }
   }, [])
@@ -155,30 +200,23 @@ export function InteractiveHandpan() {
   }, [volume])
 
   const playNote = (frequency: number, note: string, x?: number, y?: number) => {
-    if (isMuted || !audioContextRef.current) return
+    if (isMuted || !isAudioReady || !synthRef.current) return
 
-    const ctx = audioContextRef.current
-    const oscillator = ctx.createOscillator()
-    const gainNode = ctx.createGain()
+    // Play haptic feedback on mobile
+    hapticFeedback.playNoteStrike('medium')
 
-    const reverbGain = ctx.createGain()
-    reverbGain.gain.value = reverb / 100
-
-    oscillator.connect(gainNode)
-    gainNode.connect(reverbGain)
-    reverbGain.connect(ctx.destination)
-
-    oscillator.frequency.value = frequency
-    oscillator.type = "sine"
-
+    // Use Tone.js for better mobile audio performance
     const adjustedVolume = (volume / 100) * 0.3
-    const sustainTime = (sustain / 100) * 3 + 1 // 1-4 seconds based on sustain
+    Tone.Master.volume.value = -20 + (volume / 100) * 20 // -20dB to 0dB range
 
-    gainNode.gain.setValueAtTime(adjustedVolume, ctx.currentTime)
-    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + sustainTime)
+    // Configure synth for this note
+    synthRef.current.envelope.sustain = sustain / 100
+    synthRef.current.envelope.release = (sustain / 100) * 3 + 1
 
-    oscillator.start(ctx.currentTime)
-    oscillator.stop(ctx.currentTime + sustainTime)
+    // Play the note with 432Hz tuning
+    synthRef.current.triggerAttackRelease(frequency, "8n")
+    
+    const sustainTime = (sustain / 100) * 3 + 1
 
     setActiveNote(note)
     setTimeout(() => setActiveNote(null), sustainTime * 1000)
@@ -265,14 +303,14 @@ export function InteractiveHandpan() {
   }
 
   const playChord = (chordKey: string) => {
-    if (isMuted || !audioContextRef.current) return
+    if (isMuted || !isAudioReady || !synthRef.current) return
 
     const chord = chordDefinitions[chordKey]
     if (!chord) return
 
     console.log("[v0] Playing chord:", chordKey, "with notes:", chord.notes)
-
-    const ctx = audioContextRef.current
+    
+    hapticFeedback.playNoteStrike('heavy')
     setActiveChord(chordKey)
     setHighlightedNotes(chord.notes)
 
