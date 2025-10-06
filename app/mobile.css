@@ -1,0 +1,416 @@
+/* Mobile-First Optimization Styles */
+
+/* Ensure proper viewport on all mobile browsers */
+@supports (padding: env(safe-area-inset-top)) {
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 60px); /* Account for bottom nav */
+  }
+  
+  .safe-area-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .safe-area-right {
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Touch-optimized button sizes */
+.touch-target {
+  min-height: 44px; /* iOS recommended minimum */
+  min-width: 44px;
+}
+
+.touch-target-large {
+  min-height: 60px; /* For musical notes - larger for precision */
+  min-width: 60px;
+}
+
+/* Disable tap highlight on interactive elements */
+.no-tap-highlight {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Handpan mobile optimization */
+@media (max-width: 768px) {
+  .handpan-container {
+    width: 100vw !important;
+    height: auto !important;
+    max-width: 100vw !important;
+    padding: 0 !important;
+  }
+  
+  .handpan-svg {
+    width: 90vw !important;
+    height: 90vw !important;
+    max-width: 400px !important;
+    max-height: 400px !important;
+    margin: 0 auto;
+  }
+  
+  /* Larger touch targets for handpan notes */
+  .handpan-note {
+    stroke-width: 3px !important;
+    cursor: pointer;
+  }
+  
+  .handpan-note-touch-area {
+    pointer-events: all;
+    fill: transparent;
+    stroke: transparent;
+    stroke-width: 20px; /* Invisible larger touch area */
+  }
+}
+
+/* Bottom navigation optimization for thumb reach */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.5rem;
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+
+@media (min-width: 769px) {
+  .bottom-nav {
+    display: none;
+  }
+}
+
+/* Quick access chord buttons for mobile */
+.chord-quick-access {
+  position: fixed;
+  bottom: 70px;
+  left: 0;
+  right: 0;
+  z-index: 35;
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.chord-quick-access::-webkit-scrollbar {
+  display: none;
+}
+
+.chord-quick-button {
+  flex-shrink: 0;
+  min-width: 60px;
+  height: 48px;
+  border-radius: 24px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--foreground);
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.chord-quick-button:active {
+  transform: scale(0.95);
+  background: var(--primary);
+}
+
+/* Swipe gesture indicators */
+.swipe-indicator {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 50;
+}
+
+.swipe-indicator.left {
+  left: 4px;
+}
+
+.swipe-indicator.right {
+  right: 4px;
+}
+
+.swipeable:hover .swipe-indicator,
+.swipeable:active .swipe-indicator {
+  opacity: 1;
+}
+
+/* Haptic feedback animation */
+@keyframes haptic-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(139, 69, 19, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(139, 69, 19, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(139, 69, 19, 0);
+  }
+}
+
+.haptic-feedback {
+  animation: haptic-pulse 0.3s ease-out;
+}
+
+/* Ripple effect for touch feedback */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 69, 19, 0.3), transparent);
+  transform: scale(0);
+  animation: ripple 0.6s ease-out;
+  pointer-events: none;
+}
+
+/* Mobile-optimized scrolling */
+.smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent scroll during swipe gestures */
+.prevent-scroll {
+  overflow: hidden !important;
+  touch-action: none !important;
+}
+
+/* Loading skeleton for mobile */
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 25%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+/* Sacred geometry loader */
+@keyframes sacred-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.sacred-loader {
+  width: 60px;
+  height: 60px;
+  position: relative;
+  animation: sacred-rotate 2s linear infinite;
+}
+
+.sacred-loader::before,
+.sacred-loader::after {
+  content: '';
+  position: absolute;
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+.sacred-loader::before {
+  width: 100%;
+  height: 100%;
+  animation: sacred-rotate 3s linear reverse infinite;
+}
+
+.sacred-loader::after {
+  width: 70%;
+  height: 70%;
+  top: 15%;
+  left: 15%;
+  animation: sacred-rotate 1.5s linear infinite;
+}
+
+/* Mobile-specific text sizing */
+@media (max-width: 640px) {
+  .mobile-text-sm {
+    font-size: 0.875rem !important;
+  }
+  
+  .mobile-text-base {
+    font-size: 1rem !important;
+  }
+  
+  .mobile-text-lg {
+    font-size: 1.125rem !important;
+  }
+  
+  .mobile-text-xl {
+    font-size: 1.25rem !important;
+  }
+  
+  .mobile-text-2xl {
+    font-size: 1.5rem !important;
+  }
+}
+
+/* Pull to refresh indicator */
+.pull-to-refresh {
+  position: fixed;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  background: var(--glass-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: top 0.3s;
+  z-index: 100;
+}
+
+.pull-to-refresh.visible {
+  top: 20px;
+}
+
+.pull-to-refresh.refreshing {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: translateX(-50%) rotate(0deg);
+  }
+  to {
+    transform: translateX(-50%) rotate(360deg);
+  }
+}
+
+/* Optimize for different mobile screen sizes */
+@media (max-width: 375px) {
+  /* iPhone SE, older iPhones */
+  .handpan-svg {
+    width: 85vw !important;
+    height: 85vw !important;
+  }
+  
+  .chord-quick-button {
+    min-width: 55px;
+    height: 44px;
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 376px) and (max-width: 414px) {
+  /* Standard modern phones */
+  .handpan-svg {
+    width: 88vw !important;
+    height: 88vw !important;
+  }
+}
+
+@media (min-width: 415px) and (max-width: 768px) {
+  /* Large phones and small tablets */
+  .handpan-svg {
+    width: 85vw !important;
+    height: 85vw !important;
+    max-width: 450px !important;
+    max-height: 450px !important;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media (orientation: landscape) and (max-width: 896px) {
+  .handpan-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .handpan-svg {
+    width: 60vh !important;
+    height: 60vh !important;
+  }
+  
+  .bottom-nav {
+    padding: 0.25rem;
+  }
+  
+  .chord-quick-access {
+    bottom: 50px;
+  }
+}
+
+/* Performance optimizations */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.hardware-accelerate {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .smooth-scroll {
+    scroll-behavior: auto;
+  }
+}
