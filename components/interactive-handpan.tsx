@@ -6,8 +6,6 @@ import { Volume2, VolumeX, Play, Pause } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { MobileAudioManager } from "@/lib/mobile-audio"
-import { audioEngine } from "@/lib/audio-engine"
-import * as Tone from "tone"
 
 // Layout: clockwise from 6:00 position: A3, Bb3, D4, F4, A4, C5, G4, E4, C4
 const handpanNotes = {
@@ -59,29 +57,29 @@ const worshipPatterns = [
 
 const chordDefinitions = {
   // Major Chords
-  F: { note: "F4", frequency: 342.338, name: "F Major", color: "#10b981", notes: ["F4", "A4", "C5"] },
-  C: { note: "C4", frequency: 257.432, name: "C Major", color: "#3b82f6", notes: ["C4", "E4", "G4"] },
-  Bb: { note: "Bb3", frequency: 228.874, name: "Bb Major", color: "#8b5cf6", notes: ["Bb3", "D4", "F4"] },
-  G: { note: "G4", frequency: 384.444, name: "G Major", color: "#f59e0b", notes: ["G4", "D4", "A4"] },
+  F: { note: "F4", frequency: 342.338, name: "F Major", color: "#10b981" },
+  C: { note: "C4", frequency: 257.432, name: "C Major", color: "#3b82f6" },
+  Bb: { note: "Bb3", frequency: 228.874, name: "Bb Major", color: "#8b5cf6" },
+  G: { note: "G4", frequency: 384.444, name: "G Major", color: "#f59e0b" },
 
   // Minor Chords
-  Dm: { note: "D4", frequency: 288.0, name: "D Minor", color: "#ef4444", notes: ["D4", "F4", "A4"] },
-  Dm7: { note: "D4", frequency: 288.0, name: "D Minor 7", color: "#dc2626", notes: ["D4", "F4", "A4", "C5"] },
-  Am: { note: "A3", frequency: 216.0, name: "A Minor", color: "#ec4899", notes: ["A3", "C4", "E4"] },
+  Dm: { note: "D4", frequency: 288.0, name: "D Minor", color: "#ef4444" },
+  Dm7: { note: "D4", frequency: 288.0, name: "D Minor 7", color: "#dc2626" }, // Note: F4, A3, C4 would be the notes. This entry might need adjustment based on actual note mapping.
+  Am: { note: "A3", frequency: 216.0, name: "A Minor", color: "#ec4899" },
 
   // Seventh Chords
-  Fmaj7: { note: "F4", frequency: 342.338, name: "F Major 7", color: "#14b8a6", notes: ["F4", "A4", "C5", "E4"] },
-  Cmaj7: { note: "C4", frequency: 257.432, name: "C Major 7", color: "#06b6d4", notes: ["C4", "E4", "G4", "D4"] },
-  Bbmaj7: { note: "Bb3", frequency: 228.874, name: "Bb Major 7", color: "#a855f7", notes: ["Bb3", "D4", "F4", "A4"] },
+  Fmaj7: { note: "F4", frequency: 342.338, name: "F Major 7", color: "#14b8a6" },
+  Cmaj7: { note: "C4", frequency: 257.432, name: "C Major 7", color: "#06b6d4" },
+  Bbmaj7: { note: "Bb3", frequency: 228.874, name: "Bb Major 7", color: "#a855f7" },
 
   // Extended Chords
-  Fsus2: { note: "F4", frequency: 342.338, name: "F Suspended 2", color: "#22c55e", notes: ["F4", "G4", "C5"] },
-  Csus4: { note: "C4", frequency: 257.432, name: "C Suspended 4", color: "#3b82f6", notes: ["C4", "F4", "G4"] },
-  Dm9: { note: "D4", frequency: 288.0, name: "D Minor 9", color: "#f43f5e", notes: ["D4", "F4", "A4", "C5", "E4"] },
+  Fsus2: { note: "F4", frequency: 342.338, name: "F Suspended 2", color: "#22c55e" },
+  Csus4: { note: "C4", frequency: 257.432, name: "C Suspended 4", color: "#3b82f6" },
+  Dm9: { note: "D4", frequency: 288.0, name: "D Minor 9", color: "#f43f5e" },
 
   // Atmospheric Chords
-  D5: { note: "D3", frequency: 144.548, name: "D Power Chord", color: "#6366f1", notes: ["D3", "D4", "A4"] },
-  A5: { note: "A3", frequency: 216.0, name: "A Power Chord", color: "#8b5cf6", notes: ["A3", "A4", "E4"] },
+  D5: { note: "D3", frequency: 144.548, name: "D Power Chord", color: "#6366f1" },
+  A5: { note: "A3", frequency: 216.0, name: "A Power Chord", color: "#8b5cf6" },
 }
 
 const meditationModes = {
@@ -130,10 +128,10 @@ export function InteractiveHandpan() {
   const [recordedNotes, setRecordedNotes] = useState<Array<{ note: string; time: number }>>([])
   const recordingStartTimeRef = useRef<number>(0)
 
+  const audioContextRef = useRef<AudioContext | null>(null)
   const patternTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [audioReady, setAudioReady] = useState(false)
   const mobileAudioManager = useRef<MobileAudioManager>(MobileAudioManager.getInstance())
-  const [isInitialized, setIsInitialized] = useState(false)
 
   const centerX = 400
   const centerY = 400
@@ -143,25 +141,14 @@ export function InteractiveHandpan() {
   const nonagonPositions = calculateNonagonPositions(centerX, centerY, outerRadius)
 
   useEffect(() => {
-    const initAudio = async () => {
-      try {
-        await audioEngine.initialize()
-        setIsInitialized(true)
-        
-        const savedVolume = localStorage.getItem("handpan-volume")
-        if (savedVolume) {
-          const vol = Number.parseInt(savedVolume)
-          setVolume(vol)
-          audioEngine.setVolume(vol / 100 * -20)
-        }
-      } catch (error) {
-        console.error("[v0] Failed to initialize audio:", error)
-      }
+    if (typeof window !== "undefined") {
+      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)()
+
+      const savedVolume = localStorage.getItem("handpan-volume")
+      if (savedVolume) setVolume(Number.parseInt(savedVolume))
     }
-
-    initAudio()
-
     return () => {
+      audioContextRef.current?.close()
       if (patternTimeoutRef.current) clearTimeout(patternTimeoutRef.current)
       mobileAudioManager.current.cleanup()
     }
@@ -172,36 +159,56 @@ export function InteractiveHandpan() {
     if (!audioReady && MobileAudioManager.isMobileDevice()) {
       const success = await mobileAudioManager.current.initializeOnUserGesture()
       
+      // CRITICAL: Also resume the handpan's own AudioContext (iOS requirement)
+      if (success && audioContextRef.current && audioContextRef.current.state === 'suspended') {
+        try {
+          await audioContextRef.current.resume()
+          console.log("[Mobile Audio] Handpan AudioContext resumed successfully")
+        } catch (error) {
+          console.error("[Mobile Audio] Failed to resume handpan AudioContext:", error)
+        }
+      }
+      
       if (success) {
         setAudioReady(true)
-        if (!isInitialized) {
-          await audioEngine.initialize()
-          setIsInitialized(true)
-        }
       }
     }
   }
 
   useEffect(() => {
     localStorage.setItem("handpan-volume", volume.toString())
-    audioEngine.setVolume(volume / 100 * -20)
   }, [volume])
 
   const playNote = async (frequency: number, note: string, x?: number, y?: number) => {
-    if (isMuted || !isInitialized) return
+    if (isMuted || !audioContextRef.current) return
 
     // Initialize audio on mobile if not already done
     if (MobileAudioManager.isMobileDevice() && !audioReady) {
       await initializeAudioOnGesture()
     }
 
-    const sustainTime = (sustain / 100) * 3 + 1
-    
-    try {
-      audioEngine.playNote(frequency, "2n")
-    } catch (error) {
-      console.error("[v0] Failed to play note:", error)
-    }
+    const ctx = audioContextRef.current
+    const oscillator = ctx.createOscillator()
+    const gainNode = ctx.createGain()
+
+    const reverbGain = ctx.createGain()
+    reverbGain.gain.value = reverb / 100
+
+    oscillator.connect(gainNode)
+    gainNode.connect(reverbGain)
+    reverbGain.connect(ctx.destination)
+
+    oscillator.frequency.value = frequency
+    oscillator.type = "sine"
+
+    const adjustedVolume = (volume / 100) * 0.3
+    const sustainTime = (sustain / 100) * 3 + 1 // 1-4 seconds based on sustain
+
+    gainNode.gain.setValueAtTime(adjustedVolume, ctx.currentTime)
+    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + sustainTime)
+
+    oscillator.start(ctx.currentTime)
+    oscillator.stop(ctx.currentTime + sustainTime)
 
     setActiveNote(note)
     setTimeout(() => setActiveNote(null), sustainTime * 1000)
@@ -225,7 +232,9 @@ export function InteractiveHandpan() {
       "at frequency:",
       frequency,
       "Hz",
-      "with sustain:",
+      "with reverb:",
+      reverb,
+      "sustain:",
       sustain,
     )
   }
@@ -266,7 +275,7 @@ export function InteractiveHandpan() {
   }
 
   const playScale = () => {
-    if (isMuted || !isInitialized) return
+    if (isMuted || !audioContextRef.current) return
 
     const scaleNotes = [
       handpanNotes.center,
@@ -286,32 +295,45 @@ export function InteractiveHandpan() {
   }
 
   const playChord = (chordKey: string) => {
-    if (isMuted || !isInitialized) return
+    if (isMuted || !audioContextRef.current) return
 
-    const chord = chordDefinitions[chordKey as keyof typeof chordDefinitions]
+    const chord = chordDefinitions[chordKey]
     if (!chord) return
 
     console.log("[v0] Playing chord:", chordKey, "with notes:", chord.notes)
 
+    const ctx = audioContextRef.current
     setActiveChord(chordKey)
     setHighlightedNotes(chord.notes)
 
-    chord.notes.forEach((noteName) => {
-      const noteData =
-        noteName === handpanNotes.center.note
-          ? handpanNotes.center
-          : handpanNotes.outerRing.find((n) => n.note === noteName)
+    chord.notes.forEach((noteName, index) => {
+      setTimeout(() => {
+        const noteData =
+          noteName === handpanNotes.center.note
+            ? handpanNotes.center
+            : handpanNotes.outerRing.find((n) => n.note === noteName)
 
-      if (noteData) {
-        console.log("[v0] Chord note:", noteName, "at", noteData.frequency, "Hz")
-      }
+        if (noteData) {
+          const oscillator = ctx.createOscillator()
+          const gainNode = ctx.createGain()
+
+          oscillator.connect(gainNode)
+          gainNode.connect(ctx.destination)
+
+          oscillator.frequency.value = noteData.frequency
+          oscillator.type = "sine"
+
+          const adjustedVolume = (volume / 100) * 0.25
+          gainNode.gain.setValueAtTime(adjustedVolume, ctx.currentTime)
+          gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 3)
+
+          oscillator.start(ctx.currentTime)
+          oscillator.stop(ctx.currentTime + 3)
+
+          console.log("[v0] Chord note:", noteName, "at", noteData.frequency, "Hz")
+        }
+      }, index * 150)
     })
-
-    try {
-      audioEngine.playChord(chord.notes, "2n")
-    } catch (error) {
-      console.error("[v0] Failed to play chord:", error)
-    }
 
     setTimeout(() => {
       setActiveChord(null)
@@ -490,8 +512,8 @@ export function InteractiveHandpan() {
                     r={centerRadius}
                     fill={
                       isNoteHighlighted(handpanNotes.center.note)
-                        ? activeChord && chordDefinitions[activeChord as keyof typeof chordDefinitions]
-                          ? chordDefinitions[activeChord as keyof typeof chordDefinitions].color
+                        ? activeChord && chordDefinitions[activeChord]
+                          ? chordDefinitions[activeChord].color
                           : "#fbbf24"
                         : activeNote === handpanNotes.center.note
                           ? "#fbbf24"
@@ -550,8 +572,8 @@ export function InteractiveHandpan() {
                         r={noteRadius}
                         fill={
                           isHighlighted
-                            ? activeChord && chordDefinitions[activeChord as keyof typeof chordDefinitions]
-                              ? chordDefinitions[activeChord as keyof typeof chordDefinitions].color
+                            ? activeChord && chordDefinitions[activeChord]
+                              ? chordDefinitions[activeChord].color
                               : "#fbbf24"
                             : activeNote === noteData.note
                               ? "#fbbf24"
