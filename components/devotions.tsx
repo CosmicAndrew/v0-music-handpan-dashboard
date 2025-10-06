@@ -41,11 +41,22 @@ const devotions = [
 
 export function Devotions() {
   return (
-    <div className="space-y-6">
-      <div className="fade-up">
-        <h1 className="text-3xl font-bold">Righteousness Devotions</h1>
-        <p className="text-muted-foreground">Meditations on the finished work of Christ</p>
+    <div className="relative min-h-screen space-y-6">
+      <div className="spline-container absolute top-0 left-0 w-full h-full -z-10">
+        <iframe
+          src="https://my.spline.design/ventura2copy-QlljPuDvQWfMiAnUXFOrCrsY"
+          frameBorder="0"
+          width="100%"
+          height="100%"
+          id="aura-spline"
+          title="3D Background"
+        />
       </div>
+      <div className="relative z-10 space-y-6">
+        <div className="fade-up">
+          <h1 className="text-3xl font-bold">Righteousness Devotions</h1>
+          <p className="text-muted-foreground">Meditations on the finished work of Christ</p>
+        </div>
 
       <div className="grid gap-6">
         {devotions.map((devotion, index) => {
@@ -112,6 +123,7 @@ export function Devotions() {
           </p>
         </CardContent>
       </Card>
+      </div>
     </div>
   )
 }

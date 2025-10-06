@@ -1563,24 +1563,4 @@
   }
 }
 
-/* Responsive design improvements */
-@media (max-width: 1024px) {
-  .grid.lg\\:grid-cols-2 {
-    grid-template-columns: 1fr;
-  }
-  .grid.lg\\:grid-cols-\\[300px_1fr_280px\\] {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 640px) {
-  .hidden.sm\\:block {
-    display: none;
-  }
-  .hidden.sm\\:inline {
-    display: none;
-  }
-  .text-4xl.sm\\:text-5xl {
-    font-size: 2.25rem;
-  }
-}
+/* Responsive design improvements handled by Tailwind */
