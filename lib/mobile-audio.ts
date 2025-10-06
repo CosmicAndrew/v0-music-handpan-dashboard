@@ -1,3 +1,5 @@
+'use client'
+
 // Mobile Audio Optimization for iOS Safari and Android Chrome
 // Handles unlock, low-latency setup, and 432Hz tuning preservation
 
@@ -49,7 +51,10 @@ export class MobileAudioEngine {
         // Set up iOS audio session category (via Web Audio API hints)
         if ('audioSession' in navigator) {
           try {
-            await (navigator as any).audioSession.type = 'playback'
+            const navWithSession = navigator as any
+            if (navWithSession.audioSession) {
+              navWithSession.audioSession.type = 'playback'
+            }
           } catch (e) {
             console.log('[Mobile Audio] AudioSession API not available')
           }
@@ -298,12 +303,14 @@ export class HapticFeedback {
   private canVibrate: boolean = false
 
   constructor() {
-    this.canVibrate = 'vibrate' in navigator
+    if (typeof window !== 'undefined' && 'navigator' in window) {
+      this.canVibrate = 'vibrate' in navigator
+    }
   }
 
   // Play haptic feedback for note strike
   playNoteStrike(intensity: 'light' | 'medium' | 'heavy' = 'medium'): void {
-    if (!this.canVibrate) return
+    if (!this.canVibrate || typeof window === 'undefined') return
 
     const patterns = {
       light: [10],
@@ -316,24 +323,103 @@ export class HapticFeedback {
 
   // Play success feedback
   playSuccess(): void {
-    if (!this.canVibrate) return
+    if (!this.canVibrate || typeof window === 'undefined') return
     navigator.vibrate([50, 30, 50])
   }
 
   // Play error feedback
   playError(): void {
-    if (!this.canVibrate) return
+    if (!this.canVibrate || typeof window === 'undefined') return
     navigator.vibrate([100, 50, 100])
   }
 
   // Stop all vibration
   stop(): void {
-    if (!this.canVibrate) return
+    if (!this.canVibrate || typeof window === 'undefined') return
     navigator.vibrate(0)
   }
 }
 
-// Export singleton instances
-export const mobileAudio = MobileAudioEngine.getInstance()
-export const touchOptimizer = new TouchOptimizer()
-export const hapticFeedback = new HapticFeedback()
+// Export lazy-loaded singleton instances (prevents SSR issues)
+let mobileAudioInstance: MobileAudioEngine | null = null
+let touchOptimizerInstance: TouchOptimizer | null = null
+let hapticFeedbackInstance: HapticFeedback | null = null
+
+export const mobileAudio = {
+  initializeAudioContext: () => {
+    if (typeof window === 'undefined') return Promise.resolve()
+    if (!mobileAudioInstance) mobileAudioInstance = MobileAudioEngine.getInstance()
+    return mobileAudioInstance.initializeAudioContext()
+  },
+  unlockAudioContext: () => {
+    if (typeof window === 'undefined') return Promise.resolve()
+    if (!mobileAudioInstance) mobileAudioInstance = MobileAudioEngine.getInstance()
+    return mobileAudioInstance.unlockAudioContext()
+  },
+  preloadHandpanSamples: () => {
+    if (typeof window === 'undefined') return Promise.resolve()
+    if (!mobileAudioInstance) mobileAudioInstance = MobileAudioEngine.getInstance()
+    return mobileAudioInstance.preloadHandpanSamples()
+  },
+  handleVisibilityChange: (isVisible: boolean) => {
+    if (typeof window === 'undefined') return
+    if (!mobileAudioInstance) mobileAudioInstance = MobileAudioEngine.getInstance()
+    return mobileAudioInstance.handleVisibilityChange(isVisible)
+  },
+  getContext: () => {
+    if (typeof window === 'undefined') return null
+    if (!mobileAudioInstance) mobileAudioInstance = MobileAudioEngine.getInstance()
+    return mobileAudioInstance.getContext()
+  },
+  isReady: () => {
+    if (typeof window === 'undefined') return false
+    if (!mobileAudioInstance) mobileAudioInstance = MobileAudioEngine.getInstance()
+    return mobileAudioInstance.isReady()
+  }
+}
+
+export const touchOptimizer = {
+  startTouch: (noteId: string, velocity?: number) => {
+    if (typeof window === 'undefined') return
+    if (!touchOptimizerInstance) touchOptimizerInstance = new TouchOptimizer()
+    return touchOptimizerInstance.startTouch(noteId, velocity)
+  },
+  endTouch: (noteId: string) => {
+    if (typeof window === 'undefined') return 0
+    if (!touchOptimizerInstance) touchOptimizerInstance = new TouchOptimizer()
+    return touchOptimizerInstance.endTouch(noteId)
+  },
+  getActiveTouches: () => {
+    if (typeof window === 'undefined') return []
+    if (!touchOptimizerInstance) touchOptimizerInstance = new TouchOptimizer()
+    return touchOptimizerInstance.getActiveTouches()
+  },
+  clearAll: () => {
+    if (typeof window === 'undefined') return
+    if (!touchOptimizerInstance) touchOptimizerInstance = new TouchOptimizer()
+    return touchOptimizerInstance.clearAll()
+  }
+}
+
+export const hapticFeedback = {
+  playNoteStrike: (intensity: 'light' | 'medium' | 'heavy' = 'medium') => {
+    if (typeof window === 'undefined') return
+    if (!hapticFeedbackInstance) hapticFeedbackInstance = new HapticFeedback()
+    return hapticFeedbackInstance.playNoteStrike(intensity)
+  },
+  playSuccess: () => {
+    if (typeof window === 'undefined') return
+    if (!hapticFeedbackInstance) hapticFeedbackInstance = new HapticFeedback()
+    return hapticFeedbackInstance.playSuccess()
+  },
+  playError: () => {
+    if (typeof window === 'undefined') return
+    if (!hapticFeedbackInstance) hapticFeedbackInstance = new HapticFeedback()
+    return hapticFeedbackInstance.playError()
+  },
+  stop: () => {
+    if (typeof window === 'undefined') return
+    if (!hapticFeedbackInstance) hapticFeedbackInstance = new HapticFeedback()
+    return hapticFeedbackInstance.stop()
+  }
+}
