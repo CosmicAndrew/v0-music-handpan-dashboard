@@ -17,21 +17,18 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       title: "Way Maker",
       artist: "Leeland",
       key: "F",
-      youtubeId: "eK_cqO0hdRs", // Verified embeddable version
       tier: "Perfect Match",
     },
     {
       title: "Build My Life",
       artist: "Pat Barrett",
       key: "F",
-      youtubeId: "K9jnbS-vpRc", // Verified embeddable
       tier: "Perfect Match",
     },
     {
       title: "Goodness of God",
       artist: "Bethel Music",
       key: "Dm",
-      youtubeId: "x3bfa3DZ8JM", // Verified embeddable
       tier: "Perfect Match",
     },
   ]
@@ -81,27 +78,72 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       </div>
 
       <div className="space-y-4 fade-up" style={{ animationDelay: "0.1s" }}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
+              <Clock className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold">Recently Played</h2>
+              <p className="text-sm text-muted-foreground">Your recent worship sessions</p>
+            </div>
+          </div>
+          <Button variant="ghost" size="sm" onClick={() => onNavigate("songs")} className="hidden md:flex">
+            View All
+          </Button>
+        </div>
+        <Card className="glass-card">
+          <CardContent className="p-6">
+            <div className="space-y-3">
+              {recentlyPlayed.map((track, index) => (
+                <div
+                  key={track.id}
+                  className="flex items-center gap-4 p-4 rounded-xl hover:bg-muted/50 transition-all cursor-pointer group border border-transparent hover:border-border/50 fade-up"
+                  style={{ animationDelay: `${0.15 + index * 0.05}s` }}
+                >
+                  <div className="relative flex-shrink-0">
+                    <img
+                      src={track.image || "/placeholder.svg"}
+                      alt={track.title}
+                      className="w-16 h-16 rounded-lg object-cover shadow-md"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-lg transform scale-0 group-hover:scale-100 transition-transform">
+                        <Play className="w-5 h-5 text-gray-900 ml-0.5" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-semibold truncate group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                      {track.title}
+                    </h4>
+                    <p className="text-sm text-muted-foreground truncate">{track.artist}</p>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <p className="text-sm font-medium tabular-nums">{track.duration}</p>
+                    <p className="text-xs text-muted-foreground">{track.playedAt}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <Button
+              variant="outline"
+              className="w-full mt-6 bg-transparent hover:bg-muted/50"
+              onClick={() => onNavigate("songs")}
+            >
+              View All Songs
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="space-y-4 fade-up" style={{ animationDelay: "0.3s" }}>
         <h2 className="text-2xl font-bold">Featured Worship Songs</h2>
         <div className="grid md:grid-cols-3 gap-6">
           {featuredSongs.map((song, index) => (
-            <Card
-              key={song.youtubeId}
-              className="song-card fade-up"
-              style={{ animationDelay: `${0.2 + index * 0.1}s` }}
-            >
-              <div className="aspect-video bg-muted relative video-thumbnail">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src={`https://www.youtube.com/embed/${song.youtubeId}?rel=0&modestbranding=1&controls=1`}
-                  title={song.title}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  className="w-full h-full rounded-t-lg"
-                  loading="lazy"
-                />
+            <Card key={song.title} className="song-card fade-up" style={{ animationDelay: `${0.4 + index * 0.1}s` }}>
+              <div className="aspect-video bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 relative flex items-center justify-center">
+                <Music className="w-16 h-16 text-amber-600 dark:text-amber-400 opacity-50" />
               </div>
               <CardContent className="p-4">
                 <h3 className="font-bold">{song.title}</h3>
@@ -179,48 +221,6 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           </CardContent>
         </Card>
       </div>
-
-      <Card className="glass-card">
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Clock className="w-5 h-5 text-amber-500" />
-            <CardTitle>Recently Played</CardTitle>
-          </div>
-          <CardDescription>Your recent worship sessions</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {recentlyPlayed.map((track) => (
-              <div
-                key={track.id}
-                className="flex items-center gap-4 p-3 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer group"
-              >
-                <div className="relative flex-shrink-0">
-                  <img
-                    src={track.image || "/placeholder.svg"}
-                    alt={track.title}
-                    className="w-16 h-16 rounded-md object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-md flex items-center justify-center">
-                    <Play className="w-6 h-6 text-white" />
-                  </div>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h4 className="font-medium truncate">{track.title}</h4>
-                  <p className="text-sm text-muted-foreground truncate">{track.artist}</p>
-                </div>
-                <div className="text-right flex-shrink-0">
-                  <p className="text-sm font-medium">{track.duration}</p>
-                  <p className="text-xs text-muted-foreground">{track.playedAt}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <Button variant="outline" className="w-full mt-4 bg-transparent" onClick={() => onNavigate("songs")}>
-            View All Songs
-          </Button>
-        </CardContent>
-      </Card>
 
       <Card className="glass-card">
         <CardHeader>

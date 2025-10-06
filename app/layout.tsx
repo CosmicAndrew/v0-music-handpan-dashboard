@@ -1,6 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import { GeistSans } from "geist/font/sans"
 import "./globals.css"
 import { Suspense } from "react"
 
@@ -9,6 +10,8 @@ const inter = Inter({
   variable: "--font-inter",
   display: "swap",
 })
+
+const geistSans = GeistSans
 
 export const metadata: Metadata = {
   title: "Handpan Worship Suite - 432 Hz D Kurd 10",
@@ -23,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${geistSans.variable} ${inter.variable}`}>
       <body className="font-sans antialiased">
         <Suspense fallback={null}>{children}</Suspense>
       </body>
