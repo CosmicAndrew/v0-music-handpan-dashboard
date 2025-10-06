@@ -222,6 +222,69 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         </Card>
       </div>
 
+      <Card className="glass-card bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-950/30 dark:to-indigo-950/30 fade-up" style={{ animationDelay: "0.8s" }}>
+        <CardHeader>
+          <CardTitle>What God Prefers in Worship</CardTitle>
+          <CardDescription>Biblical principles from the heart of worship</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            God hasn't left us clueless about how He wants to be worshiped. Scripture reveals His preferences—not as arbitrary rules, but as invitations into deeper intimacy with Him.
+          </p>
+          
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="space-y-3">
+              <div className="p-3 rounded-lg bg-background/50">
+                <h4 className="font-semibold text-sm mb-1">Full Devotion</h4>
+                <p className="text-xs text-muted-foreground">Worship with your whole heart (2 Chronicles 15:12-15, 1 Kings 8:61)</p>
+              </div>
+              
+              <div className="p-3 rounded-lg bg-background/50">
+                <h4 className="font-semibold text-sm mb-1">Faith & Confidence</h4>
+                <p className="text-xs text-muted-foreground">Without faith it's impossible to please Him (Hebrews 11:6, 4:16)</p>
+              </div>
+              
+              <div className="p-3 rounded-lg bg-background/50">
+                <h4 className="font-semibold text-sm mb-1">Pure Hearts</h4>
+                <p className="text-xs text-muted-foreground">Clean hands and pure hearts (Psalm 24:1-6, 1 John 1:9)</p>
+              </div>
+              
+              <div className="p-3 rounded-lg bg-background/50">
+                <h4 className="font-semibold text-sm mb-1">Unity & Humility</h4>
+                <p className="text-xs text-muted-foreground">Worship together in harmony (Psalm 133, James 4:6-8)</p>
+              </div>
+            </div>
+            
+            <div className="space-y-3">
+              <div className="p-3 rounded-lg bg-background/50">
+                <h4 className="font-semibold text-sm mb-1">Singing & Testimony</h4>
+                <p className="text-xs text-muted-foreground">Declare His goodness! (Psalm 96:3, Revelation 12:11)</p>
+              </div>
+              
+              <div className="p-3 rounded-lg bg-background/50">
+                <h4 className="font-semibold text-sm mb-1">Instruments & Volume</h4>
+                <p className="text-xs text-muted-foreground">Play skillfully with loud praise (Psalm 33:3, 150:3-6)</p>
+              </div>
+              
+              <div className="p-3 rounded-lg bg-background/50">
+                <h4 className="font-semibold text-sm mb-1">Honoring Jesus</h4>
+                <p className="text-xs text-muted-foreground">Worship the Lamb! (Revelation 5, Matthew 17:5)</p>
+              </div>
+              
+              <div className="p-3 rounded-lg bg-background/50">
+                <h4 className="font-semibold text-sm mb-1">Calling Him "Holy"</h4>
+                <p className="text-xs text-muted-foreground">Day and night they never cease (Revelation 4:8)</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 border-l-4 border-amber-500">
+            <p className="text-sm font-semibold mb-2">Most Important:</p>
+            <p className="text-sm italic">"The Father is seeking such people to worship him in spirit and truth." - John 4:23-24</p>
+          </div>
+        </CardContent>
+      </Card>
+
       <Card className="glass-card">
         <CardHeader>
           <CardTitle>About This Instrument</CardTitle>
