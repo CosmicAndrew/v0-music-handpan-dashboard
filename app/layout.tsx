@@ -48,12 +48,12 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/icon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/icon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/icon-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-16x16.svg", sizes: "16x16", type: "image/svg+xml" },
+      { url: "/icon-32x32.svg", sizes: "32x32", type: "image/svg+xml" },
+      { url: "/icon-192x192.svg", sizes: "192x192", type: "image/svg+xml" },
     ],
     apple: [
-      { url: "/apple-icon-180x180.png", sizes: "180x180", type: "image/png" },
+      { url: "/apple-icon-180x180.svg", sizes: "180x180", type: "image/svg+xml" },
     ],
   },
 }
