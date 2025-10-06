@@ -296,8 +296,6 @@ export function InteractiveHandpan() {
     setActiveChord(chordKey)
     setHighlightedNotes(chord.notes)
 
-    const frequencies: number[] = []
-    
     chord.notes.forEach((noteName) => {
       const noteData =
         noteName === handpanNotes.center.note
@@ -305,13 +303,12 @@ export function InteractiveHandpan() {
           : handpanNotes.outerRing.find((n) => n.note === noteName)
 
       if (noteData) {
-        frequencies.push(noteData.frequency)
         console.log("[v0] Chord note:", noteName, "at", noteData.frequency, "Hz")
       }
     })
 
     try {
-      audioEngine.playChord(frequencies, "2n")
+      audioEngine.playChord(chord.notes, "2n")
     } catch (error) {
       console.error("[v0] Failed to play chord:", error)
     }
