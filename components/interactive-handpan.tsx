@@ -57,29 +57,29 @@ const worshipPatterns = [
 
 const chordDefinitions = {
   // Major Chords
-  F: { note: "F4", frequency: 342.338, name: "F Major", color: "#10b981" },
-  C: { note: "C4", frequency: 257.432, name: "C Major", color: "#3b82f6" },
-  Bb: { note: "Bb3", frequency: 228.874, name: "Bb Major", color: "#8b5cf6" },
-  G: { note: "G4", frequency: 384.444, name: "G Major", color: "#f59e0b" },
+  F: { note: "F4", frequency: 342.338, name: "F Major", color: "#10b981", notes: ["F4", "A4", "C5"] },
+  C: { note: "C4", frequency: 257.432, name: "C Major", color: "#3b82f6", notes: ["C4", "E4", "G4"] },
+  Bb: { note: "Bb3", frequency: 228.874, name: "Bb Major", color: "#8b5cf6", notes: ["Bb3", "D4", "F4"] },
+  G: { note: "G4", frequency: 384.444, name: "G Major", color: "#f59e0b", notes: ["G4", "D4", "A4"] },
 
   // Minor Chords
-  Dm: { note: "D4", frequency: 288.0, name: "D Minor", color: "#ef4444" },
-  Dm7: { note: "D4", frequency: 288.0, name: "D Minor 7", color: "#dc2626" }, // Note: F4, A3, C4 would be the notes. This entry might need adjustment based on actual note mapping.
-  Am: { note: "A3", frequency: 216.0, name: "A Minor", color: "#ec4899" },
+  Dm: { note: "D4", frequency: 288.0, name: "D Minor", color: "#ef4444", notes: ["D4", "F4", "A4"] },
+  Dm7: { note: "D4", frequency: 288.0, name: "D Minor 7", color: "#dc2626", notes: ["D4", "F4", "A4", "C5"] },
+  Am: { note: "A3", frequency: 216.0, name: "A Minor", color: "#ec4899", notes: ["A3", "C4", "E4"] },
 
   // Seventh Chords
-  Fmaj7: { note: "F4", frequency: 342.338, name: "F Major 7", color: "#14b8a6" },
-  Cmaj7: { note: "C4", frequency: 257.432, name: "C Major 7", color: "#06b6d4" },
-  Bbmaj7: { note: "Bb3", frequency: 228.874, name: "Bb Major 7", color: "#a855f7" },
+  Fmaj7: { note: "F4", frequency: 342.338, name: "F Major 7", color: "#14b8a6", notes: ["F4", "A4", "C5", "E4"] },
+  Cmaj7: { note: "C4", frequency: 257.432, name: "C Major 7", color: "#06b6d4", notes: ["C4", "E4", "G4", "D4"] },
+  Bbmaj7: { note: "Bb3", frequency: 228.874, name: "Bb Major 7", color: "#a855f7", notes: ["Bb3", "D4", "F4", "A4"] },
 
   // Extended Chords
-  Fsus2: { note: "F4", frequency: 342.338, name: "F Suspended 2", color: "#22c55e" },
-  Csus4: { note: "C4", frequency: 257.432, name: "C Suspended 4", color: "#3b82f6" },
-  Dm9: { note: "D4", frequency: 288.0, name: "D Minor 9", color: "#f43f5e" },
+  Fsus2: { note: "F4", frequency: 342.338, name: "F Suspended 2", color: "#22c55e", notes: ["F4", "G4", "C5"] },
+  Csus4: { note: "C4", frequency: 257.432, name: "C Suspended 4", color: "#3b82f6", notes: ["C4", "F4", "G4"] },
+  Dm9: { note: "D4", frequency: 288.0, name: "D Minor 9", color: "#f43f5e", notes: ["D4", "F4", "A4", "C5", "E4"] },
 
   // Atmospheric Chords
-  D5: { note: "D3", frequency: 144.548, name: "D Power Chord", color: "#6366f1" },
-  A5: { note: "A3", frequency: 216.0, name: "A Power Chord", color: "#8b5cf6" },
+  D5: { note: "D3", frequency: 144.548, name: "D Power Chord", color: "#6366f1", notes: ["D3", "D4", "A4"] },
+  A5: { note: "A3", frequency: 216.0, name: "A Power Chord", color: "#8b5cf6", notes: ["A3", "A4", "E4"] },
 }
 
 const meditationModes = {
