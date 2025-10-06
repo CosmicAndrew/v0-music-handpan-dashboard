@@ -158,6 +158,17 @@ export function InteractiveHandpan() {
   const initializeAudioOnGesture = async () => {
     if (!audioReady && MobileAudioManager.isMobileDevice()) {
       const success = await mobileAudioManager.current.initializeOnUserGesture()
+      
+      // CRITICAL: Also resume the handpan's own AudioContext (iOS requirement)
+      if (success && audioContextRef.current && audioContextRef.current.state === 'suspended') {
+        try {
+          await audioContextRef.current.resume()
+          console.log("[Mobile Audio] Handpan AudioContext resumed successfully")
+        } catch (error) {
+          console.error("[Mobile Audio] Failed to resume handpan AudioContext:", error)
+        }
+      }
+      
       if (success) {
         setAudioReady(true)
       }
