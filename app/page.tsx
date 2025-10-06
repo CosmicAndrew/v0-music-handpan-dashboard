@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
+import dynamic from "next/dynamic"
 import { InteractiveHandpan } from "@/components/interactive-handpan"
 import { SongLibrary } from "@/components/song-library"
 import { Devotions } from "@/components/devotions"
@@ -10,7 +11,9 @@ import { RecentlyPlayed } from "@/components/recently-played"
 import { Settings } from "@/components/settings"
 import { useTheme } from "@/hooks/use-theme"
 import { PWAManager } from "@/components/pwa-manager"
-import { MobileNavigation } from "@/components/mobile-navigation"
+
+// Only MobileNavigation needs to be client-only to prevent hydration mismatch
+const MobileNavigation = dynamic(() => import("@/components/mobile-navigation").then(mod => mod.MobileNavigation), { ssr: false })
 
 type Section = "dashboard" | "handpan" | "songs" | "devotions" | "settings" | "export"
 
