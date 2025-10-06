@@ -1,0 +1,26 @@
+
+<svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bronzeGradient" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" style="stop-color:#CD7F32;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8B4513;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#654321;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="centerGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#D4A574;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B4513;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="48" cy="48" r="46" fill="url(#bronzeGradient)" stroke="#654321" stroke-width="2"/>
+  
+  <!-- Center note (D) -->
+  <circle cx="48" cy="48" r="16" fill="url(#centerGradient)" stroke="#654321" stroke-width="1.5"/>
+  
+  <!-- Outer notes in nonagon pattern -->
+  <circle cx="48" cy="19.200000000000003" r="7.68" fill="url(#centerGradient)" stroke="#654321" stroke-width="1" opacity="0.9"/><circle cx="66.51228315897234" cy="25.937920038173434" r="7.68" fill="url(#centerGradient)" stroke="#654321" stroke-width="1" opacity="0.9"/><circle cx="76.36246328675159" cy="42.998932483192405" r="7.68" fill="url(#centerGradient)" stroke="#654321" stroke-width="1" opacity="0.9"/><circle cx="72.94153162899184" cy="62.4" r="7.68" fill="url(#centerGradient)" stroke="#654321" stroke-width="1" opacity="0.9"/><circle cx="57.85018012777926" cy="75.06314747863416" r="7.68" fill="url(#centerGradient)" stroke="#654321" stroke-width="1" opacity="0.9"/><circle cx="38.149819872220746" cy="75.06314747863416" r="7.68" fill="url(#centerGradient)" stroke="#654321" stroke-width="1" opacity="0.9"/><circle cx="23.058468371008168" cy="62.4" r="7.68" fill="url(#centerGradient)" stroke="#654321" stroke-width="1" opacity="0.9"/><circle cx="19.637536713248412" cy="42.998932483192405" r="7.68" fill="url(#centerGradient)" stroke="#654321" stroke-width="1" opacity="0.9"/><circle cx="29.487716841027666" cy="25.937920038173438" r="7.68" fill="url(#centerGradient)" stroke="#654321" stroke-width="1" opacity="0.9"/>
+  
+  <!-- 432 Hz text for larger icons -->
+  
+</svg>
