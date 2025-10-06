@@ -9,6 +9,7 @@ import { ExportProgress } from "@/components/export-progress"
 import { RecentlyPlayed } from "@/components/recently-played"
 import { Settings } from "@/components/settings"
 import { useTheme } from "@/hooks/use-theme"
+import { PWAManager } from "@/components/pwa-manager"
 
 type Section = "dashboard" | "handpan" | "songs" | "devotions" | "settings" | "export"
 
@@ -634,6 +635,7 @@ export default function Home() {
         {activeSection === "devotions" && <Devotions />}
         {activeSection === "export" && <ExportProgress />}
       </div>
+      <PWAManager />
     </main>
   )
 }
