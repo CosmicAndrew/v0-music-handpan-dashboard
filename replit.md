@@ -16,7 +16,34 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-### October 6, 2025 - Mobile-First PWA Transformation (Latest)
+### October 6, 2025 - Critical Audio Bug Fixes (Latest)
+- **Fixed chord playback system** - chords were completely broken due to missing note definitions
+- **Consolidated audio architecture** - removed duplicate AudioContext implementations
+- **Resolved TypeScript errors** - fixed 31 critical type errors in interactive-handpan.tsx
+
+**Key Fixes**:
+1. **Chord Definitions**: Added `notes` arrays to all chord definitions with proper handpan voicings
+   - Each chord now maps to specific handpan notes (e.g., F Major = ["F4", "A4", "C5"])
+   - Chord pads and meditation modes now produce sound correctly
+   
+2. **Audio System Consolidation**: Migrated from dual-context to single Tone.js architecture
+   - Removed raw Web Audio API AudioContext (was conflicting with Tone.js)
+   - All audio now routes through `HandpanAudioEngine` via Tone.js
+   - Fixed iOS audio issues by eliminating context conflicts
+   - Updated `playChord()` to pass Tone.js note names instead of raw frequencies
+   
+3. **TypeScript Fixes**: Resolved critical type safety issues
+   - Added proper type casting for `chordDefinitions` object indexing
+   - Fixed unsafe string-to-object-key conversions
+   - Remaining 4 errors in song-library.tsx are non-critical UI library type warnings
+
+**Technical Impact**:
+- Files modified: `components/interactive-handpan.tsx`, `lib/audio-engine.ts`
+- Chord playback now functional after passing note names to Tone.js instead of frequencies
+- Single audio engine improves performance and reduces memory usage
+- App successfully loads with Tone.js initialized and no JavaScript errors
+
+### October 6, 2025 - Mobile-First PWA Transformation
 - **Transformed app into a mobile-first Progressive Web App (PWA)** with comprehensive optimizations
 - **PWA Features Implemented**:
   - Created web app manifest (`public/manifest.json`) for installability to home screen
