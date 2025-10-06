@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { GeistSans } from "geist/font/sans"
 import "./globals.css"
+import "./mobile.css"
 import { Suspense } from "react"
 
 const inter = Inter({
@@ -26,10 +27,6 @@ export const metadata: Metadata = {
     userScalable: true,
     viewportFit: "cover",
   },
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#8B4513" },
-    { media: "(prefers-color-scheme: dark)", color: "#1a1a2e" },
-  ],
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -61,6 +58,13 @@ export const metadata: Metadata = {
   },
 }
 
+export const viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#8B4513" },
+    { media: "(prefers-color-scheme: dark)", color: "#1a1a2e" },
+  ],
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -68,7 +72,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${inter.variable}`}>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased safe-area-top safe-area-bottom">
         <Suspense fallback={null}>{children}</Suspense>
       </body>
     </html>

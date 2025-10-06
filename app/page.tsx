@@ -10,6 +10,7 @@ import { RecentlyPlayed } from "@/components/recently-played"
 import { Settings } from "@/components/settings"
 import { useTheme } from "@/hooks/use-theme"
 import { PWAManager } from "@/components/pwa-manager"
+import { MobileNavigation } from "@/components/mobile-navigation"
 
 type Section = "dashboard" | "handpan" | "songs" | "devotions" | "settings" | "export"
 
@@ -636,6 +637,7 @@ export default function Home() {
         {activeSection === "export" && <ExportProgress />}
       </div>
       <PWAManager />
+      <MobileNavigation activeSection={activeSection} setActiveSection={setActiveSection} />
     </main>
   )
 }
