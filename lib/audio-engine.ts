@@ -75,11 +75,11 @@ export class HandpanAudioEngine {
     }
   }
 
-  playChord(notes: string[] | number[], duration = "2n") {
+  playChord(frequencies: number[], duration = "2n") {
     if (!this.synth || !this.initialized) return
 
     try {
-      this.synth.triggerAttackRelease(notes, duration, Tone.now())
+      this.synth.triggerAttackRelease(frequencies, duration, Tone.now())
     } catch (error) {
       console.error("[v0] Failed to play chord:", error)
     }
