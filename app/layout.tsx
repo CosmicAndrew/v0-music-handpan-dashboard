@@ -15,7 +15,9 @@ const geistSans = GeistSans
 
 export const viewport: Viewport = {
   width: 'device-width',
-  initialScale: 1,
+  initialScale: 0.65,
+  maximumScale: 5,
+  userScalable: true,
   themeColor: '#93c5fd',
 }
 

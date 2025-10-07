@@ -166,6 +166,13 @@ export default function Home() {
                 <span className="nav-label hidden md:inline">Devotions</span>
               </button>
               <button
+                className={`pastel-nav-item ${activeSection === "export" ? "active" : ""}`}
+                onClick={() => setActiveSection("export")}
+              >
+                <span className="nav-icon text-xl sm:text-2xl">📦</span>
+                <span className="nav-label hidden md:inline">Export</span>
+              </button>
+              <button
                 className={`pastel-nav-item ${activeSection === "settings" ? "active" : ""}`}
                 onClick={() => setActiveSection("settings")}
               >
