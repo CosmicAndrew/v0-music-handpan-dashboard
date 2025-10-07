@@ -370,6 +370,50 @@
     animation: noteRipple 0.6s ease-out;
   }
 
+  /* Performance optimizations for mobile */
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  .gpu-accelerate {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Reduce blur on mobile for better performance */
+  @media (max-width: 768px) {
+    .pastel-glass-header,
+    .pastel-card,
+    .glass-surface,
+    .glass-surface-frosty,
+    .glass-elevated {
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+    }
+
+    .pastel-button,
+    .pastel-badge,
+    .pastel-nav-item {
+      backdrop-filter: blur(15px) !important;
+      -webkit-backdrop-filter: blur(15px) !important;
+    }
+  }
+
+  /* Optimize animations for mobile */
+  @media (max-width: 768px) {
+    .worship-feature-card,
+    .pastel-card,
+    .studio-button {
+      will-change: transform;
+      transform: translateZ(0);
+    }
+
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+  }
+
   @keyframes noteRipple {
     0% {
       transform: scale(1);

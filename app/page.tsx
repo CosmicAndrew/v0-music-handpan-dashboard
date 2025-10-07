@@ -1,16 +1,26 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
-import { InteractiveHandpan } from "@/components/interactive-handpan"
-import { SongLibrary } from "@/components/song-library"
-import { Devotions } from "@/components/devotions"
-import { ExportProgress } from "@/components/export-progress"
-import { RecentlyPlayed } from "@/components/recently-played"
-import { Settings } from "@/components/settings"
+import { useState, useEffect, lazy, Suspense } from "react"
 import { useTheme } from "@/hooks/use-theme"
 
+const InteractiveHandpan = lazy(() => import("@/components/interactive-handpan").then(mod => ({ default: mod.InteractiveHandpan })))
+const SongLibrary = lazy(() => import("@/components/song-library").then(mod => ({ default: mod.SongLibrary })))
+const Devotions = lazy(() => import("@/components/devotions").then(mod => ({ default: mod.Devotions })))
+const ExportProgress = lazy(() => import("@/components/export-progress").then(mod => ({ default: mod.ExportProgress })))
+const RecentlyPlayed = lazy(() => import("@/components/recently-played").then(mod => ({ default: mod.RecentlyPlayed })))
+const Settings = lazy(() => import("@/components/settings").then(mod => ({ default: mod.Settings })))
+
 type Section = "dashboard" | "handpan" | "songs" | "devotions" | "settings" | "export"
+
+const ComponentLoader = () => (
+  <div className="flex items-center justify-center min-h-[50vh]">
+    <div className="text-center space-y-4">
+      <div className="w-16 h-16 mx-auto border-4 border-white/20 border-t-white rounded-full animate-spin" />
+      <p className="text-white/80 text-sm">Loading...</p>
+    </div>
+  </div>
+)
 
 export default function Home() {
   const { resolvedTheme, setTheme } = useTheme()
@@ -19,9 +29,15 @@ export default function Home() {
   const [isDragging, setIsDragging] = useState(false)
   const [dragOffset, setDragOffset] = useState(0)
   const [dragStartX, setDragStartX] = useState(0)
+  const [backgroundLoaded, setBackgroundLoaded] = useState(false)
 
   useEffect(() => {
   }, [resolvedTheme])
+
+  useEffect(() => {
+    const timer = setTimeout(() => setBackgroundLoaded(true), 100)
+    return () => clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     if (activeSection === "dashboard" && !isDragging) {
@@ -83,14 +99,17 @@ export default function Home() {
   return (
     <main className="app-container min-h-screen relative overflow-hidden" data-theme={resolvedTheme}>
       <div className="spline-container absolute top-0 left-0 w-full h-full -z-10">
-        <iframe
-          src="https://my.spline.design/ventura2copy-QlljPuDvQWfMiAnUXFOrCrsY"
-          frameBorder="0"
-          width="100%"
-          height="100%"
-          id="aura-spline"
-          title="3D Background"
-        />
+        {backgroundLoaded && (
+          <iframe
+            src="https://my.spline.design/ventura2copy-QlljPuDvQWfMiAnUXFOrCrsY"
+            frameBorder="0"
+            width="100%"
+            height="100%"
+            id="aura-spline"
+            title="3D Background"
+            loading="lazy"
+          />
+        )}
       </div>
 
       <header className="pastel-glass-header sticky top-0 z-[100] border-b border-white/20 safe-top">
@@ -605,19 +624,39 @@ export default function Home() {
               </div>
             </div>
             <div className="max-w-7xl mx-auto py-12">
-              <RecentlyPlayed />
+              <Suspense fallback={<ComponentLoader />}>
+                <RecentlyPlayed />
+              </Suspense>
             </div>
           </>
         )}
-        {activeSection === "settings" && <Settings theme={resolvedTheme} setTheme={setTheme} />}
-        {activeSection === "handpan" && <InteractiveHandpan />}
+        {activeSection === "settings" && (
+          <Suspense fallback={<ComponentLoader />}>
+            <Settings theme={resolvedTheme} setTheme={setTheme} />
+          </Suspense>
+        )}
+        {activeSection === "handpan" && (
+          <Suspense fallback={<ComponentLoader />}>
+            <InteractiveHandpan />
+          </Suspense>
+        )}
         {activeSection === "songs" && (
           <div className="min-h-screen">
-            <SongLibrary />
+            <Suspense fallback={<ComponentLoader />}>
+              <SongLibrary />
+            </Suspense>
           </div>
         )}
-        {activeSection === "devotions" && <Devotions />}
-        {activeSection === "export" && <ExportProgress />}
+        {activeSection === "devotions" && (
+          <Suspense fallback={<ComponentLoader />}>
+            <Devotions />
+          </Suspense>
+        )}
+        {activeSection === "export" && (
+          <Suspense fallback={<ComponentLoader />}>
+            <ExportProgress />
+          </Suspense>
+        )}
       </div>
     </main>
   )
