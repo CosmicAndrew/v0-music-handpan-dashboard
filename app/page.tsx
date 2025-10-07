@@ -237,7 +237,7 @@ export default function Home() {
                   <div
                     className={`worship-cards-section feature-${activeCard}-active ${isDragging ? "dragging" : ""} w-full touch-manipulation`}
                     style={{ 
-                      height: "clamp(24rem, 80vh, 36rem)",
+                      height: "clamp(20rem, 70vh, 28rem)",
                       cursor: isDragging ? "grabbing" : "grab",
                       touchAction: "manipulation"
                     }}
@@ -252,7 +252,7 @@ export default function Home() {
                     <div
                       className="worship-feature-card pastel-card"
                       style={{
-                        height: "36rem",
+                        height: "28rem",
                         background:
                           "linear-gradient(135deg, rgba(147, 197, 253, 0.4) 0%, rgba(196, 181, 253, 0.4) 100%)",
                         transform: activeCard === 1 ? `translateX(${dragOffset}px)` : undefined,
@@ -328,7 +328,7 @@ export default function Home() {
                     <div
                       className="worship-feature-card pastel-card"
                       style={{
-                        height: "36rem",
+                        height: "28rem",
                         background: "linear-gradient(135deg, rgba(140, 92, 246, 0.4) 0%, rgba(228, 72, 153, 0.4) 100%)",
                         transform: activeCard === 2 ? `translateX(${dragOffset}px)` : undefined,
                         transition: isDragging ? "none" : "transform 0.3s ease-out",
@@ -403,7 +403,7 @@ export default function Home() {
                     <div
                       className="worship-feature-card pastel-card"
                       style={{
-                        height: "36rem",
+                        height: "28rem",
                         background: "linear-gradient(135deg, rgba(228, 72, 153, 0.4) 0%, rgba(245, 158, 11, 0.4) 100%)",
                         transform: activeCard === 3 ? `translateX(${dragOffset}px)` : undefined,
                         transition: isDragging ? "none" : "transform 0.3s ease-out",
@@ -478,7 +478,7 @@ export default function Home() {
                     <div
                       className="worship-feature-card pastel-card"
                       style={{
-                        height: "36rem",
+                        height: "28rem",
                         background: "linear-gradient(135deg, rgba(245, 158, 11, 0.4) 0%, rgba(16, 185, 130, 0.4) 100%)",
                         transform: activeCard === 4 ? `translateX(${dragOffset}px)` : undefined,
                         transition: isDragging ? "none" : "transform 0.3s ease-out",
@@ -553,7 +553,7 @@ export default function Home() {
                     <div
                       className="worship-feature-card pastel-card"
                       style={{
-                        height: "36rem",
+                        height: "28rem",
                         background:
                           "linear-gradient(135deg, rgba(16, 185, 130, 0.4) 0%, rgba(147, 197, 253, 0.4) 100%)",
                         transform: activeCard === 5 ? `translateX(${dragOffset}px)` : undefined,
