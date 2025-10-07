@@ -196,17 +196,6 @@ export function InteractiveHandpan() {
       }, 600)
     }
 
-    console.log(
-      "[v0] Playing note:",
-      note,
-      "at frequency:",
-      frequency,
-      "Hz",
-      "with reverb:",
-      reverb,
-      "sustain:",
-      sustain,
-    )
   }
 
   const playPattern = () => {
@@ -270,7 +259,6 @@ export function InteractiveHandpan() {
     const chord = chordDefinitions[chordKey]
     if (!chord) return
 
-    console.log("[v0] Playing chord:", chordKey, "with notes:", chord.notes)
 
     const ctx = audioContextRef.current
     setActiveChord(chordKey)
@@ -300,7 +288,6 @@ export function InteractiveHandpan() {
           oscillator.start(ctx.currentTime)
           oscillator.stop(ctx.currentTime + 3)
 
-          console.log("[v0] Chord note:", noteName, "at", noteData.frequency, "Hz")
         }
       }, index * 150)
     })
@@ -321,10 +308,8 @@ export function InteractiveHandpan() {
       setIsRecording(true)
       setRecordedNotes([])
       recordingStartTimeRef.current = Date.now()
-      console.log("[v0] Recording started")
     } else {
       setIsRecording(false)
-      console.log("[v0] Recording stopped. Recorded notes:", recordedNotes)
     }
   }
 

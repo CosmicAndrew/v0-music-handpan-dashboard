@@ -21,7 +21,6 @@ export default function Home() {
   const [dragStartX, setDragStartX] = useState(0)
 
   useEffect(() => {
-    console.log("[v0] Theme changed:", resolvedTheme)
   }, [resolvedTheme])
 
   useEffect(() => {

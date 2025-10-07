@@ -97,7 +97,6 @@ export function SongLibrary() {
   }
 
   const startHandpanPractice = (song: Song) => {
-    console.log("[v0] Starting practice for:", song.title, "with chords:", song.chords)
     alert(
       `Practice mode for "${song.title}" - Navigate to Handpan tab to practice these chords: ${song.chords.join(", ")}`,
     )
@@ -409,7 +408,7 @@ export function SongLibrary() {
                       <div
                         key={idx}
                         className="px-5 py-3 rounded-lg bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 font-mono font-bold text-base md:text-lg hover:scale-105 transition-transform cursor-pointer border-2 border-amber-300/50 shadow-lg"
-                        onClick={() => console.log("[v0] Chord clicked:", chord)}
+                        onClick={() => {}}
                       >
                         {chord}
                       </div>
