@@ -33,6 +33,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${inter.variable}`}>
+      <head>
+        <link rel="preconnect" href="https://my.spline.design" />
+        <link rel="dns-prefetch" href="https://my.spline.design" />
+      </head>
       <body className="font-sans antialiased">
         <Suspense fallback={null}>{children}</Suspense>
       </body>

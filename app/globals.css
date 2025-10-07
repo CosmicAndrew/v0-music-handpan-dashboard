@@ -414,6 +414,37 @@
     }
   }
 
+  /* Smooth scrolling optimization */
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Optimize scroll performance */
+  .main-content,
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  /* Prevent layout shift */
+  img,
+  svg,
+  iframe {
+    content-visibility: auto;
+  }
+
+  /* Optimize touch interactions */
+  button,
+  a,
+  .pastel-nav-item,
+  .worship-feature-card {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
   @keyframes noteRipple {
     0% {
       transform: scale(1);
