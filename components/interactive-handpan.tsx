@@ -333,35 +333,37 @@ export function InteractiveHandpan() {
   }
 
   return (
-    <div className="layout-designer space-y-6 fade-in">
-      <div className="designer-header glass-surface p-6 rounded-xl border border-white/10">
-        <div className="flex items-center justify-between flex-wrap gap-4">
+    <div className="layout-designer space-y-4 sm:space-y-6 fade-in">
+      <div className="designer-header glass-surface p-4 sm:p-6 rounded-xl border border-white/10">
+        <div className="flex items-center justify-between flex-wrap gap-3 sm:gap-4">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight">Interactive Handpan Layout Designer</h2>
-            <p className="text-muted-foreground mt-1">Design and customize your YataoPan D Kurd 10 experience</p>
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">Interactive Handpan Layout Designer</h2>
+            <p className="text-muted-foreground mt-1 text-sm sm:text-base">Design and customize your YataoPan D Kurd 10 experience</p>
           </div>
-          <div className="designer-controls flex gap-2">
+          <div className="designer-controls flex gap-2 flex-wrap justify-end">
             <Button
               variant={!showControls ? "default" : "outline"}
-              className="control-btn"
+              className="control-btn text-xs sm:text-sm"
               onClick={() => setShowControls(false)}
             >
-              👁️ Preview Mode
-              <span className="text-xs block">View & Play Notes</span>
+              <span className="hidden sm:inline">👁️ Preview Mode</span>
+              <span className="sm:hidden">👁️</span>
+              <span className="text-xs hidden sm:block">View & Play Notes</span>
             </Button>
             <Button
               variant={showControls ? "default" : "outline"}
-              className="control-btn"
+              className="control-btn text-xs sm:text-sm"
               onClick={() => setShowControls(true)}
             >
-              🎯 Practice Mode
-              <span className="text-xs block">Learn & Record</span>
+              <span className="hidden sm:inline">🎯 Practice Mode</span>
+              <span className="sm:hidden">🎯</span>
+              <span className="text-xs hidden sm:block">Learn & Record</span>
             </Button>
             <Button
               variant="outline"
               size="icon"
               onClick={() => setIsMuted(!isMuted)}
-              className="glass-button bg-white/90 hover:bg-white"
+              className="glass-button bg-white/90 hover:bg-white min-w-[44px] min-h-[44px]"
             >
               {isMuted ? <VolumeX className="w-4 h-4 text-gray-900" /> : <Volume2 className="w-4 h-4 text-gray-900" />}
             </Button>
@@ -369,9 +371,9 @@ export function InteractiveHandpan() {
         </div>
       </div>
 
-      <div className="designer-workspace grid lg:grid-cols-[300px_1fr_280px] gap-6">
+      <div className="designer-workspace grid lg:grid-cols-[300px_1fr_280px] gap-4 sm:gap-6">
         {/* Left Sidebar - Configuration Panel */}
-        <div className="layout-sidebar glass-elevated p-6 rounded-xl border border-white/10 space-y-6">
+        <div className="layout-sidebar glass-elevated p-4 sm:p-6 rounded-xl border border-white/10 space-y-4 sm:space-y-6 hidden lg:block">
           <div>
             <h4 className="text-lg font-semibold mb-4">Configuration</h4>
 
@@ -614,7 +616,7 @@ export function InteractiveHandpan() {
         </div>
 
         {/* Right Sidebar - Properties Panel */}
-        <div className="properties-panel glass-elevated p-6 rounded-xl border border-white/10 space-y-6">
+        <div className="properties-panel glass-elevated p-4 sm:p-6 rounded-xl border border-white/10 space-y-4 sm:space-y-6 hidden lg:block">
           <div>
             <h4 className="text-lg font-semibold mb-4 text-shadow-strong bg-black/20 px-3 py-2 rounded-lg">
               🎛️ Sacred Sound Properties
