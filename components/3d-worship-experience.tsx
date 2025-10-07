@@ -26,9 +26,11 @@ interface NoteData {
   position: THREE.Vector3
 }
 
-function Handpan3DModel({ onNoteClick, activeNote }: { onNoteClick: (note: string, frequency: number) => void; activeNote: string | null }) {
+function Handpan3DModel({ onNoteClick, activeNote, quality }: { onNoteClick: (note: string, frequency: number) => void; activeNote: string | null; quality: QualityLevel }) {
   const groupRef = useRef<THREE.Group>(null)
   const [hoveredNote, setHoveredNote] = useState<string | null>(null)
+  
+  const segments = quality === "low" ? 16 : quality === "medium" ? 32 : quality === "high" ? 48 : 64
 
   const centerNote: NoteData = {
     note: handpanFrequencies.center.note,
@@ -49,7 +51,7 @@ function Handpan3DModel({ onNoteClick, activeNote }: { onNoteClick: (note: strin
   })
 
   useGSAP(() => {
-    if (groupRef.current) {
+    if (groupRef.current && quality !== "low") {
       gsap.to(groupRef.current.rotation, {
         y: "+=0.1",
         duration: 20,
@@ -57,12 +59,12 @@ function Handpan3DModel({ onNoteClick, activeNote }: { onNoteClick: (note: strin
         ease: "none",
       })
     }
-  }, [])
+  }, [quality])
 
   return (
     <group ref={groupRef} position={[0, 0, 0]}>
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow castShadow>
-        <cylinderGeometry args={[3, 3.2, 0.4, 64]} />
+        <cylinderGeometry args={[3, 3.2, 0.4, segments]} />
         <meshStandardMaterial
           color="#d4a574"
           metalness={0.8}
@@ -78,7 +80,7 @@ function Handpan3DModel({ onNoteClick, activeNote }: { onNoteClick: (note: strin
         onPointerOut={() => setHoveredNote(null)}
         castShadow
       >
-        <cylinderGeometry args={[0.5, 0.5, 0.15, 32]} />
+        <cylinderGeometry args={[0.5, 0.5, 0.15, segments / 2]} />
         <meshStandardMaterial
           color={activeNote === centerNote.note ? "#fbbf24" : hoveredNote === centerNote.note ? "#e8c9a0" : "#c9a87c"}
           metalness={0.7}
@@ -97,7 +99,7 @@ function Handpan3DModel({ onNoteClick, activeNote }: { onNoteClick: (note: strin
           onPointerOut={() => setHoveredNote(null)}
           castShadow
         >
-          <cylinderGeometry args={[0.35, 0.35, 0.1, 32]} />
+          <cylinderGeometry args={[0.35, 0.35, 0.1, segments / 2]} />
           <meshStandardMaterial
             color={activeNote === noteData.note ? "#fbbf24" : hoveredNote === noteData.note ? "#e8c9a0" : "#d4a574"}
             metalness={0.7}
@@ -111,11 +113,12 @@ function Handpan3DModel({ onNoteClick, activeNote }: { onNoteClick: (note: strin
   )
 }
 
-function Scene({ activeNote, activeFrequency, environment, quality }: {
+function Scene({ activeNote, activeFrequency, environment, quality, onNoteClick }: {
   activeNote: string | null
   activeFrequency: number
   environment: EnvironmentTheme
   quality: QualityLevel
+  onNoteClick: (note: string, frequency: number) => void
 }) {
   return (
     <>
@@ -135,7 +138,7 @@ function Scene({ activeNote, activeFrequency, environment, quality }: {
       <WorshipEnvironment theme={environment} intensity={1} />
       
       <Suspense fallback={null}>
-        <Handpan3DModel onNoteClick={() => {}} activeNote={activeNote} />
+        <Handpan3DModel onNoteClick={onNoteClick} activeNote={activeNote} quality={quality} />
       </Suspense>
       
       {quality !== "low" && (
@@ -155,14 +158,16 @@ function Scene({ activeNote, activeFrequency, environment, quality }: {
       
       <Environment preset="sunset" />
       
-      <OrbitControls
-        enablePan={false}
-        enableZoom={true}
-        minDistance={5}
-        maxDistance={15}
-        minPolarAngle={Math.PI / 6}
-        maxPolarAngle={Math.PI / 2}
-      />
+      {quality !== "low" && (
+        <OrbitControls
+          enablePan={false}
+          enableZoom={true}
+          minDistance={5}
+          maxDistance={15}
+          minPolarAngle={Math.PI / 6}
+          maxPolarAngle={Math.PI / 2}
+        />
+      )}
     </>
   )
 }
@@ -289,7 +294,13 @@ export function WorshipExperience3D() {
       )}
 
       <Canvas shadows={quality !== "low"}>
-        <Scene activeNote={activeNote} activeFrequency={activeFrequency} environment={environment} quality={quality} />
+        <Scene 
+          activeNote={activeNote} 
+          activeFrequency={activeFrequency} 
+          environment={environment} 
+          quality={quality}
+          onNoteClick={handleNoteClick}
+        />
         
         {quality === "ultra" && (
           <EffectComposer>
