@@ -16,6 +16,7 @@ Interactive handpan worship experience with YataoPan D Kurd 10 tuned to 432Hz. T
   - Visual chord badges categorized by type
   - Usage tips for worship songs
 - **Audio Initialization Guidance**: Updated handpan header with "Click any note to play" instruction for clear user guidance
+- **ChunkLoadError Fix**: Resolved critical JavaScript chunk loading error by adding '*.worf.replit.dev' to allowedDevOrigins in next.config.mjs
 
 ### October 7, 2025 - Critical Mobile Fixes & Full Mobile Optimization
 - **CRITICAL: Viewport Configuration Added**: Fixed missing viewport meta tag that was breaking mobile rendering completely. Now properly configured with device-width and initial-scale while allowing user zoom for accessibility
