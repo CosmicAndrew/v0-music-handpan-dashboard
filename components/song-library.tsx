@@ -116,11 +116,11 @@ export function SongLibrary() {
         />
       </div>
 
-      <div className="space-y-6 relative z-10">
-        <div className="glass-surface-frosty p-8 rounded-2xl space-y-4 border-2 border-white/30">
+      <div className="space-y-4 sm:space-y-6 relative z-10">
+        <div className="glass-surface-frosty p-4 sm:p-6 lg:p-8 rounded-2xl space-y-3 sm:space-y-4 border-2 border-white/30">
           <div>
             <h1
-              className="text-4xl font-bold text-white mb-2"
+              className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2"
               style={{
                 textShadow: "0 3px 10px rgba(0, 0, 0, 0.8), 0 6px 20px rgba(0, 0, 0, 0.6)",
               }}
@@ -128,7 +128,7 @@ export function SongLibrary() {
               Worship Component Gallery
             </h1>
             <p
-              className="text-white text-lg"
+              className="text-white text-sm sm:text-base lg:text-lg"
               style={{
                 textShadow: "0 2px 8px rgba(0, 0, 0, 0.7), 0 4px 12px rgba(0, 0, 0, 0.5)",
               }}
@@ -136,23 +136,23 @@ export function SongLibrary() {
               Professional handpan components for your worship experience
             </p>
           </div>
-          <div className="flex gap-3 flex-wrap">
-            <div className="stat-badge-enhanced">
-              <span className="font-bold text-lg">{expandedSongLibrary.length}</span> Components
+          <div className="flex gap-2 sm:gap-3 flex-wrap">
+            <div className="stat-badge-enhanced text-sm sm:text-base">
+              <span className="font-bold text-base sm:text-lg">{expandedSongLibrary.length}</span> Components
             </div>
-            <div className="stat-badge-enhanced">
-              <span className="font-bold text-lg">432Hz</span> Tuned
+            <div className="stat-badge-enhanced text-sm sm:text-base">
+              <span className="font-bold text-base sm:text-lg">432Hz</span> Tuned
             </div>
-            <div className="stat-badge-enhanced">
-              <span className="font-bold text-lg">D Kurd</span> Scale
+            <div className="stat-badge-enhanced text-sm sm:text-base">
+              <span className="font-bold text-base sm:text-lg">D Kurd</span> Scale
             </div>
-            <div className="stat-badge-enhanced">
-              <span className="font-bold text-lg">{getTierCount("Perfect")}</span> Perfect Match
+            <div className="stat-badge-enhanced text-sm sm:text-base">
+              <span className="font-bold text-base sm:text-lg">{getTierCount("Perfect")}</span> Perfect Match
             </div>
           </div>
         </div>
 
-        <Card className="glass-surface-frosty p-6 space-y-4 border-2 border-white/30">
+        <Card className="glass-surface-frosty p-4 sm:p-6 space-y-3 sm:space-y-4 border-2 border-white/30">
           <div className="space-y-4">
             <div className="space-y-3">
               <label

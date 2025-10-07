@@ -417,9 +417,9 @@ export function InteractiveHandpan() {
 
         {/* Center - Handpan Preview Area */}
         <div className="handpan-preview-area space-y-4">
-          <div className="preview-frame glass-elevated p-6 rounded-xl border border-white/10">
+          <div className="preview-frame glass-elevated p-3 sm:p-6 rounded-xl border border-white/10">
             <div className="flex justify-center relative">
-              <svg viewBox="0 0 800 800" className="w-full max-w-2xl touch-none select-none">
+              <svg viewBox="0 0 800 800" className="w-full max-w-full sm:max-w-2xl touch-none select-none" style={{ maxHeight: "min(80vh, 600px)" }}>
                 <defs>
                   <radialGradient id="handpanGradient" cx="50%" cy="50%">
                     <stop offset="0%" stopColor="#d4a574" />
