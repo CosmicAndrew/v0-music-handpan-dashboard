@@ -323,7 +323,7 @@ export function InteractiveHandpan() {
         <div className="flex items-center justify-between flex-wrap gap-3 sm:gap-4">
           <div>
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">Interactive Handpan Layout Designer</h2>
-            <p className="text-muted-foreground mt-1 text-sm sm:text-base">Design and customize your YataoPan D Kurd 10 experience</p>
+            <p className="text-muted-foreground mt-1 text-sm sm:text-base">YataoPan D Kurd 10 • 432Hz Sacred Tuning • Click any note to play</p>
           </div>
           <div className="designer-controls flex gap-2 flex-wrap justify-end">
             <Button
@@ -1012,6 +1012,86 @@ export function InteractiveHandpan() {
           </Card>
         </div>
       )}
+
+      {/* Handpan Information Panel */}
+      <div className="glass-surface p-4 sm:p-6 rounded-xl border border-white/10 max-w-6xl mx-auto">
+        <h3 className="text-xl sm:text-2xl font-bold mb-4">🪘 D Kurd Scale & Chord Information</h3>
+        
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Scale Notes */}
+          <div>
+            <h4 className="text-lg font-semibold mb-3 text-blue-300">📝 Available Notes (432Hz Tuning)</h4>
+            <div className="space-y-2">
+              <div className="flex justify-between items-center p-2 rounded bg-white/5 border border-blue-400/30">
+                <span className="font-bold text-blue-200">{handpanNotes.center.note} (Center)</span>
+                <span className="text-sm text-muted-foreground">{handpanNotes.center.frequency.toFixed(2)}Hz</span>
+              </div>
+              {handpanNotes.outerRing.map((note) => (
+                <div key={note.note} className="flex justify-between items-center p-2 rounded bg-white/5 border border-white/10">
+                  <span className="font-medium">{note.note}</span>
+                  <span className="text-sm text-muted-foreground">{note.frequency.toFixed(2)}Hz</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Available Chords */}
+          <div>
+            <h4 className="text-lg font-semibold mb-3 text-purple-300">🎹 Playable Chords</h4>
+            <div className="space-y-3">
+              <div>
+                <p className="text-sm font-medium text-green-300 mb-2">Major Chords:</p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 rounded-full bg-green-500/20 border border-green-400/30 text-sm">F Major</span>
+                  <span className="px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-sm">C Major</span>
+                  <span className="px-3 py-1 rounded-full bg-purple-500/20 border border-purple-400/30 text-sm">Bb Major</span>
+                  <span className="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-sm">G Major</span>
+                </div>
+              </div>
+              
+              <div>
+                <p className="text-sm font-medium text-red-300 mb-2">Minor Chords:</p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 rounded-full bg-red-500/20 border border-red-400/30 text-sm">D Minor</span>
+                  <span className="px-3 py-1 rounded-full bg-pink-500/20 border border-pink-400/30 text-sm">A Minor</span>
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm font-medium text-cyan-300 mb-2">Seventh & Extended:</p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-sm">Fmaj7</span>
+                  <span className="px-3 py-1 rounded-full bg-teal-500/20 border border-teal-400/30 text-sm">Cmaj7</span>
+                  <span className="px-3 py-1 rounded-full bg-violet-500/20 border border-violet-400/30 text-sm">Bbmaj7</span>
+                  <span className="px-3 py-1 rounded-full bg-rose-500/20 border border-rose-400/30 text-sm">Dm7</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="mt-4 p-3 rounded-lg bg-blue-500/10 border border-blue-400/20">
+              <p className="text-xs text-blue-200">
+                <strong>💡 Tip:</strong> These chords are compatible with worship songs in F and Dm keys. 
+                Click chord buttons in the right panel to play them!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Scale Pattern Info */}
+        <div className="mt-6 p-4 rounded-lg bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-400/20">
+          <h4 className="text-lg font-semibold mb-2 text-purple-200">🎵 D Kurd Scale Pattern</h4>
+          <p className="text-sm text-muted-foreground mb-3">
+            The D Kurd scale is a minor pentatonic scale perfect for meditative and worship music. 
+            It contains: <strong className="text-white">D - A - Bb - C - D - E - F - G - A</strong>
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <span className="text-xs px-2 py-1 rounded bg-purple-600/30 border border-purple-400/40">Root: D</span>
+            <span className="text-xs px-2 py-1 rounded bg-blue-600/30 border border-blue-400/40">Perfect 5th: A</span>
+            <span className="text-xs px-2 py-1 rounded bg-indigo-600/30 border border-indigo-400/40">Minor 6th: Bb</span>
+            <span className="text-xs px-2 py-1 rounded bg-violet-600/30 border border-violet-400/40">Perfect 8th: C</span>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
