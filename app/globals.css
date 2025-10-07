@@ -1646,7 +1646,16 @@
 
 /* Prevent zoom on double tap for iOS */
 @media (max-width: 768px) {
-  * {
+  button,
+  a,
+  input:not([type="range"]),
+  textarea,
+  select,
+  [role="button"],
+  .pastel-nav-item,
+  .worship-feature-card,
+  .glass-button,
+  .studio-button {
     touch-action: manipulation;
   }
 }

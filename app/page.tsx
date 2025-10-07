@@ -215,14 +215,13 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="flex justify-center lg:justify-end order-1 lg:order-2">
+                <div className="flex justify-center lg:justify-end order-1 lg:order-2 w-full max-w-md">
                   <div
-                    className={`worship-cards-section feature-${activeCard}-active ${isDragging ? "dragging" : ""}`}
+                    className={`worship-cards-section feature-${activeCard}-active ${isDragging ? "dragging" : ""} w-full touch-manipulation`}
                     style={{ 
-                      height: "clamp(28rem, 80vw, 36rem)", 
-                      width: "100%",
-                      maxWidth: "28rem",
-                      cursor: isDragging ? "grabbing" : "grab" 
+                      height: "clamp(24rem, 80vh, 36rem)",
+                      cursor: isDragging ? "grabbing" : "grab",
+                      touchAction: "manipulation"
                     }}
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}
