@@ -1216,17 +1216,22 @@
   .pastel-nav-item {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     padding: 0.5rem 0.75rem;
     border-radius: 0.75rem;
     background: transparent;
-    border: 1px solid transparent;
+    border: 2px solid transparent;
     color: rgba(255, 255, 255, 0.95);
     font-weight: 600;
     font-size: 0.875rem;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    min-width: 3rem;
+    min-height: 3rem;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .pastel-nav-item:hover {
@@ -1239,6 +1244,18 @@
     background: rgba(255, 255, 255, 0.3);
     border-color: rgba(255, 255, 255, 0.4);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .pastel-nav-item:active {
+    transform: scale(0.95);
+  }
+
+  @media (max-width: 640px) {
+    .pastel-nav-item {
+      padding: 0.5rem;
+      min-width: 2.75rem;
+      min-height: 2.75rem;
+    }
   }
 
   .pastel-badge {
@@ -1582,5 +1599,54 @@
   }
   .text-4xl.sm\\:text-5xl {
     font-size: 2.25rem;
+  }
+}
+
+/* Mobile optimizations */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Mobile-optimized buttons and interactive elements */
+@media (max-width: 768px) {
+  button, 
+  .studio-button,
+  .glass-button,
+  .pastel-nav-item {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .worship-feature-card {
+    padding: 1rem !important;
+    height: auto !important;
+    min-height: 24rem !important;
+  }
+
+  .card-icon-badge {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+  }
+
+  .studio-button {
+    padding: 0.75rem 1.25rem !important;
+    font-size: 0.9375rem !important;
+  }
+}
+
+/* Prevent zoom on double tap for iOS */
+@media (max-width: 768px) {
+  * {
+    touch-action: manipulation;
   }
 }

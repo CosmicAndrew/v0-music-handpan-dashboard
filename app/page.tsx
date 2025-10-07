@@ -95,11 +95,11 @@ export default function Home() {
       </div>
 
       <header className="pastel-glass-header sticky top-0 z-50 border-b border-white/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between gap-4 sm:gap-6 flex-wrap">
-            <div className="flex items-center gap-3">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
+          <div className="flex items-center justify-between gap-2 sm:gap-6">
+            <div className="flex items-center gap-2 sm:gap-3">
               <div className="brand-icon">
-                <svg viewBox="0 0 24 24" className="w-8 h-8 sm:w-10 sm:h-10">
+                <svg viewBox="0 0 24 24" className="w-10 h-10 sm:w-12 sm:h-12">
                   <defs>
                     <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor="#93c5fd" />
@@ -112,67 +112,49 @@ export default function Home() {
                   </text>
                 </svg>
               </div>
-              <div>
-                <h1 className="text-base sm:text-lg font-semibold tracking-tight text-white">Handpan Worship Studio</h1>
-                <span className="text-xs text-white/80 hidden sm:block">Design your worship experience</span>
+              <div className="hidden sm:block">
+                <h1 className="text-lg sm:text-xl font-semibold tracking-tight text-white">Handpan Worship Studio</h1>
+                <span className="text-xs text-white/80">Design your worship experience</span>
               </div>
             </div>
 
-            <nav className="flex items-center gap-1 sm:gap-2 flex-wrap">
+            <nav className="flex items-center gap-1 sm:gap-2 overflow-x-auto scrollbar-hide max-w-[calc(100vw-8rem)] sm:max-w-none">
               <button
                 className={`pastel-nav-item ${activeSection === "dashboard" ? "active" : ""}`}
                 onClick={() => setActiveSection("dashboard")}
               >
-                <span className="nav-icon">🎴</span>
-                <span className="nav-label hidden sm:inline">Dashboard</span>
-              </button>
-              <button
-                className={`pastel-nav-item ${activeSection === "settings" ? "active" : ""}`}
-                onClick={() => setActiveSection("settings")}
-              >
-                <span className="nav-icon">⚙️</span>
-                <span className="nav-label hidden sm:inline">Settings</span>
+                <span className="nav-icon text-xl sm:text-2xl">🎴</span>
+                <span className="nav-label hidden md:inline">Dashboard</span>
               </button>
               <button
                 className={`pastel-nav-item ${activeSection === "handpan" ? "active" : ""}`}
                 onClick={() => setActiveSection("handpan")}
               >
-                <span className="nav-icon">🪘</span>
-                <span className="nav-label hidden sm:inline">Handpan</span>
+                <span className="nav-icon text-xl sm:text-2xl">🪘</span>
+                <span className="nav-label hidden md:inline">Handpan</span>
               </button>
               <button
                 className={`pastel-nav-item ${activeSection === "songs" ? "active" : ""}`}
                 onClick={() => setActiveSection("songs")}
               >
-                <span className="nav-icon">🎵</span>
-                <span className="nav-label hidden sm:inline">Library</span>
+                <span className="nav-icon text-xl sm:text-2xl">🎵</span>
+                <span className="nav-label hidden md:inline">Library</span>
               </button>
               <button
                 className={`pastel-nav-item ${activeSection === "devotions" ? "active" : ""}`}
                 onClick={() => setActiveSection("devotions")}
               >
-                <span className="nav-icon">✞</span>
-                <span className="nav-label hidden sm:inline">Devotions</span>
+                <span className="nav-icon text-xl sm:text-2xl">✞</span>
+                <span className="nav-label hidden md:inline">Devotions</span>
               </button>
               <button
-                className={`pastel-nav-item ${activeSection === "export" ? "active" : ""}`}
-                onClick={() => setActiveSection("export")}
+                className={`pastel-nav-item ${activeSection === "settings" ? "active" : ""}`}
+                onClick={() => setActiveSection("settings")}
               >
-                <span className="nav-icon">📦</span>
-                <span className="nav-label hidden sm:inline">Export</span>
+                <span className="nav-icon text-xl sm:text-2xl">⚙️</span>
+                <span className="nav-label hidden md:inline">Settings</span>
               </button>
             </nav>
-
-            <div className="hidden lg:flex items-center gap-3">
-              <div className="pastel-badge">
-                <div className="status-dot" />
-                <span className="text-xs font-medium text-white">System Ready</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="pastel-badge-accent">40 Songs</span>
-                <span className="pastel-badge-accent">432Hz</span>
-              </div>
-            </div>
           </div>
         </div>
       </header>
@@ -180,63 +162,68 @@ export default function Home() {
       <div className="main-content pt-6 sm:pt-8 px-4 sm:px-6 lg:px-8 pb-8">
         {activeSection === "dashboard" && (
           <>
-            <div className="min-h-[70vh] flex items-center justify-center py-8">
-              <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full">
-                <div className="space-y-6 sm:space-y-8 fade-up">
-                  <div className="space-y-4">
+            <div className="min-h-[60vh] sm:min-h-[70vh] flex items-center justify-center py-4 sm:py-8">
+              <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center w-full">
+                <div className="space-y-4 sm:space-y-6 lg:space-y-8 fade-up order-2 lg:order-1">
+                  <div className="space-y-3 sm:space-y-4">
                     <div className="pastel-badge inline-flex">
                       <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-                      <span className="text-sm font-medium text-white uppercase tracking-wide">Worship Platform</span>
+                      <span className="text-xs sm:text-sm font-medium text-white uppercase tracking-wide">Worship Platform</span>
                     </div>
-                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-tight">
                       Transform Your
                       <span className="block text-white">Worship Experience</span>
                     </h1>
-                    <p className="text-lg sm:text-xl text-white/90 leading-relaxed">
+                    <p className="text-base sm:text-lg lg:text-xl text-white/90 leading-relaxed">
                       Sacred 432Hz handpan with 40+ worship songs, biblical devotions, and interactive practice tools.
-                      Drag through features to discover your spiritual journey.
+                      <span className="hidden sm:inline"> Drag through features to discover your spiritual journey.</span>
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3 justify-center lg:justify-start">
                     {[1, 2, 3, 4, 5].map((num) => (
                       <button
                         key={num}
                         onClick={() => setActiveCard(num)}
-                        className={`transition-all ${
+                        className={`transition-all touch-manipulation ${
                           activeCard === num
-                            ? "w-8 h-3 bg-white rounded-full"
-                            : "w-3 h-3 bg-white/40 hover:bg-white/60 rounded-full"
+                            ? "w-10 h-4 sm:w-8 sm:h-3 bg-white rounded-full"
+                            : "w-4 h-4 sm:w-3 sm:h-3 bg-white/40 hover:bg-white/60 rounded-full"
                         }`}
                         aria-label={`Go to card ${num}`}
                       />
                     ))}
                   </div>
 
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     <div className="feature-list-item">
-                      <div className="w-2 h-2 bg-white rounded-full" />
-                      <span className="text-white">27 Perfect Match songs in F & Dm keys</span>
+                      <div className="w-2 h-2 bg-white rounded-full flex-shrink-0" />
+                      <span className="text-white text-sm sm:text-base">27 Perfect Match songs in F & Dm keys</span>
                     </div>
                     <div className="feature-list-item">
-                      <div className="w-2 h-2 bg-white rounded-full" />
-                      <span className="text-white">Interactive handpan with authentic 432Hz tuning</span>
+                      <div className="w-2 h-2 bg-white rounded-full flex-shrink-0" />
+                      <span className="text-white text-sm sm:text-base">Interactive handpan with authentic 432Hz tuning</span>
                     </div>
                     <div className="feature-list-item">
-                      <div className="w-2 h-2 bg-white rounded-full" />
-                      <span className="text-white">Righteousness devotions with biblical meditation</span>
+                      <div className="w-2 h-2 bg-white rounded-full flex-shrink-0" />
+                      <span className="text-white text-sm sm:text-base">Righteousness devotions with biblical meditation</span>
                     </div>
                     <div className="feature-list-item">
-                      <div className="w-2 h-2 bg-white rounded-full" />
-                      <span className="text-white">Practice analytics and progress tracking</span>
+                      <div className="w-2 h-2 bg-white rounded-full flex-shrink-0" />
+                      <span className="text-white text-sm sm:text-base">Practice analytics and progress tracking</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex justify-center lg:justify-end">
+                <div className="flex justify-center lg:justify-end order-1 lg:order-2">
                   <div
                     className={`worship-cards-section feature-${activeCard}-active ${isDragging ? "dragging" : ""}`}
-                    style={{ height: "36rem", cursor: isDragging ? "grabbing" : "grab" }}
+                    style={{ 
+                      height: "clamp(28rem, 80vw, 36rem)", 
+                      width: "100%",
+                      maxWidth: "28rem",
+                      cursor: isDragging ? "grabbing" : "grab" 
+                    }}
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}
                     onMouseUp={handleMouseUp}
