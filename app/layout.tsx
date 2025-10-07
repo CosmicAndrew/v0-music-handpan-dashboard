@@ -38,7 +38,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://my.spline.design" />
       </head>
       <body className="font-sans antialiased">
-        <Suspense fallback={null}>{children}</Suspense>
+        {children}
       </body>
     </html>
   )
