@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 import { GeistSans } from "geist/font/sans"
 import "./globals.css"
@@ -12,6 +12,14 @@ const inter = Inter({
 })
 
 const geistSans = GeistSans
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#93c5fd',
+}
 
 export const metadata: Metadata = {
   title: "Handpan Worship Suite - 432 Hz D Kurd 10",
