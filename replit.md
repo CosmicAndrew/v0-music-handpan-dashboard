@@ -5,6 +5,18 @@ Interactive handpan worship experience with YataoPan D Kurd 10 tuned to 432Hz. T
 
 ## Recent Changes
 
+### October 7, 2025 - User Experience Enhancements
+- **Feature Cards Optimized**: Reduced stackable card height from 36rem to 28rem for better mobile viewing and less scrolling
+- **Export Navigation Added**: Re-added Export page to main navigation with 📦 icon for easy access to export functionality
+- **Mobile Viewport Adjustment**: Changed viewport initial-scale from 1.0 to 0.65 (35% zoom out) for optimal mobile display across all screen sizes
+- **Handpan Information Panel**: Added comprehensive D Kurd scale and chord information panel showing:
+  - All 10 notes with exact 432Hz frequencies
+  - Available chords (Major: F, C, Bb, G | Minor: Dm, Am | Seventh: Fmaj7, Cmaj7, Bbmaj7, Dm7)
+  - D Kurd scale pattern explanation
+  - Visual chord badges categorized by type
+  - Usage tips for worship songs
+- **Audio Initialization Guidance**: Updated handpan header with "Click any note to play" instruction for clear user guidance
+
 ### October 7, 2025 - Critical Mobile Fixes & Full Mobile Optimization
 - **CRITICAL: Viewport Configuration Added**: Fixed missing viewport meta tag that was breaking mobile rendering completely. Now properly configured with device-width and initial-scale while allowing user zoom for accessibility
 - **CRITICAL: Header Visibility Fixed**: Resolved issue where navigation header was invisible on mobile devices, making navigation impossible. Added:
