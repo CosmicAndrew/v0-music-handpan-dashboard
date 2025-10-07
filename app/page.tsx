@@ -94,8 +94,8 @@ export default function Home() {
         />
       </div>
 
-      <header className="pastel-glass-header sticky top-0 z-50 border-b border-white/20">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
+      <header className="pastel-glass-header sticky top-0 z-[100] border-b border-white/20 safe-top">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4 safe-x">
           <div className="flex items-center justify-between gap-2 sm:gap-6">
             <div className="flex items-center gap-2 sm:gap-3">
               <div className="brand-icon">
@@ -159,7 +159,7 @@ export default function Home() {
         </div>
       </header>
 
-      <div className="main-content pt-6 sm:pt-8 px-4 sm:px-6 lg:px-8 pb-8">
+      <div className="main-content pt-20 sm:pt-24 px-4 sm:px-6 lg:px-8 pb-8 safe-x safe-bottom">
         {activeSection === "dashboard" && (
           <>
             <div className="min-h-[60vh] sm:min-h-[70vh] flex items-center justify-center py-4 sm:py-8">

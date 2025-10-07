@@ -1659,3 +1659,34 @@
     touch-action: manipulation;
   }
 }
+
+/* Safe area support for mobile devices with notches */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-x {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Ensure header is always visible on mobile */
+@media (max-width: 768px) {
+  .pastel-glass-header {
+    position: sticky;
+    top: 0;
+    background: rgba(147, 197, 253, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 100 !important;
+  }
+
+  .main-content {
+    position: relative;
+    z-index: 1;
+  }
+}
