@@ -8,7 +8,6 @@ import { Devotions } from "@/components/devotions"
 import { ExportProgress } from "@/components/export-progress"
 import { RecentlyPlayed } from "@/components/recently-played"
 import { Settings } from "@/components/settings"
-import { WorshipExperience3D } from "@/components/3d-worship-experience"
 import { useTheme } from "@/hooks/use-theme"
 
 type Section = "dashboard" | "handpan" | "songs" | "devotions" | "settings" | "export"
@@ -20,7 +19,6 @@ export default function Home() {
   const [isDragging, setIsDragging] = useState(false)
   const [dragOffset, setDragOffset] = useState(0)
   const [dragStartX, setDragStartX] = useState(0)
-  const [handpanView, setHandpanView] = useState<"2d" | "3d">("3d")
 
   useEffect(() => {
     console.log("[v0] Theme changed:", resolvedTheme)
@@ -627,34 +625,7 @@ export default function Home() {
           </>
         )}
         {activeSection === "settings" && <Settings theme={resolvedTheme} setTheme={setTheme} />}
-        {activeSection === "handpan" && (
-          <div className="space-y-6">
-            <div className="flex items-center justify-center gap-4">
-              <button
-                className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                  handpanView === "3d"
-                    ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg"
-                    : "bg-white/10 text-white/60 hover:bg-white/20"
-                }`}
-                onClick={() => setHandpanView("3d")}
-              >
-                🌌 3D Worship Experience
-              </button>
-              <button
-                className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                  handpanView === "2d"
-                    ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg"
-                    : "bg-white/10 text-white/60 hover:bg-white/20"
-                }`}
-                onClick={() => setHandpanView("2d")}
-              >
-                🎹 Classic Designer
-              </button>
-            </div>
-            
-            {handpanView === "3d" ? <WorshipExperience3D /> : <InteractiveHandpan />}
-          </div>
-        )}
+        {activeSection === "handpan" && <InteractiveHandpan />}
         {activeSection === "songs" && (
           <div className="min-h-screen">
             <SongLibrary />
