@@ -97,9 +97,8 @@ export function SongLibrary() {
   }
 
   const startHandpanPractice = (song: Song) => {
-    alert(
-      `Practice mode for "${song.title}" - Navigate to Handpan tab to practice these chords: ${song.chords.join(", ")}`,
-    )
+    console.log("[v0] Starting practice for:", song.title, "with chords:", song.chords)
+    console.log("[v0] Navigate to Handpan section to practice chords:", song.chords.join(", "))
   }
 
   return (
@@ -115,11 +114,11 @@ export function SongLibrary() {
         />
       </div>
 
-      <div className="space-y-4 sm:space-y-6 relative z-10">
-        <div className="glass-surface-frosty p-4 sm:p-6 lg:p-8 rounded-2xl space-y-3 sm:space-y-4 border-2 border-white/30">
+      <div className="space-y-4 md:space-y-6 relative z-10">
+        <div className="glass-surface-frosty p-4 md:p-6 lg:p-8 rounded-2xl space-y-3 md:space-y-4 border-2 border-white/30">
           <div>
             <h1
-              className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2"
+              className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2"
               style={{
                 textShadow: "0 3px 10px rgba(0, 0, 0, 0.8), 0 6px 20px rgba(0, 0, 0, 0.6)",
               }}
@@ -127,7 +126,7 @@ export function SongLibrary() {
               Worship Component Gallery
             </h1>
             <p
-              className="text-white text-sm sm:text-base lg:text-lg"
+              className="text-white text-sm md:text-base lg:text-lg"
               style={{
                 textShadow: "0 2px 8px rgba(0, 0, 0, 0.7), 0 4px 12px rgba(0, 0, 0, 0.5)",
               }}
@@ -135,34 +134,38 @@ export function SongLibrary() {
               Professional handpan components for your worship experience
             </p>
           </div>
-          <div className="flex gap-2 sm:gap-3 flex-wrap">
-            <div className="stat-badge-enhanced text-sm sm:text-base">
-              <span className="font-bold text-base sm:text-lg">{expandedSongLibrary.length}</span> Components
+          <div className="flex gap-2 md:gap-3 flex-wrap">
+            <div className="stat-badge-enhanced">
+              <span className="font-bold text-base md:text-lg">{expandedSongLibrary.length}</span>{" "}
+              <span className="hidden sm:inline">Components</span>
             </div>
-            <div className="stat-badge-enhanced text-sm sm:text-base">
-              <span className="font-bold text-base sm:text-lg">432Hz</span> Tuned
+            <div className="stat-badge-enhanced">
+              <span className="font-bold text-base md:text-lg">432Hz</span>{" "}
+              <span className="hidden sm:inline">Tuned</span>
             </div>
-            <div className="stat-badge-enhanced text-sm sm:text-base">
-              <span className="font-bold text-base sm:text-lg">D Kurd</span> Scale
+            <div className="stat-badge-enhanced">
+              <span className="font-bold text-base md:text-lg">D Kurd</span>{" "}
+              <span className="hidden sm:inline">Scale</span>
             </div>
-            <div className="stat-badge-enhanced text-sm sm:text-base">
-              <span className="font-bold text-base sm:text-lg">{getTierCount("Perfect")}</span> Perfect Match
+            <div className="stat-badge-enhanced">
+              <span className="font-bold text-base md:text-lg">{getTierCount("Perfect")}</span>{" "}
+              <span className="hidden sm:inline">Perfect</span>
             </div>
           </div>
         </div>
 
-        <Card className="glass-surface-frosty p-4 sm:p-6 space-y-3 sm:space-y-4 border-2 border-white/30">
-          <div className="space-y-4">
-            <div className="space-y-3">
+        <Card className="glass-surface-frosty p-4 md:p-6 space-y-3 md:space-y-4 border-2 border-white/30">
+          <div className="space-y-3 md:space-y-4">
+            <div className="space-y-2 md:space-y-3">
               <label
-                className="text-base font-bold text-white block bg-black/30 px-3 py-2 rounded-lg"
+                className="text-sm md:text-base font-bold text-white block bg-black/30 px-3 py-2 rounded-lg"
                 style={{
                   textShadow: "0 2px 8px rgba(0, 0, 0, 0.7)",
                 }}
               >
                 Compatibility Tier
               </label>
-              <div className="flex gap-2 flex-wrap">
+              <div className="flex gap-2 flex-wrap md:flex-nowrap overflow-x-auto mobile-tabs pb-2">
                 <button
                   onClick={() => setTierFilter("")}
                   className={`filter-btn-enhanced ${!tierFilter ? "active" : ""}`}
@@ -192,7 +195,7 @@ export function SongLibrary() {
 
             <div className="space-y-3">
               <label
-                className="text-base font-bold text-white block bg-black/30 px-3 py-2 rounded-lg"
+                className="text-sm md:text-base font-bold text-white block bg-black/30 px-3 py-2 rounded-lg"
                 style={{
                   textShadow: "0 2px 8px rgba(0, 0, 0, 0.7)",
                 }}
@@ -236,13 +239,13 @@ export function SongLibrary() {
 
           <div className="flex gap-2">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-700" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-gray-700" />
               <Input
                 type="search"
-                placeholder="Search components or artists..."
+                placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-12 bg-white/95 text-gray-900 font-medium border-2 border-white/40 placeholder:text-gray-600"
+                className="pl-9 md:pl-10 h-12 md:h-14 mobile-search-input bg-white/95 text-gray-900 font-medium border-2 border-white/40 placeholder:text-gray-600 text-sm md:text-base"
                 style={{
                   boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
                 }}
@@ -253,7 +256,7 @@ export function SongLibrary() {
                 onClick={clearAllFilters}
                 variant="outline"
                 size="icon"
-                className="h-12 w-12 bg-white/95 border-2 border-white/40"
+                className="h-12 w-12 md:h-14 md:w-14 mobile-touch-target bg-white/95 border-2 border-white/40"
               >
                 <X className="w-5 h-5 text-gray-900" />
               </Button>
@@ -271,13 +274,13 @@ export function SongLibrary() {
           </div>
         </Card>
 
-        <div className="grid gap-6">
+        <div className="grid gap-4 md:gap-6">
           {filteredSongs.map((song) => (
             <Card
               key={`${song.title}-${song.artist}`}
               className="glass-surface-frosty overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border-2 border-white/30"
             >
-              <div className="p-6 md:p-8 space-y-4">
+              <div className="p-4 md:p-6 lg:p-8 space-y-3 md:space-y-4">
                 <div className="flex items-start gap-4">
                   <div className="component-preview-icon-enhanced">
                     <Music2 className="w-7 h-7 text-white" />
@@ -408,7 +411,7 @@ export function SongLibrary() {
                       <div
                         key={idx}
                         className="px-5 py-3 rounded-lg bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 font-mono font-bold text-base md:text-lg hover:scale-105 transition-transform cursor-pointer border-2 border-amber-300/50 shadow-lg"
-                        onClick={() => {}}
+                        onClick={() => console.log("[v0] Chord clicked:", chord)}
                       >
                         {chord}
                       </div>
@@ -416,22 +419,24 @@ export function SongLibrary() {
                   </div>
                 </div>
 
-                <div className="flex gap-3 pt-2">
+                <div className="flex flex-col sm:flex-row gap-2 md:gap-3 pt-2">
                   <Button
                     onClick={() => startHandpanPractice(song)}
-                    className="flex-1 gap-2 action-btn-primary h-14 text-base font-bold"
+                    className="flex-1 gap-2 action-btn-primary h-12 md:h-14 text-sm md:text-base font-bold"
                   >
-                    <Play className="w-5 h-5" />
-                    Preview Component
+                    <Play className="w-4 h-4 md:w-5 md:h-5" />
+                    <span className="hidden sm:inline">Preview Component</span>
+                    <span className="sm:hidden">Preview</span>
                   </Button>
                   <Button
                     asChild
                     variant="outline"
-                    className="flex-1 gap-2 action-btn-secondary bg-white/95 h-14 text-base font-bold border-2 border-white/40"
+                    className="flex-1 gap-2 action-btn-secondary bg-white/95 h-12 md:h-14 text-sm md:text-base font-bold border-2 border-white/40"
                   >
                     <a href={song.videoUrl} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="w-5 h-5" />
-                      Add to Setlist
+                      <ExternalLink className="w-4 h-4 md:w-5 md:h-5" />
+                      <span className="hidden sm:inline">Add to Setlist</span>
+                      <span className="sm:hidden">Add</span>
                     </a>
                   </Button>
                 </div>

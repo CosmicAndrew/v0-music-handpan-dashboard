@@ -41,77 +41,175 @@ const devotions = [
 
 export function Devotions() {
   return (
-    <div className="space-y-6">
-      <div className="fade-up">
-        <h1 className="text-3xl font-bold">Righteousness Devotions</h1>
-        <p className="text-muted-foreground">Meditations on the finished work of Christ</p>
+    <div className="relative min-h-screen">
+      <div className="absolute top-0 left-0 w-full h-full -z-10">
+        <iframe
+          src="https://my.spline.design/ventura2copy-QlljPuDvQWfMiAnUXFOrCrsY"
+          frameBorder="0"
+          width="100%"
+          height="100%"
+          id="aura-spline-devotions"
+          className="w-full h-full"
+        />
       </div>
 
-      <div className="grid gap-6">
-        {devotions.map((devotion, index) => {
-          const Icon = devotion.icon
-          return (
-            <Card
-              key={devotion.title}
-              className="glass-card fade-up"
-              style={{ animationDelay: `${0.1 + index * 0.15}s` }}
+      <div className="space-y-6 relative z-10">
+        <div className="fade-up glass-surface-frosty p-8 rounded-2xl border-2 border-white/30">
+          <h1
+            className="text-3xl font-bold text-white"
+            style={{
+              textShadow: "0 3px 10px rgba(0, 0, 0, 0.8), 0 6px 20px rgba(0, 0, 0, 0.6)",
+            }}
+          >
+            Righteousness Devotions
+          </h1>
+          <p
+            className="text-white text-lg mt-2"
+            style={{
+              textShadow: "0 2px 8px rgba(0, 0, 0, 0.7), 0 4px 12px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            Meditations on the finished work of Christ
+          </p>
+        </div>
+
+        <div className="grid gap-6">
+          {devotions.map((devotion, index) => {
+            const Icon = devotion.icon
+            return (
+              <Card
+                key={devotion.title}
+                className="glass-surface-frosty fade-up border-2 border-white/30"
+                style={{ animationDelay: `${0.1 + index * 0.15}s` }}
+              >
+                <CardHeader>
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <CardTitle
+                        className="text-2xl text-white"
+                        style={{
+                          textShadow: "0 3px 10px rgba(0, 0, 0, 0.8), 0 6px 20px rgba(0, 0, 0, 0.6)",
+                        }}
+                      >
+                        {devotion.title}
+                      </CardTitle>
+                      <CardDescription className="mt-2">
+                        <BookOpen className="w-4 h-4 inline mr-2" />
+                        <span
+                          className="text-white/90"
+                          style={{
+                            textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
+                          }}
+                        >
+                          {devotion.scripture}
+                        </span>
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="p-4 rounded-lg bg-white/20 border-l-4 border-primary backdrop-blur-sm">
+                    <p
+                      className="italic text-white leading-relaxed"
+                      style={{
+                        textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
+                      }}
+                    >
+                      {devotion.verse}
+                    </p>
+                  </div>
+
+                  <div className="p-4 rounded-lg bg-black/30 backdrop-blur-sm border-2 border-white/20">
+                    <h4
+                      className="font-semibold mb-2 text-white"
+                      style={{
+                        textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
+                      }}
+                    >
+                      Reflection
+                    </h4>
+                    <p
+                      className="text-white/95 leading-relaxed"
+                      style={{
+                        textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
+                      }}
+                    >
+                      {devotion.reflection}
+                    </p>
+                  </div>
+
+                  <div className="p-4 rounded-lg bg-black/30 backdrop-blur-sm border-2 border-white/20">
+                    <h4
+                      className="font-semibold mb-2 text-white"
+                      style={{
+                        textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
+                      }}
+                    >
+                      Application
+                    </h4>
+                    <p
+                      className="text-white/95 leading-relaxed"
+                      style={{
+                        textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
+                      }}
+                    >
+                      {devotion.application}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            )
+          })}
+        </div>
+
+        <Card className="glass-surface-frosty bg-gradient-to-br from-amber-50/10 to-orange-50/10 border-2 border-white/30">
+          <CardHeader>
+            <CardTitle
+              className="text-white"
+              style={{
+                textShadow: "0 3px 10px rgba(0, 0, 0, 0.8), 0 6px 20px rgba(0, 0, 0, 0.6)",
+              }}
             >
-              <CardHeader>
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center flex-shrink-0">
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <CardTitle className="text-2xl">{devotion.title}</CardTitle>
-                    <CardDescription className="mt-2">
-                      <BookOpen className="w-4 h-4 inline mr-2" />
-                      {devotion.scripture}
-                    </CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="p-4 rounded-lg bg-muted/50 border-l-4 border-primary">
-                  <p className="italic text-foreground leading-relaxed">{devotion.verse}</p>
-                </div>
-
-                <div className="p-4 rounded-lg bg-background/60 backdrop-blur-sm">
-                  <h4 className="font-semibold mb-2 text-foreground">Reflection</h4>
-                  <p className="text-foreground/90 leading-relaxed">{devotion.reflection}</p>
-                </div>
-
-                <div className="p-4 rounded-lg bg-background/60 backdrop-blur-sm">
-                  <h4 className="font-semibold mb-2 text-foreground">Application</h4>
-                  <p className="text-foreground/90 leading-relaxed">{devotion.application}</p>
-                </div>
-              </CardContent>
-            </Card>
-          )
-        })}
+              About Righteousness Theology
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm leading-relaxed">
+            <p
+              className="text-white/95"
+              style={{
+                textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
+              }}
+            >
+              These devotions are rooted in the biblical truth that righteousness is a gift, not an achievement. Through
+              the blood of Jesus and the victory of the cross, believers are made righteous—not by their works, but by
+              faith in Christ's finished work.
+            </p>
+            <p
+              className="text-white/95"
+              style={{
+                textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
+              }}
+            >
+              As you play the handpan and meditate on these truths, remember that worship is not about performing for
+              God but celebrating what He has already done. The 432 Hz tuning is believed to resonate with the natural
+              frequency of the universe, creating a sense of harmony and peace—a perfect metaphor for the harmony we
+              have with God through Christ.
+            </p>
+            <p
+              className="font-semibold text-white"
+              style={{
+                textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
+              }}
+            >
+              "For by grace you have been saved through faith. And this is not your own doing; it is the gift of God,
+              not a result of works, so that no one may boast." - Ephesians 2:8-9
+            </p>
+          </CardContent>
+        </Card>
       </div>
-
-      <Card className="glass-card bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30">
-        <CardHeader>
-          <CardTitle>About Righteousness Theology</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3 text-sm leading-relaxed">
-          <p>
-            These devotions are rooted in the biblical truth that righteousness is a gift, not an achievement. Through
-            the blood of Jesus and the victory of the cross, believers are made righteous—not by their works, but by
-            faith in Christ's finished work.
-          </p>
-          <p>
-            As you play the handpan and meditate on these truths, remember that worship is not about performing for God
-            but celebrating what He has already done. The 432 Hz tuning is believed to resonate with the natural
-            frequency of the universe, creating a sense of harmony and peace—a perfect metaphor for the harmony we have
-            with God through Christ.
-          </p>
-          <p className="font-semibold">
-            "For by grace you have been saved through faith. And this is not your own doing; it is the gift of God, not
-            a result of works, so that no one may boast." - Ephesians 2:8-9
-          </p>
-        </CardContent>
-      </Card>
     </div>
   )
 }

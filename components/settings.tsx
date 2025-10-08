@@ -3,7 +3,7 @@
 import { useState } from "react"
 
 interface SettingsProps {
-  theme: "light" | "dark"
+  theme: "light" | "dark" | "system"
   setTheme: (theme: "light" | "dark" | "system") => void
 }
 

@@ -98,62 +98,7 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
   --font-inter: "Inter", sans-serif;
-  --font-geist-sans: "Geist Sans", sans-serif;
-
-  /* Status & Feedback Colors */
-  --success-bg: rgba(34, 197, 94, 0.15);
-  --success-border: rgba(34, 197, 94, 0.3);
-  --success-text: #22c55e;
-
-  /* Background Gradients - exact from reference */
-  --studio-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
-
-  /* Restored beautiful transparent glassmorphism */
-  --studio-surface: rgba(255, 255, 255, 0.15);
-  --studio-glass: rgba(255, 255, 255, 0.15);
-  --studio-border: rgba(255, 255, 255, 0.2);
-
-  /* Updated to transparent glassmorphism values */
-  --studio-glass-10: rgba(255, 255, 255, 0.1);
-  --studio-glass-15: rgba(255, 255, 255, 0.15);
-  --studio-glass-25: rgba(255, 255, 255, 0.25);
-  --studio-glass-border: rgba(255, 255, 255, 0.15);
-
-  /* Sacred Earth Tones - Bohemian Biblical */
-  --holy-gold: #d4af37;
-  --sacred-amber: #b8860b;
-  --divine-purple: #6b46c1;
-  --royal-indigo: #4c1d95;
-  --olive-green: #8b8000;
-  --desert-sand: #d2691e;
-  --wine-red: #722f37;
-  --deep-brown: #8b4513;
-
-  /* Bohemian Accents */
-  --sunset-orange: #ff6b35;
-  --earthy-terracotta: #a0522d;
-  --mystic-teal: #008b8b;
-  --sage-green: #9caf88;
-
-  /* High Contrast Text for Visibility */
-  --text-primary: rgba(255, 255, 255, 0.95);
-  --text-secondary: rgba(255, 255, 255, 0.85);
-  --text-dark: rgba(0, 0, 0, 0.85);
-
-  /* Pastel glassmorphism color palette */
-  --pastel-blue: rgba(147, 197, 253, 0.3);
-  --pastel-purple: rgba(196, 181, 253, 0.3);
-  --pastel-pink: rgba(251, 182, 206, 0.3);
-  --pastel-green: rgba(167, 243, 208, 0.3);
-  --pastel-yellow: rgba(254, 240, 138, 0.3);
-  --pastel-border: rgba(255, 255, 255, 0.2);
-  --pastel-shadow: rgba(0, 0, 0, 0.1);
-
-  /* Soft pastel gradients */
-  --pastel-gradient-1: linear-gradient(135deg, var(--pastel-blue) 0%, var(--pastel-purple) 100%);
-  --pastel-gradient-2: linear-gradient(135deg, var(--pastel-purple) 0%, var(--pastel-pink) 100%);
-  --pastel-gradient-3: linear-gradient(135deg, var(--pastel-pink) 0%, var(--pastel-yellow) 100%);
-  --pastel-gradient-4: linear-gradient(135deg, var(--pastel-green) 0%, var(--pastel-blue) 100%);
+  --font-outfit: "Outfit", sans-serif; /* Added font configuration for Outfit */
 }
 
 /* Enhanced light mode with brighter, more vibrant appearance */
@@ -174,7 +119,7 @@
 
 /* Enhanced dark mode with darker, more subdued appearance */
 [data-theme="dark"] {
-  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312810 100%);
   --text-primary: rgba(255, 255, 255, 0.95);
   --text-secondary: rgba(255, 255, 255, 0.75);
   --glass-bg: rgba(15, 23, 42, 0.6);
@@ -231,7 +176,7 @@
 
 @theme inline {
   /* Configure Inter as the sans-serif font */
-  --font-sans: var(--font-geist-sans), var(--font-inter), "Inter", sans-serif;
+  --font-sans: var(--font-outfit), var(--font-inter), "Inter", sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -368,81 +313,6 @@
 
   .handpan-note.active {
     animation: noteRipple 0.6s ease-out;
-  }
-
-  /* Performance optimizations for mobile */
-  .will-change-transform {
-    will-change: transform;
-  }
-
-  .gpu-accelerate {
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    perspective: 1000px;
-  }
-
-  /* Reduce blur on mobile for better performance */
-  @media (max-width: 768px) {
-    .pastel-glass-header,
-    .pastel-card,
-    .glass-surface,
-    .glass-surface-frosty,
-    .glass-elevated {
-      backdrop-filter: blur(20px) !important;
-      -webkit-backdrop-filter: blur(20px) !important;
-    }
-
-    .pastel-button,
-    .pastel-badge,
-    .pastel-nav-item {
-      backdrop-filter: blur(15px) !important;
-      -webkit-backdrop-filter: blur(15px) !important;
-    }
-  }
-
-  /* Optimize animations for mobile */
-  @media (max-width: 768px) {
-    .worship-feature-card,
-    .pastel-card,
-    .studio-button {
-      will-change: transform;
-      transform: translateZ(0);
-    }
-
-    * {
-      -webkit-tap-highlight-color: transparent;
-    }
-  }
-
-  /* Smooth scrolling optimization */
-  html {
-    scroll-behavior: smooth;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Optimize scroll performance */
-  .main-content,
-  .overflow-x-auto {
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
-  }
-
-  /* Prevent layout shift */
-  img,
-  svg,
-  iframe {
-    content-visibility: auto;
-  }
-
-  /* Optimize touch interactions */
-  button,
-  a,
-  .pastel-nav-item,
-  .worship-feature-card {
-    -webkit-user-select: none;
-    user-select: none;
-    -webkit-touch-callout: none;
   }
 
   @keyframes noteRipple {
@@ -976,7 +846,7 @@
 
   /* FlowSpace Interactive Stacked Cards System */
   .worship-cards-section {
-    --_offset-steps: 5rem;
+    --_offset-steps: 3.5rem; /* Adjusted */
     --_scale-steps: 12;
     --_opacity-steps: 18;
     --_offset-steps-two: calc(var(--_offset-steps) * -1);
@@ -991,7 +861,7 @@
 
     display: grid;
     grid-template-areas: "stack";
-    width: min(calc(100% - 2rem), 28rem);
+    width: min(calc(100% - 2rem), 20rem); /* Adjusted */
     perspective: 1000px;
     margin: 0 auto;
   }
@@ -1291,22 +1161,17 @@
   .pastel-nav-item {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 0.5rem;
     padding: 0.5rem 0.75rem;
     border-radius: 0.75rem;
     background: transparent;
-    border: 2px solid transparent;
+    border: 1px solid transparent;
     color: rgba(255, 255, 255, 0.95);
     font-weight: 600;
     font-size: 0.875rem;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-    min-width: 3rem;
-    min-height: 3rem;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
   }
 
   .pastel-nav-item:hover {
@@ -1319,18 +1184,6 @@
     background: rgba(255, 255, 255, 0.3);
     border-color: rgba(255, 255, 255, 0.4);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-
-  .pastel-nav-item:active {
-    transform: scale(0.95);
-  }
-
-  @media (max-width: 640px) {
-    .pastel-nav-item {
-      padding: 0.5rem;
-      min-width: 2.75rem;
-      min-height: 2.75rem;
-    }
   }
 
   .pastel-badge {
@@ -1606,12 +1459,16 @@
   }
 
   .action-btn-primary {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 3px solid rgba(255, 255, 255, 0.3);
     background: linear-gradient(135deg, #1f2937, #111827) !important;
     color: white !important;
-    border: 3px solid rgba(255, 255, 255, 0.3) !important;
-    font-weight: 700 !important;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
@@ -1653,6 +1510,490 @@
     height: 100%;
     border: none;
   }
+
+  /* Mobile bottom navigation styles */
+  .mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(80px) saturate(210%);
+    -webkit-backdrop-filter: blur(80px) saturate(210%);
+    border-top: 3px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.35);
+  }
+
+  .mobile-nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    background: transparent;
+    border: 2px solid transparent;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 600;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+    min-width: 4rem;
+  }
+
+  .mobile-nav-btn:hover {
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .mobile-nav-btn.active {
+    color: white;
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
+  }
+
+  .mobile-nav-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  /* Padding bottom to main content for mobile nav clearance */
+  .app-container {
+    padding-bottom: 5rem;
+  }
+
+  @media (min-width: 768px) {
+    .app-container {
+      padding-bottom: 0;
+    }
+  }
+
+  /* Mobile-optimized touch targets and responsive improvements */
+
+  /* Minimum touch target size for mobile (44x44px) */
+  .mobile-touch-target {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Mobile-optimized handpan player */
+  @media (max-width: 768px) {
+    .handpan-note {
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .handpan-note circle {
+      transition: all 0.2s ease;
+    }
+
+    .handpan-note:active circle {
+      transform: scale(0.95);
+    }
+
+    /* Larger touch targets for mobile handpan */
+    .handpan-note-mobile {
+      min-width: 60px;
+      min-height: 60px;
+    }
+
+    /* Reduced stackable card sizes for mobile */
+    .worship-cards-section {
+      --_offset-steps: 2rem;
+      width: min(calc(100% - 1rem), 16rem);
+    }
+
+    .worship-feature-card {
+      height: 20rem !important;
+      padding: 1rem !important;
+    }
+
+    /* Mobile-optimized glassmorphism - lighter blur for performance */
+    .glass-surface-frosty,
+    .glass-surface,
+    .glass-elevated {
+      backdrop-filter: blur(40px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+    }
+
+    /* Reduce Spline 3D opacity on mobile for performance */
+    .spline-container iframe {
+      opacity: 0.4;
+    }
+
+    /* Mobile-optimized text sizes */
+    .text-4xl {
+      font-size: 2rem;
+    }
+
+    .text-3xl {
+      font-size: 1.75rem;
+    }
+
+    .text-2xl {
+      font-size: 1.5rem;
+    }
+
+    /* Mobile-optimized spacing */
+    .main-content {
+      padding-left: 1rem;
+      padding-right: 1rem;
+      padding-top: 1.5rem;
+    }
+
+    /* Mobile-optimized buttons */
+    .studio-button,
+    .pastel-button,
+    .action-btn-primary,
+    .action-btn-secondary {
+      min-height: 48px;
+      font-size: 1rem;
+      padding: 0.875rem 1.25rem;
+    }
+
+    /* Mobile-optimized navigation */
+    .mobile-bottom-nav {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .mobile-nav-btn {
+      min-width: 60px;
+      min-height: 60px;
+      padding: 0.5rem;
+    }
+
+    /* Mobile-optimized song cards */
+    .song-card {
+      padding: 1rem !important;
+    }
+
+    /* Mobile-optimized chord buttons */
+    .chord-button-mobile {
+      min-width: 70px;
+      min-height: 56px;
+      font-size: 1.125rem;
+    }
+
+    /* Mobile-optimized sliders */
+    .settings-slider,
+    .pastel-slider,
+    .sacred-slider {
+      height: 1rem;
+    }
+
+    .settings-slider::-webkit-slider-thumb,
+    .pastel-slider::-webkit-slider-thumb,
+    .sacred-slider::-webkit-slider-thumb {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    .settings-slider::-moz-range-thumb,
+    .pastel-slider::-moz-range-thumb,
+    .sacred-slider::-moz-range-thumb {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    /* Mobile-optimized filter buttons */
+    .filter-btn-enhanced {
+      min-height: 44px;
+      padding: 0.75rem 1rem;
+      font-size: 0.9375rem;
+    }
+
+    /* Mobile-optimized search input */
+    .mobile-search-input {
+      height: 52px;
+      font-size: 1rem;
+    }
+
+    /* Hide desktop-only elements */
+    .desktop-only {
+      display: none !important;
+    }
+
+    /* Mobile-optimized grid layouts */
+    .grid.md\\:grid-cols-2,
+    .grid.md\\:grid-cols-3,
+    .grid.md\\:grid-cols-4,
+    .grid.lg\\:grid-cols-2 {
+      grid-template-columns: 1fr;
+    }
+
+    /* Mobile-optimized feature list */
+    .feature-list-item {
+      padding: 0.75rem;
+      font-size: 0.9375rem;
+    }
+
+    /* Mobile-optimized badges */
+    .stat-badge-enhanced,
+    .pastel-badge,
+    .pastel-badge-accent {
+      font-size: 0.8125rem;
+      padding: 0.5rem 0.875rem;
+    }
+
+    /* Mobile-optimized card stats */
+    .card-stat-row {
+      font-size: 0.9375rem;
+    }
+
+    /* Optimize animations for mobile performance */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Mobile-optimized devotions layout */
+    .devotions-container {
+      padding: 1rem !important;
+    }
+
+    /* Mobile-optimized handpan designer */
+    .layout-designer {
+      padding: 0 !important;
+    }
+
+    .designer-workspace {
+      grid-template-columns: 1fr !important;
+      gap: 1rem !important;
+    }
+
+    .layout-sidebar,
+    .properties-panel {
+      max-height: none !important;
+      position: relative !important;
+    }
+
+    /* Mobile-optimized handpan SVG */
+    .handpan-preview-area svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Mobile-optimized control panels */
+    .preview-controls {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .preview-controls button {
+      flex: 1 1 calc(50% - 0.25rem);
+      min-width: 140px;
+    }
+
+    /* Mobile-optimized chord grid */
+    .chord-grid-mobile {
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: 0.5rem;
+    }
+
+    /* Mobile-optimized property groups */
+    .property-group {
+      padding: 0.75rem;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 0.75rem;
+    }
+
+    /* Mobile-optimized modal */
+    .mobile-modal {
+      max-height: 80vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Mobile-optimized tabs */
+    .mobile-tabs {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .mobile-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Improve scroll performance */
+    .scroll-container {
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+
+    /* Mobile-optimized recently played */
+    .recently-played-grid {
+      grid-template-columns: 1fr !important;
+      gap: 1rem !important;
+    }
+
+    /* Mobile-optimized export progress */
+    .export-progress-container {
+      padding: 1rem !important;
+    }
+
+    /* Mobile-optimized settings */
+    .settings-container {
+      padding: 1rem !important;
+    }
+
+    .settings-section {
+      padding: 1rem !important;
+    }
+
+    /* Mobile bento grid optimization */
+    .bento-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .section-card-3d {
+      padding: 1rem;
+      border-radius: 1.5rem;
+    }
+
+    .handpan-info-panel {
+      padding: 1rem;
+    }
+  }
+
+  /* Tablet optimizations (768px - 1024px) */
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .worship-cards-section {
+      --_offset-steps: 4rem;
+      width: min(calc(100% - 2rem), 26rem);
+    }
+
+    .worship-feature-card {
+      height: 32rem !important;
+    }
+
+    .grid.md\\:grid-cols-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid.md\\:grid-cols-3 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid.md\\:grid-cols-4 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Landscape mobile optimizations */
+  @media (max-width: 768px) and (orientation: landscape) {
+    .worship-feature-card {
+      height: 24rem !important;
+    }
+
+    .main-content {
+      padding-top: 1rem;
+    }
+
+    .mobile-bottom-nav {
+      padding: 0.5rem 0;
+    }
+
+    .mobile-nav-btn {
+      min-height: 52px;
+      padding: 0.375rem;
+    }
+
+    .mobile-nav-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    .mobile-nav-btn span {
+      font-size: 0.6875rem;
+    }
+  }
+
+  /* Small mobile devices (< 375px) */
+  @media (max-width: 374px) {
+    .text-4xl {
+      font-size: 1.75rem;
+    }
+
+    .text-3xl {
+      font-size: 1.5rem;
+    }
+
+    .text-2xl {
+      font-size: 1.25rem;
+    }
+
+    .worship-cards-section {
+      --_offset-steps: 2.5rem;
+      width: min(calc(100% - 0.5rem), 22rem);
+    }
+
+    .worship-feature-card {
+      height: 26rem !important;
+      padding: 1.25rem !important;
+    }
+
+    .studio-button,
+    .pastel-button {
+      font-size: 0.875rem;
+      padding: 0.75rem 1rem;
+    }
+
+    .mobile-nav-btn {
+      min-width: 52px;
+      font-size: 0.6875rem;
+    }
+
+    .filter-btn-enhanced {
+      font-size: 0.875rem;
+      padding: 0.75rem 1rem;
+    }
+  }
+
+  /* iOS safe area support */
+  @supports (padding: max(0px)) {
+    .app-container {
+      padding-left: max(1rem, env(safe-area-inset-left));
+      padding-right: max(1rem, env(safe-area-inset-right));
+    }
+
+    .mobile-bottom-nav {
+      padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+    }
+  }
+
+  /* Improve touch feedback */
+  @media (hover: none) and (pointer: coarse) {
+    button,
+    .handpan-note,
+    .song-card,
+    .filter-btn-enhanced,
+    .mobile-nav-btn {
+      -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+    }
+
+    button:active,
+    .handpan-note:active,
+    .song-card:active,
+    .filter-btn-enhanced:active,
+    .mobile-nav-btn:active {
+      transform: scale(0.98);
+      transition: transform 0.1s ease;
+    }
+  }
 }
 
 /* Responsive design improvements */
@@ -1677,91 +2018,130 @@
   }
 }
 
-/* Mobile optimizations */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+/* Added 3D card effect styles for full-page sections */
+.section-card-3d {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(70px) saturate(200%);
+  -webkit-backdrop-filter: blur(70px) saturate(200%);
+  border: 3px solid rgba(255, 255, 255, 0.35);
+  border-radius: 2rem;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+  min-height: 100vh;
+  padding: 2rem;
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+.section-card-3d:hover {
+  transform: translateZ(10px);
 }
 
-.touch-manipulation {
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+/* Bento grid layout for card components inside sections */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
 }
 
-/* Mobile-optimized buttons and interactive elements */
-@media (max-width: 768px) {
-  button, 
-  .studio-button,
-  .glass-button,
-  .pastel-nav-item {
-    min-height: 44px;
-    min-width: 44px;
-  }
-
-  .worship-feature-card {
-    padding: 1rem !important;
-    height: auto !important;
-    min-height: 24rem !important;
-  }
-
-  .card-icon-badge {
-    width: 2.5rem !important;
-    height: 2.5rem !important;
-  }
-
-  .studio-button {
-    padding: 0.75rem 1.25rem !important;
-    font-size: 0.9375rem !important;
-  }
+.bento-card {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 }
 
-/* Prevent zoom on double tap for iOS */
-@media (max-width: 768px) {
-  button,
-  a,
-  input:not([type="range"]),
-  textarea,
-  select,
-  [role="button"],
-  .pastel-nav-item,
-  .worship-feature-card,
-  .glass-button,
-  .studio-button {
-    touch-action: manipulation;
-  }
+.bento-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
 }
 
-/* Safe area support for mobile devices with notches */
-.safe-top {
-  padding-top: env(safe-area-inset-top);
+/* Handpan info panel styles */
+.handpan-info-panel {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  margin-top: 1rem;
 }
 
-.safe-bottom {
-  padding-bottom: env(safe-area-inset-bottom);
+.info-section {
+  margin-bottom: 1.5rem;
 }
 
-.safe-x {
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
+.info-section h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Ensure header is always visible on mobile */
-@media (max-width: 768px) {
-  .pastel-glass-header {
-    position: sticky;
-    top: 0;
-    background: rgba(147, 197, 253, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    z-index: 100 !important;
-  }
+.info-section p,
+.info-section ul {
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
 
-  .main-content {
-    position: relative;
-    z-index: 1;
-  }
+.info-section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.info-section li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-section li:last-child {
+  border-bottom: none;
+}
+
+.scale-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Added horizontal note layout styles */
+.note-list-horizontal {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.note-list-horizontal::-webkit-scrollbar {
+  height: 6px;
+}
+
+.note-list-horizontal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.note-list-horizontal::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.note-config-compact {
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.note-config-compact:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  transform: translateY(-2px);
 }

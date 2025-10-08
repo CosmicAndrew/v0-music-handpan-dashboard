@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Play, Pause, Clock, Music2 } from "lucide-react"
+import { Play, Pause, Clock, Music2 } from "@/components/icons"
 
 interface RecentSong {
   id: number
