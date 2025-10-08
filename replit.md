@@ -84,7 +84,7 @@ Interactive handpan worship experience with YataoPan D Kurd 10 tuned to 432Hz. T
 - **Fonts**: Geist Sans, Inter
 
 ### Project Structure
-```
+\`\`\`
 app/                    # Next.js App Router
   ├── layout.tsx       # Root layout with fonts and metadata
   ├── page.tsx         # Main dashboard page
@@ -109,7 +109,7 @@ hooks/                 # Custom React hooks
   └── use-theme.ts
 
 public/               # Static assets (images, etc.)
-```
+\`\`\`
 
 ### Key Features
 1. **Dashboard**: Draggable feature cards showcasing the app's capabilities
@@ -128,16 +128,16 @@ public/               # Static assets (images, etc.)
 ## Running the Project
 
 ### Development
-```bash
+\`\`\`bash
 pnpm run dev
-```
+\`\`\`
 Server runs on http://0.0.0.0:5000
 
 ### Production Build
-```bash
+\`\`\`bash
 pnpm run build
 pnpm run start
-```
+\`\`\`
 
 ### Deployment
 The project is configured for Replit's autoscale deployment:
