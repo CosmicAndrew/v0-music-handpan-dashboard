@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { InteractiveHandpan } from "@/components/interactive-handpan"
 import { SongLibrary } from "@/components/song-library"
 import { Devotions } from "@/components/devotions"
@@ -24,7 +24,10 @@ export default function HandpanWorshipStudio() {
   const [isDragging, setIsDragging] = useState(false)
   const [dragOffset, setDragOffset] = useState(0)
   const [dragStartX, setDragStartX] = useState(0)
+  const [dragStartTime, setDragStartTime] = useState(0)
+  const [clickedInteractive, setClickedInteractive] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const cardsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const preloadCache = async () => {
@@ -81,53 +84,127 @@ export default function HandpanWorshipStudio() {
     }
   }, [activeSection, isDragging])
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handleDragStart = useCallback((clientX: number, e: React.MouseEvent | React.TouchEvent) => {
+    const target = e.target as HTMLElement
+
+    // Check if clicking on interactive elements - prevent drag
+    if (
+      target.closest("button") ||
+      target.closest("a") ||
+      target.tagName === "BUTTON" ||
+      target.tagName === "A" ||
+      target.hasAttribute("data-interactive") ||
+      target.classList.contains("studio-button") ||
+      target.classList.contains("card-menu-btn")
+    ) {
+      console.log("[v0] Clicked interactive element, preventing drag")
+      setClickedInteractive(true)
+      return false
+    }
+
+    console.log("[v0] Starting drag at X:", clientX)
+    setClickedInteractive(false)
     setIsDragging(true)
-    setDragStartX(e.clientX)
+    setDragStartX(clientX)
+    setDragStartTime(Date.now())
     setDragOffset(0)
-  }
+    return true
+  }, [])
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return
-    const offset = e.clientX - dragStartX
-    setDragOffset(offset)
-  }
+  const handleDragMove = useCallback(
+    (clientX: number) => {
+      if (!isDragging || clickedInteractive) return
 
-  const handleMouseUp = () => {
-    if (Math.abs(dragOffset) > 100) {
+      const offset = clientX - dragStartX
+
+      // Only start visual drag if moved more than 10px
+      if (Math.abs(offset) > 10) {
+        console.log("[v0] Dragging, offset:", offset)
+        setDragOffset(offset)
+      }
+    },
+    [isDragging, dragStartX, clickedInteractive],
+  )
+
+  const handleDragEnd = useCallback(() => {
+    if (!isDragging || clickedInteractive) {
+      setClickedInteractive(false)
+      return
+    }
+
+    const dragDuration = Date.now() - dragStartTime
+    const velocity = Math.abs(dragOffset) / Math.max(dragDuration, 1)
+
+    // Dynamic threshold based on velocity
+    const threshold = velocity > 0.5 ? 50 : 100
+
+    console.log("[v0] Drag ended - offset:", dragOffset, "velocity:", velocity.toFixed(2), "threshold:", threshold)
+
+    if (Math.abs(dragOffset) > threshold) {
       if (dragOffset < 0 && activeCard < 5) {
+        console.log("[v0] Swiping to next card:", activeCard + 1)
         setActiveCard(activeCard + 1)
+        if (navigator.vibrate) navigator.vibrate(10)
       } else if (dragOffset > 0 && activeCard > 1) {
+        console.log("[v0] Swiping to previous card:", activeCard - 1)
         setActiveCard(activeCard - 1)
+        if (navigator.vibrate) navigator.vibrate(10)
       }
     }
+
     setIsDragging(false)
     setDragOffset(0)
-  }
+    setClickedInteractive(false)
+  }, [isDragging, dragOffset, dragStartTime, activeCard, clickedInteractive])
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setIsDragging(true)
-    setDragStartX(e.touches[0].clientX)
-    setDragOffset(0)
-  }
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return
-    const offset = e.touches[0].clientX - dragStartX
-    setDragOffset(offset)
-  }
-
-  const handleTouchEnd = () => {
-    if (Math.abs(dragOffset) > 100) {
-      if (dragOffset < 0 && activeCard < 5) {
-        setActiveCard(activeCard + 1)
-      } else if (dragOffset > 0 && activeCard > 1) {
-        setActiveCard(activeCard - 1)
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      if (handleDragStart(e.clientX, e)) {
+        e.preventDefault()
       }
+    },
+    [handleDragStart],
+  )
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent) => {
+      handleDragMove(e.clientX)
+    },
+    [handleDragMove],
+  )
+
+  const handleMouseUp = useCallback(() => {
+    handleDragEnd()
+  }, [handleDragEnd])
+
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      handleDragStart(e.touches[0].clientX, e)
+    },
+    [handleDragStart],
+  )
+
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      handleDragMove(e.touches[0].clientX)
+    },
+    [handleDragMove],
+  )
+
+  const handleTouchEnd = useCallback(() => {
+    handleDragEnd()
+  }, [handleDragEnd])
+
+  const handleButtonClick = useCallback((section: Section, e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation()
+      e.preventDefault()
     }
-    setIsDragging(false)
-    setDragOffset(0)
-  }
+    console.log("[v0] Button clicked, navigating to:", section)
+    setActiveSection(section)
+    setClickedInteractive(false)
+    if (navigator.vibrate) navigator.vibrate(10)
+  }, [])
 
   return (
     <main
@@ -275,7 +352,10 @@ export default function HandpanWorshipStudio() {
                     {[1, 2, 3, 4, 5].map((num) => (
                       <button
                         key={num}
-                        onClick={() => setActiveCard(num)}
+                        onClick={() => {
+                          console.log("[v0] Dot clicked, switching to card:", num)
+                          setActiveCard(num)
+                        }}
                         className={`mobile-touch-target transition-all ${
                           activeCard === num
                             ? "w-8 md:w-10 h-3 md:h-4 bg-white rounded-full"
@@ -312,8 +392,14 @@ export default function HandpanWorshipStudio() {
 
                 <div className="flex justify-center lg:justify-end">
                   <div
+                    ref={cardsRef}
                     className={`worship-cards-section feature-${activeCard}-active ${isDragging ? "dragging" : ""}`}
-                    style={{ height: "22rem", cursor: isDragging ? "grabbing" : "grab" }}
+                    style={{
+                      height: "22rem",
+                      cursor: isDragging ? "grabbing" : "grab",
+                      touchAction: "pan-y",
+                      userSelect: "none",
+                    }}
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}
                     onMouseUp={handleMouseUp}
@@ -322,14 +408,19 @@ export default function HandpanWorshipStudio() {
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}
                   >
+                    {/* Card 1 - Perfect Match Songs */}
                     <div
                       className="worship-feature-card pastel-card"
                       style={{
                         height: "22rem",
                         background:
                           "linear-gradient(135deg, rgba(147, 197, 253, 0.4) 0%, rgba(196, 181, 253, 0.4) 100%)",
-                        transform: activeCard === 1 ? `translateX(${dragOffset}px)` : undefined,
-                        transition: isDragging ? "none" : "transform 0.3s ease-out",
+                        transform:
+                          activeCard === 1
+                            ? `translateX(${dragOffset}px) ${Math.abs(dragOffset) > 50 ? `rotateY(${dragOffset * 0.02}deg)` : ""}`
+                            : undefined,
+                        transition: isDragging ? "none" : "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                        pointerEvents: activeCard === 1 ? "auto" : "none",
                       }}
                     >
                       <div className="flex flex-col h-full text-white">
@@ -377,19 +468,23 @@ export default function HandpanWorshipStudio() {
 
                         <div className="flex gap-3">
                           <button
-                            className="studio-button primary flex-1"
-                            onClick={(e) => {
+                            data-interactive="true"
+                            className="studio-button primary flex-1 mobile-touch-target"
+                            onClick={(e) => handleButtonClick("songs", e)}
+                            onTouchEnd={(e) => {
                               e.stopPropagation()
-                              setActiveSection("songs")
+                              handleButtonClick("songs")
                             }}
                           >
                             Explore Library →
                           </button>
                           <button
-                            className="studio-button secondary"
-                            onClick={(e) => {
+                            data-interactive="true"
+                            className="studio-button secondary mobile-touch-target"
+                            onClick={(e) => handleButtonClick("dashboard", e)}
+                            onTouchEnd={(e) => {
                               e.stopPropagation()
-                              setActiveSection("dashboard")
+                              handleButtonClick("dashboard")
                             }}
                           >
                             Menu
@@ -398,13 +493,18 @@ export default function HandpanWorshipStudio() {
                       </div>
                     </div>
 
+                    {/* Card 2 - Interactive Handpan */}
                     <div
                       className="worship-feature-card pastel-card"
                       style={{
                         height: "22rem",
                         background: "linear-gradient(135deg, rgba(140, 92, 246, 0.4) 0%, rgba(228, 72, 153, 0.4) 100%)",
-                        transform: activeCard === 2 ? `translateX(${dragOffset}px)` : undefined,
-                        transition: isDragging ? "none" : "transform 0.3s ease-out",
+                        transform:
+                          activeCard === 2
+                            ? `translateX(${dragOffset}px) ${Math.abs(dragOffset) > 50 ? `rotateY(${dragOffset * 0.02}deg)` : ""}`
+                            : undefined,
+                        transition: isDragging ? "none" : "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                        pointerEvents: activeCard === 2 ? "auto" : "none",
                       }}
                     >
                       <div className="flex flex-col h-full text-white">
@@ -452,19 +552,23 @@ export default function HandpanWorshipStudio() {
 
                         <div className="flex gap-3">
                           <button
-                            className="studio-button primary flex-1"
-                            onClick={(e) => {
+                            data-interactive="true"
+                            className="studio-button primary flex-1 mobile-touch-target"
+                            onClick={(e) => handleButtonClick("handpan", e)}
+                            onTouchEnd={(e) => {
                               e.stopPropagation()
-                              setActiveSection("handpan")
+                              handleButtonClick("handpan")
                             }}
                           >
                             Play Handpan →
                           </button>
                           <button
-                            className="studio-button secondary"
-                            onClick={(e) => {
+                            data-interactive="true"
+                            className="studio-button secondary mobile-touch-target"
+                            onClick={(e) => handleButtonClick("dashboard", e)}
+                            onTouchEnd={(e) => {
                               e.stopPropagation()
-                              setActiveSection("dashboard")
+                              handleButtonClick("dashboard")
                             }}
                           >
                             Menu
@@ -473,13 +577,18 @@ export default function HandpanWorshipStudio() {
                       </div>
                     </div>
 
+                    {/* Card 3 - Righteousness Devotions */}
                     <div
                       className="worship-feature-card pastel-card"
                       style={{
                         height: "22rem",
                         background: "linear-gradient(135deg, rgba(228, 72, 153, 0.4) 0%, rgba(245, 158, 11, 0.4) 100%)",
-                        transform: activeCard === 3 ? `translateX(${dragOffset}px)` : undefined,
-                        transition: isDragging ? "none" : "transform 0.3s ease-out",
+                        transform:
+                          activeCard === 3
+                            ? `translateX(${dragOffset}px) ${Math.abs(dragOffset) > 50 ? `rotateY(${dragOffset * 0.02}deg)` : ""}`
+                            : undefined,
+                        transition: isDragging ? "none" : "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                        pointerEvents: activeCard === 3 ? "auto" : "none",
                       }}
                     >
                       <div className="flex flex-col h-full text-white">
@@ -527,19 +636,23 @@ export default function HandpanWorshipStudio() {
 
                         <div className="flex gap-3">
                           <button
-                            className="studio-button primary flex-1"
-                            onClick={(e) => {
+                            data-interactive="true"
+                            className="studio-button primary flex-1 mobile-touch-target"
+                            onClick={(e) => handleButtonClick("devotions", e)}
+                            onTouchEnd={(e) => {
                               e.stopPropagation()
-                              setActiveSection("devotions")
+                              handleButtonClick("devotions")
                             }}
                           >
                             Read Devotions →
                           </button>
                           <button
-                            className="studio-button secondary"
-                            onClick={(e) => {
+                            data-interactive="true"
+                            className="studio-button secondary mobile-touch-target"
+                            onClick={(e) => handleButtonClick("dashboard", e)}
+                            onTouchEnd={(e) => {
                               e.stopPropagation()
-                              setActiveSection("dashboard")
+                              handleButtonClick("dashboard")
                             }}
                           >
                             Menu
@@ -548,13 +661,18 @@ export default function HandpanWorshipStudio() {
                       </div>
                     </div>
 
+                    {/* Card 4 - Extended Practice */}
                     <div
                       className="worship-feature-card pastel-card"
                       style={{
                         height: "22rem",
                         background: "linear-gradient(135deg, rgba(245, 158, 11, 0.4) 0%, rgba(16, 185, 130, 0.4) 100%)",
-                        transform: activeCard === 4 ? `translateX(${dragOffset}px)` : undefined,
-                        transition: isDragging ? "none" : "transform 0.3s ease-out",
+                        transform:
+                          activeCard === 4
+                            ? `translateX(${dragOffset}px) ${Math.abs(dragOffset) > 50 ? `rotateY(${dragOffset * 0.02}deg)` : ""}`
+                            : undefined,
+                        transition: isDragging ? "none" : "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                        pointerEvents: activeCard === 4 ? "auto" : "none",
                       }}
                     >
                       <div className="flex flex-col h-full text-white">
@@ -602,19 +720,23 @@ export default function HandpanWorshipStudio() {
 
                         <div className="flex gap-3">
                           <button
-                            className="studio-button primary flex-1"
-                            onClick={(e) => {
+                            data-interactive="true"
+                            className="studio-button primary flex-1 mobile-touch-target"
+                            onClick={(e) => handleButtonClick("songs", e)}
+                            onTouchEnd={(e) => {
                               e.stopPropagation()
-                              setActiveSection("songs")
+                              handleButtonClick("songs")
                             }}
                           >
                             View All Songs →
                           </button>
                           <button
-                            className="studio-button secondary"
-                            onClick={(e) => {
+                            data-interactive="true"
+                            className="studio-button secondary mobile-touch-target"
+                            onClick={(e) => handleButtonClick("dashboard", e)}
+                            onTouchEnd={(e) => {
                               e.stopPropagation()
-                              setActiveSection("dashboard")
+                              handleButtonClick("dashboard")
                             }}
                           >
                             Menu
@@ -623,14 +745,19 @@ export default function HandpanWorshipStudio() {
                       </div>
                     </div>
 
+                    {/* Card 5 - Practice Analytics */}
                     <div
                       className="worship-feature-card pastel-card"
                       style={{
                         height: "22rem",
                         background:
                           "linear-gradient(135deg, rgba(16, 185, 130, 0.4) 0%, rgba(147, 197, 253, 0.4) 100%)",
-                        transform: activeCard === 5 ? `translateX(${dragOffset}px)` : undefined,
-                        transition: isDragging ? "none" : "transform 0.3s ease-out",
+                        transform:
+                          activeCard === 5
+                            ? `translateX(${dragOffset}px) ${Math.abs(dragOffset) > 50 ? `rotateY(${dragOffset * 0.02}deg)` : ""}`
+                            : undefined,
+                        transition: isDragging ? "none" : "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                        pointerEvents: activeCard === 5 ? "auto" : "none",
                       }}
                     >
                       <div className="flex flex-col h-full text-white">
@@ -681,10 +808,12 @@ export default function HandpanWorshipStudio() {
                             View Analytics →
                           </button>
                           <button
-                            className="studio-button secondary"
-                            onClick={(e) => {
+                            data-interactive="true"
+                            className="studio-button secondary mobile-touch-target"
+                            onClick={(e) => handleButtonClick("dashboard", e)}
+                            onTouchEnd={(e) => {
                               e.stopPropagation()
-                              setActiveSection("dashboard")
+                              handleButtonClick("dashboard")
                             }}
                           >
                             Menu
@@ -733,7 +862,7 @@ export default function HandpanWorshipStudio() {
         <div className="glass-surface-frosty border-t-2 border-white/30 backdrop-blur-xl">
           <div className="flex items-center justify-around px-1 py-2">
             <button
-              onClick={() => setActiveSection("dashboard")}
+              onClick={() => handleButtonClick("dashboard")}
               className={`mobile-nav-btn ${
                 activeSection === "dashboard"
                   ? "bg-white/30 text-white scale-105"
@@ -749,7 +878,7 @@ export default function HandpanWorshipStudio() {
             </button>
 
             <button
-              onClick={() => setActiveSection("handpan")}
+              onClick={() => handleButtonClick("handpan")}
               className={`mobile-nav-btn ${
                 activeSection === "handpan"
                   ? "bg-white/30 text-white scale-105"
@@ -761,7 +890,7 @@ export default function HandpanWorshipStudio() {
             </button>
 
             <button
-              onClick={() => setActiveSection("songs")}
+              onClick={() => handleButtonClick("songs")}
               className={`mobile-nav-btn ${
                 activeSection === "songs"
                   ? "bg-white/30 text-white scale-105"
@@ -773,7 +902,7 @@ export default function HandpanWorshipStudio() {
             </button>
 
             <button
-              onClick={() => setActiveSection("devotions")}
+              onClick={() => handleButtonClick("devotions")}
               className={`mobile-nav-btn ${
                 activeSection === "devotions"
                   ? "bg-white/30 text-white scale-105"
@@ -785,7 +914,7 @@ export default function HandpanWorshipStudio() {
             </button>
 
             <button
-              onClick={() => setActiveSection("export")}
+              onClick={() => handleButtonClick("export")}
               className={`mobile-nav-btn ${
                 activeSection === "export"
                   ? "bg-white/30 text-white scale-105"
@@ -797,7 +926,7 @@ export default function HandpanWorshipStudio() {
             </button>
 
             <button
-              onClick={() => setActiveSection("settings")}
+              onClick={() => handleButtonClick("settings")}
               className={`mobile-nav-btn ${
                 activeSection === "settings"
                   ? "bg-white/30 text-white scale-105"
