@@ -18,7 +18,7 @@ import { Music2, BookOpen, Settings as SettingsIcon, ExternalLink as Download } 
 type Section = "dashboard" | "handpan" | "songs" | "devotions" | "settings" | "export"
 
 export default function HandpanWorshipStudio() {
-  const { resolvedTheme, setTheme } = useTheme()
+  const { resolvedTheme, setTheme, theme } = useTheme()
   const [activeSection, setActiveSection] = useState<Section>("dashboard")
   const [activeCard, setActiveCard] = useState(1)
   const [isDragging, setIsDragging] = useState(false)
@@ -140,6 +140,7 @@ export default function HandpanWorshipStudio() {
       e.stopPropagation()
       e.preventDefault()
     }
+    console.log("[v0] Navigating to section:", section)
     setActiveSection(section)
     if (navigator.vibrate) navigator.vibrate(10)
   }, [])
@@ -278,42 +279,42 @@ export default function HandpanWorshipStudio() {
             <nav className="flex items-center gap-1 sm:gap-2 flex-wrap">
               <button
                 className={`pastel-nav-item ${activeSection === "dashboard" ? "active" : ""}`}
-                onClick={() => setActiveSection("dashboard")}
+                onClick={() => handleButtonClick("dashboard")}
               >
                 <span className="nav-icon">🎴</span>
                 <span className="nav-label hidden sm:inline">Dashboard</span>
               </button>
               <button
                 className={`pastel-nav-item ${activeSection === "settings" ? "active" : ""}`}
-                onClick={() => setActiveSection("settings")}
+                onClick={() => handleButtonClick("settings")}
               >
                 <span className="nav-icon">⚙️</span>
                 <span className="nav-label hidden sm:inline">Settings</span>
               </button>
               <button
                 className={`pastel-nav-item ${activeSection === "handpan" ? "active" : ""}`}
-                onClick={() => setActiveSection("handpan")}
+                onClick={() => handleButtonClick("handpan")}
               >
                 <span className="nav-icon">🪘</span>
                 <span className="nav-label hidden sm:inline">Handpan</span>
               </button>
               <button
                 className={`pastel-nav-item ${activeSection === "songs" ? "active" : ""}`}
-                onClick={() => setActiveSection("songs")}
+                onClick={() => handleButtonClick("songs")}
               >
                 <span className="nav-icon">🎵</span>
                 <span className="nav-label hidden sm:inline">Library</span>
               </button>
               <button
                 className={`pastel-nav-item ${activeSection === "devotions" ? "active" : ""}`}
-                onClick={() => setActiveSection("devotions")}
+                onClick={() => handleButtonClick("devotions")}
               >
                 <span className="nav-icon">✞</span>
                 <span className="nav-label hidden sm:inline">Devotions</span>
               </button>
               <button
                 className={`pastel-nav-item ${activeSection === "export" ? "active" : ""}`}
-                onClick={() => setActiveSection("export")}
+                onClick={() => handleButtonClick("export")}
               >
                 <span className="nav-icon">📦</span>
                 <span className="nav-label hidden sm:inline">Export</span>
@@ -509,7 +510,7 @@ export default function HandpanWorshipStudio() {
         )}
         {activeSection === "settings" && (
           <div className="section-card-3d">
-            <Settings theme={resolvedTheme} setTheme={setTheme} />
+            <Settings theme={theme} setTheme={setTheme} />
           </div>
         )}
         {activeSection === "handpan" && (

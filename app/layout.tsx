@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   viewport: {
     width: "device-width",
-    initialScale: 0.65,
+    initialScale: 0.65, // Already optimized at 35% zoom out for mobile
     maximumScale: 1,
     userScalable: true,
   },

@@ -18,11 +18,9 @@ export const handpanFrequencies = {
 export interface AudioEngineSettings {
   volume: number
   reverb: number
-  delay: number
   sustain: number
   attack: number
   release: number
-  harmonics: number
 }
 
 export class HandpanAudioEngine {
@@ -34,13 +32,11 @@ export class HandpanAudioEngine {
   private compressor: DynamicsCompressorNode | null = null
   private initialized = false
   private settings: AudioEngineSettings = {
-    volume: 0.7,
+    volume: 0.85,
     reverb: 0.5,
-    delay: 0.3,
     sustain: 0.7,
     attack: 0.01,
     release: 3.0,
-    harmonics: 0.3,
   }
 
   async initialize() {
@@ -65,25 +61,13 @@ export class HandpanAudioEngine {
       this.reverbNode = this.audioContext.createConvolver()
       await this.createReverbImpulse()
 
-      // Create delay effect
-      this.delayNode = this.audioContext.createDelay(2.0)
-      this.delayNode.delayTime.value = 0.3
-
-      this.delayFeedback = this.audioContext.createGain()
-      this.delayFeedback.gain.value = this.settings.delay
-
-      // Connect delay feedback loop
-      this.delayNode.connect(this.delayFeedback)
-      this.delayFeedback.connect(this.delayNode)
-
-      // Connect audio graph: reverb + delay -> compressor -> master
+      // Connect audio graph: reverb -> compressor -> master
       this.reverbNode.connect(this.compressor)
-      this.delayNode.connect(this.compressor)
       this.compressor.connect(this.masterGain)
       this.masterGain.connect(this.audioContext.destination)
 
       this.initialized = true
-      console.log("[v0] Enhanced audio engine initialized with reverb, delay, and compression")
+      console.log("[v0] Enhanced audio engine initialized with reverb and compression")
     } catch (error) {
       console.error("[v0] Failed to initialize audio engine:", error)
       throw error
@@ -118,33 +102,10 @@ export class HandpanAudioEngine {
     const now = this.audioContext.currentTime
     const sustainTime = duration || this.settings.sustain * 4
 
-    // Create multiple oscillators for rich harmonic content
-    const oscillators: OscillatorNode[] = []
-    const gains: GainNode[] = []
-
-    // Fundamental frequency
-    const osc1 = this.audioContext.createOscillator()
-    const gain1 = this.audioContext.createGain()
-    osc1.frequency.value = frequency
-    osc1.type = "sine"
-    oscillators.push(osc1)
-    gains.push(gain1)
-
-    // Second harmonic (octave)
-    const osc2 = this.audioContext.createOscillator()
-    const gain2 = this.audioContext.createGain()
-    osc2.frequency.value = frequency * 2
-    osc2.type = "sine"
-    oscillators.push(osc2)
-    gains.push(gain2)
-
-    // Third harmonic (perfect fifth above octave)
-    const osc3 = this.audioContext.createOscillator()
-    const gain3 = this.audioContext.createGain()
-    osc3.frequency.value = frequency * 3
-    osc3.type = "sine"
-    oscillators.push(osc3)
-    gains.push(gain3)
+    // Create oscillator for fundamental frequency
+    const osc = this.audioContext.createOscillator()
+    osc.frequency.value = frequency
+    osc.type = "sine"
 
     // Create panner for spatial audio based on position
     const panner = this.audioContext.createStereoPanner()
@@ -157,15 +118,8 @@ export class HandpanAudioEngine {
     // Create main envelope gain
     const envelopeGain = this.audioContext.createGain()
 
-    // Connect oscillators with different gain levels
-    oscillators.forEach((osc, index) => {
-      const gain = gains[index]
-      const level = index === 0 ? 0.6 : this.settings.harmonics * (0.3 / (index + 1))
-      gain.gain.value = level
-
-      osc.connect(gain)
-      gain.connect(envelopeGain)
-    })
+    // Connect oscillator with gain level
+    osc.connect(envelopeGain)
 
     // ADSR Envelope
     envelopeGain.gain.setValueAtTime(0, now)
@@ -176,15 +130,12 @@ export class HandpanAudioEngine {
     // Connect to effects
     envelopeGain.connect(panner)
     panner.connect(this.reverbNode!)
-    panner.connect(this.delayNode!)
 
-    // Start and stop oscillators
-    oscillators.forEach((osc) => {
-      osc.start(now)
-      osc.stop(now + sustainTime)
-    })
+    // Start and stop oscillator
+    osc.start(now)
+    osc.stop(now + sustainTime)
 
-    console.log("[v0] Playing note:", note, "at", frequency, "Hz with", oscillators.length, "harmonics")
+    console.log("[v0] Playing note:", note, "at", frequency, "Hz")
   }
 
   playChord(frequencies: number[], notes: string[], duration?: number): void {
@@ -207,10 +158,6 @@ export class HandpanAudioEngine {
       this.masterGain.gain.value = settings.volume
     }
 
-    if (this.delayFeedback && settings.delay !== undefined) {
-      this.delayFeedback.gain.value = settings.delay
-    }
-
     console.log("[v0] Audio settings updated:", this.settings)
   }
 
@@ -222,16 +169,8 @@ export class HandpanAudioEngine {
     this.updateSettings({ reverb: value / 100 })
   }
 
-  setDelay(value: number): void {
-    this.updateSettings({ delay: value / 100 })
-  }
-
   setSustain(value: number): void {
     this.updateSettings({ sustain: value / 100 })
-  }
-
-  setHarmonics(value: number): void {
-    this.updateSettings({ harmonics: value / 100 })
   }
 
   getSettings(): AudioEngineSettings {

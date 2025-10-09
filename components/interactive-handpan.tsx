@@ -124,8 +124,6 @@ export function InteractiveHandpan() {
   const [ripples, setRipples] = useState<Array<{ id: number; x: number; y: number }>>([])
   const [reverb, setReverb] = useState(50)
   const [sustain, setSustain] = useState(70)
-  const [delay, setDelay] = useState(30)
-  const [harmonics, setHarmonics] = useState(30)
   const [isRecording, setIsRecording] = useState(false)
   const [recordedNotes, setRecordedNotes] = useState<Array<{ note: string; time: number }>>([])
   const recordingStartTimeRef = useRef<number>(0)
@@ -180,16 +178,18 @@ export function InteractiveHandpan() {
   }, [reverb])
 
   useEffect(() => {
-    audioEngine.setDelay(delay)
-  }, [delay])
-
-  useEffect(() => {
     audioEngine.setSustain(sustain)
   }, [sustain])
 
   useEffect(() => {
-    audioEngine.setHarmonics(harmonics)
-  }, [harmonics])
+    if (selectedPattern !== null && !isPlaying) {
+      const pattern = worshipPatterns[selectedPattern]
+      setHighlightedNotes(pattern.notes)
+      console.log("[v0] Pattern selected, highlighting notes:", pattern.notes)
+    } else if (!isPlaying && !activeChord) {
+      setHighlightedNotes([])
+    }
+  }, [selectedPattern, isPlaying, activeChord])
 
   const playNote = async (frequency: number, note: string, x?: number, y?: number) => {
     if (isMuted) return
@@ -774,7 +774,7 @@ export function InteractiveHandpan() {
           </div>
         </div>
 
-        {/* Right column - Sound Properties (unchanged) */}
+        {/* Right column - Sound Properties */}
         <div className="bento-card space-y-4">
           <h4 className="text-lg font-semibold mb-4 text-shadow-strong bg-black/20 px-3 py-2 rounded-lg">
             🎛️ Sacred Sound Properties
@@ -815,42 +815,12 @@ export function InteractiveHandpan() {
 
             <div className="property-group">
               <label className="text-sm font-medium flex items-center justify-between mb-2 text-shadow-strong bg-black/15 px-2 py-1 rounded">
-                <span>⏱️ Delay</span>
-                <span className="text-xs font-bold bg-black/30 px-2 py-0.5 rounded">{delay}%</span>
-              </label>
-              <Slider
-                value={[delay]}
-                onValueChange={(v) => setDelay(v[0])}
-                min={0}
-                max={100}
-                step={1}
-                className="w-full sacred-slider"
-              />
-            </div>
-
-            <div className="property-group">
-              <label className="text-sm font-medium flex items-center justify-between mb-2 text-shadow-strong bg-black/15 px-2 py-1 rounded">
                 <span>🎵 Sustain</span>
                 <span className="text-xs font-bold bg-black/30 px-2 py-0.5 rounded">{sustain}%</span>
               </label>
               <Slider
                 value={[sustain]}
                 onValueChange={(v) => setSustain(v[0])}
-                min={0}
-                max={100}
-                step={1}
-                className="w-full sacred-slider"
-              />
-            </div>
-
-            <div className="property-group">
-              <label className="text-sm font-medium flex items-center justify-between mb-2 text-shadow-strong bg-black/15 px-2 py-1 rounded">
-                <span>✨ Harmonics</span>
-                <span className="text-xs font-bold bg-black/30 px-2 py-0.5 rounded">{harmonics}%</span>
-              </label>
-              <Slider
-                value={[harmonics]}
-                onValueChange={(v) => setHarmonics(v[0])}
                 min={0}
                 max={100}
                 step={1}
@@ -873,6 +843,9 @@ export function InteractiveHandpan() {
                   </option>
                 ))}
               </select>
+              <p className="text-xs mt-2 text-shadow-strong bg-black/15 px-2 py-1 rounded">
+                Select a pattern and click Play to see notes illuminate on the handpan
+              </p>
             </div>
 
             <div className="pt-4 border-t border-white/10">
@@ -880,7 +853,7 @@ export function InteractiveHandpan() {
                 Chord Pads
               </label>
               <p className="text-xs mb-3 text-shadow-strong bg-black/15 px-2 py-1 rounded">
-                <span className="hidden md:inline">Click to play • Right-click for variations</span>
+                <span className="hidden md:inline">Tap to play chords</span>
                 <span className="md:hidden">Tap to play chords</span>
               </p>
               <div className="grid grid-cols-3 gap-2 chord-grid-mobile">
@@ -890,10 +863,6 @@ export function InteractiveHandpan() {
                     <Button
                       key={key}
                       onClick={() => playChord(key)}
-                      onContextMenu={(e) => {
-                        e.preventDefault()
-                        showChordVariations(key)
-                      }}
                       variant={activeChord === key ? "default" : "outline"}
                       className="text-xs md:text-sm h-14 md:h-16 flex flex-col items-center justify-center font-bold shadow-lg chord-button-mobile"
                       style={{

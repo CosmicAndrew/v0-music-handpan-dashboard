@@ -175,8 +175,8 @@
 }
 
 @theme inline {
-  /* Configure Inter as the sans-serif font */
-  --font-sans: var(--font-outfit), var(--font-inter), "Inter", sans-serif;
+  /* Configure Outfit as the primary sans-serif font with Inter as fallback */
+  --font-sans: var(--font-outfit), var(--font-inter), "Inter", "Outfit", sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

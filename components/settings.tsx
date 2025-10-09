@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 interface SettingsProps {
   theme: "light" | "dark" | "system"
@@ -12,6 +12,24 @@ export function Settings({ theme, setTheme }: SettingsProps) {
   const [volume, setVolume] = useState(70)
   const [tuningStandard, setTuningStandard] = useState("432hz")
   const [autoSave, setAutoSave] = useState(true)
+
+  useEffect(() => {
+    // Save theme to localStorage
+    localStorage.setItem("theme", theme)
+
+    // Apply theme immediately to document
+    const root = document.documentElement
+    if (theme === "system") {
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+      root.classList.remove("light", "dark")
+      root.classList.add(systemTheme)
+    } else {
+      root.classList.remove("light", "dark")
+      root.classList.add(theme)
+    }
+
+    console.log("[v0] Theme changed to:", theme)
+  }, [theme])
 
   return (
     <div className="min-h-screen p-6">
@@ -75,10 +93,13 @@ export function Settings({ theme, setTheme }: SettingsProps) {
               </label>
               <div className="grid grid-cols-3 gap-2">
                 <button
-                  onClick={() => setTheme("light")}
+                  onClick={() => {
+                    setTheme("light")
+                    if (navigator.vibrate) navigator.vibrate(10)
+                  }}
                   className={`p-3 rounded-lg border-2 transition-all ${
                     theme === "light"
-                      ? "bg-white/40 border-white/60 shadow-lg"
+                      ? "bg-white/40 border-white/60 shadow-lg scale-105"
                       : "bg-white/20 border-white/30 hover:bg-white/25"
                   }`}
                 >
@@ -93,10 +114,13 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                   </div>
                 </button>
                 <button
-                  onClick={() => setTheme("dark")}
+                  onClick={() => {
+                    setTheme("dark")
+                    if (navigator.vibrate) navigator.vibrate(10)
+                  }}
                   className={`p-3 rounded-lg border-2 transition-all ${
                     theme === "dark"
-                      ? "bg-white/40 border-white/60 shadow-lg"
+                      ? "bg-white/40 border-white/60 shadow-lg scale-105"
                       : "bg-white/20 border-white/30 hover:bg-white/25"
                   }`}
                 >
@@ -111,10 +135,13 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                   </div>
                 </button>
                 <button
-                  onClick={() => setTheme("system")}
+                  onClick={() => {
+                    setTheme("system")
+                    if (navigator.vibrate) navigator.vibrate(10)
+                  }}
                   className={`p-3 rounded-lg border-2 transition-all ${
                     theme === "system"
-                      ? "bg-white/40 border-white/60 shadow-lg"
+                      ? "bg-white/40 border-white/60 shadow-lg scale-105"
                       : "bg-white/20 border-white/30 hover:bg-white/25"
                   }`}
                 >
@@ -371,7 +398,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                     <span
                       className="text-sm font-bold text-white"
                       style={{
-                        textShadow: "0 2px 6px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3)",
+                        textShadow: "0 2px 8px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3)",
                       }}
                     >
                       {session.date}
@@ -430,7 +457,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                   <span
                     className="text-sm font-bold text-white"
                     style={{
-                      textShadow: "0 2px 6px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3)",
+                      textShadow: "0 2px 8px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.4)",
                     }}
                   >
                     Total Sessions
