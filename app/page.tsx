@@ -403,7 +403,7 @@ export default function HandpanWorshipStudio() {
                     ref={cardsRef}
                     className={`worship-cards-section feature-${activeCard}-active ${isDragging ? "dragging" : ""}`}
                     style={{
-                      height: "22rem",
+                      height: "18rem",
                       cursor: isDragging ? "grabbing" : "grab",
                       touchAction: "pan-y",
                       userSelect: "none",
@@ -421,7 +421,7 @@ export default function HandpanWorshipStudio() {
                         key={card.id}
                         className="worship-feature-card pastel-card"
                         style={{
-                          height: "22rem",
+                          height: "18rem",
                           background: card.gradient,
                           transform:
                             activeCard === card.id
@@ -432,14 +432,14 @@ export default function HandpanWorshipStudio() {
                         }}
                       >
                         <div className="flex flex-col h-full text-white">
-                          <div className="flex items-center justify-between mb-6">
+                          <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-3">
                               <div className="card-icon-badge">
                                 <span className="text-2xl">{card.icon}</span>
                               </div>
                               <div>
                                 <span className="text-xs uppercase tracking-wide opacity-90">Feature {card.id}</span>
-                                <h3 className="text-2xl font-bold">{card.title}</h3>
+                                <h3 className="text-xl font-bold">{card.title}</h3>
                               </div>
                             </div>
                             <button
@@ -458,21 +458,21 @@ export default function HandpanWorshipStudio() {
                             </button>
                           </div>
 
-                          <p className="text-lg opacity-90 mb-6 flex-1">{card.description}</p>
+                          <p className="text-base opacity-90 mb-4 flex-1 line-clamp-3">{card.description}</p>
 
-                          <div className="space-y-3 mb-6">
+                          <div className="space-y-2 mb-4">
                             {card.stats.map((stat, i) => (
-                              <div key={i} className="card-stat-row">
+                              <div key={i} className="card-stat-row text-sm">
                                 <span className="opacity-80">{stat.label}</span>
                                 <span className="font-semibold">{stat.value}</span>
                               </div>
                             ))}
                           </div>
 
-                          <div className="flex gap-3">
+                          <div className="flex gap-2">
                             <button
                               data-interactive="true"
-                              className="studio-button primary flex-1 mobile-touch-target"
+                              className="studio-button primary flex-1 mobile-touch-target text-sm py-2"
                               onClick={(e) => handleButtonClick(card.primaryButton.section, e)}
                               onTouchEnd={(e) => {
                                 e.stopPropagation()
@@ -484,7 +484,7 @@ export default function HandpanWorshipStudio() {
                             </button>
                             <button
                               data-interactive="true"
-                              className="studio-button secondary mobile-touch-target"
+                              className="studio-button secondary mobile-touch-target text-sm py-2"
                               onClick={(e) => handleButtonClick("dashboard", e)}
                               onTouchEnd={(e) => {
                                 e.stopPropagation()

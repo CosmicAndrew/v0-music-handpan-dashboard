@@ -130,6 +130,7 @@ export function InteractiveHandpan() {
   const [recordedNotes, setRecordedNotes] = useState<Array<{ note: string; time: number }>>([])
   const recordingStartTimeRef = useRef<number>(0)
   const [showInfo, setShowInfo] = useState(false)
+  const [audioInitialized, setAudioInitialized] = useState(false)
 
   const patternTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -144,6 +145,9 @@ export function InteractiveHandpan() {
     const initAudio = async () => {
       try {
         await audioEngine.initialize()
+        setAudioInitialized(true)
+        console.log("[v0] Audio engine initialized successfully")
+
         const savedVolume = localStorage.getItem("handpan-volume")
         if (savedVolume) {
           const vol = Number.parseInt(savedVolume)
@@ -187,8 +191,20 @@ export function InteractiveHandpan() {
     audioEngine.setHarmonics(harmonics)
   }, [harmonics])
 
-  const playNote = (frequency: number, note: string, x?: number, y?: number) => {
+  const playNote = async (frequency: number, note: string, x?: number, y?: number) => {
     if (isMuted) return
+
+    if (!audioInitialized) {
+      try {
+        await audioEngine.initialize()
+        setAudioInitialized(true)
+      } catch (error) {
+        console.error("[v0] Failed to initialize audio on interaction:", error)
+        return
+      }
+    }
+
+    await audioEngine.resume()
 
     audioEngine.playNote(frequency, note, x && y ? { x, y } : undefined)
 
@@ -209,12 +225,24 @@ export function InteractiveHandpan() {
     }
   }
 
-  const playPattern = () => {
+  const playPattern = async () => {
     if (isPlaying) {
       setIsPlaying(false)
       if (patternTimeoutRef.current) clearTimeout(patternTimeoutRef.current)
       return
     }
+
+    if (!audioInitialized) {
+      try {
+        await audioEngine.initialize()
+        setAudioInitialized(true)
+      } catch (error) {
+        console.error("[v0] Failed to initialize audio:", error)
+        return
+      }
+    }
+
+    await audioEngine.resume()
 
     setIsPlaying(true)
     const pattern = worshipPatterns[selectedPattern]
@@ -244,8 +272,20 @@ export function InteractiveHandpan() {
     })
   }
 
-  const playScale = () => {
+  const playScale = async () => {
     if (isMuted) return
+
+    if (!audioInitialized) {
+      try {
+        await audioEngine.initialize()
+        setAudioInitialized(true)
+      } catch (error) {
+        console.error("[v0] Failed to initialize audio:", error)
+        return
+      }
+    }
+
+    await audioEngine.resume()
 
     const scaleNotes = [
       handpanNotes.center,
@@ -264,8 +304,20 @@ export function InteractiveHandpan() {
     })
   }
 
-  const playChord = (chordKey: string) => {
+  const playChord = async (chordKey: string) => {
     if (isMuted) return
+
+    if (!audioInitialized) {
+      try {
+        await audioEngine.initialize()
+        setAudioInitialized(true)
+      } catch (error) {
+        console.error("[v0] Failed to initialize audio:", error)
+        return
+      }
+    }
+
+    await audioEngine.resume()
 
     const chord = chordDefinitions[chordKey]
     if (!chord) return
@@ -359,7 +411,7 @@ export function InteractiveHandpan() {
 
       <div className="bento-card">
         <Button onClick={() => setShowInfo(!showInfo)} className="w-full mb-4" variant="outline">
-          {showInfo ? "Hide" : "Show"} Handpan Info
+          {showInfo ? "Hide" : "Show"} Handpan Info (Chords, Scales & Notes)
         </Button>
 
         {showInfo && (
@@ -421,6 +473,8 @@ export function InteractiveHandpan() {
                 <span className="scale-badge">Fmaj7</span>
                 <span className="scale-badge">Cmaj7</span>
                 <span className="scale-badge">Bbmaj7</span>
+                <span className="scale-badge">Fsus2</span>
+                <span className="scale-badge">Csus4</span>
               </div>
             </div>
 
