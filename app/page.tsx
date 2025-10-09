@@ -27,16 +27,11 @@ export default function HandpanWorshipStudio() {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    console.log("[v0] Component mounted, activeSection:", activeSection)
-    console.log("[v0] Resolved theme:", resolvedTheme)
-  }, [activeSection, resolvedTheme])
-
-  useEffect(() => {
     const preloadCache = async () => {
       try {
         await cacheManager.preloadSongLibrary(expandedSongLibrary)
       } catch (error) {
-        console.error("[v0] Failed to preload cache:", error)
+        console.error("Failed to preload cache:", error)
       }
     }
 
@@ -44,8 +39,6 @@ export default function HandpanWorshipStudio() {
   }, [])
 
   const { isPulling, pullDistance } = usePullToRefresh(async () => {
-    console.log("[v0] Pull to refresh triggered")
-    // Simulate refresh
     await new Promise((resolve) => setTimeout(resolve, 1000))
   })
 
@@ -141,23 +134,7 @@ export default function HandpanWorshipStudio() {
       ref={containerRef}
       className="app-container min-h-screen relative overflow-hidden pb-24 md:pb-0"
       data-theme={resolvedTheme}
-      style={{ opacity: 1, visibility: "visible", display: "block" }}
     >
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          zIndex: 9999,
-          background: "red",
-          color: "white",
-          padding: "4px 8px",
-          fontSize: "12px",
-        }}
-      >
-        App Loaded: {activeSection}
-      </div>
-
       <OfflineIndicator />
 
       {isPulling && (
@@ -836,5 +813,3 @@ export default function HandpanWorshipStudio() {
     </main>
   )
 }
-
-console.log("[v0] HandpanWorshipStudio component loading")
