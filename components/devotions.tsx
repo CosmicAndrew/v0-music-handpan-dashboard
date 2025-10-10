@@ -15,7 +15,8 @@ const devotions = [
     application:
       "Today, reject any thought that says you must earn God's favor. You are already favored, already righteous, already loved. Play your handpan as an act of worship, celebrating the finished work of the cross.",
     theme: "blood-covenant",
-    color: "from-red-500/20 to-pink-500/20",
+    color: "from-blue-400/30 to-cyan-400/30",
+    bgColor: "bg-gradient-to-br from-blue-500/20 to-cyan-500/20",
   },
   {
     title: "Cross Victory Meditation",
@@ -28,7 +29,8 @@ const devotions = [
     application:
       "Identify one area where you feel defeated or accused. Declare over it: 'The cross has already won this battle.' Let your handpan playing be a declaration of victory, not a plea for help.",
     theme: "cross-victory",
-    color: "from-purple-500/20 to-blue-500/20",
+    color: "from-purple-400/30 to-pink-400/30",
+    bgColor: "bg-gradient-to-br from-purple-500/20 to-pink-500/20",
   },
   {
     title: "Gospel Foundation",
@@ -41,14 +43,15 @@ const devotions = [
     application:
       "Meditate on the resurrection today. Jesus didn't just die for you—He rose for you. You are not defined by your past but by His future. Play your handpan as a celebration of resurrection life.",
     theme: "gospel-foundation",
-    color: "from-green-500/20 to-emerald-500/20",
+    color: "from-orange-400/30 to-amber-400/30",
+    bgColor: "bg-gradient-to-br from-orange-500/20 to-amber-500/20",
   },
 ]
 
 export function Devotions() {
   return (
     <div className="relative min-h-screen">
-      <div className="absolute top-0 left-0 w-full h-full -z-10">
+      <div className="absolute top-0 left-0 w-full h-full -z-10 opacity-60">
         <iframe
           src="https://my.spline.design/ventura2copy-QlljPuDvQWfMiAnUXFOrCrsY"
           frameBorder="0"
@@ -56,13 +59,15 @@ export function Devotions() {
           height="100%"
           id="aura-spline-devotions"
           className="w-full h-full"
+          title="3D Background Animation"
+          loading="lazy"
         />
       </div>
 
       <div className="space-y-6 relative z-10">
         <div className="fade-up glass-surface-frosty p-6 md:p-8 rounded-2xl border-2 border-white/30">
           <h1
-            className="text-3xl md:text-4xl font-bold text-white mb-2"
+            className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2"
             style={{
               textShadow: "0 3px 10px rgba(0, 0, 0, 0.8), 0 6px 20px rgba(0, 0, 0, 0.6)",
             }}
@@ -70,7 +75,7 @@ export function Devotions() {
             Righteousness Devotions
           </h1>
           <p
-            className="text-white text-lg"
+            className="text-white text-base md:text-lg"
             style={{
               textShadow: "0 2px 8px rgba(0, 0, 0, 0.7), 0 4px 12px rgba(0, 0, 0, 0.5)",
             }}
@@ -79,27 +84,25 @@ export function Devotions() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+        <div className="bento-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {devotions.map((devotion, index) => {
             const Icon = devotion.icon
             return (
               <Card
                 key={devotion.title}
-                className={`glass-surface-frosty fade-up border-2 border-white/30 hover:scale-[1.02] transition-transform duration-300 ${
-                  index === 0 ? "lg:col-span-2" : ""
-                }`}
+                className={`glass-surface-frosty fade-up border-2 border-white/30 hover:scale-[1.02] transition-all duration-300 ${devotion.bgColor} backdrop-blur-xl`}
                 style={{ animationDelay: `${0.1 + index * 0.15}s` }}
               >
                 <CardHeader>
                   <div className="flex items-start gap-4">
                     <div
-                      className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${devotion.color} flex items-center justify-center flex-shrink-0 border-2 border-white/20`}
+                      className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${devotion.color} flex items-center justify-center flex-shrink-0 border-2 border-white/30 shadow-lg`}
                     >
-                      <Icon className="w-7 h-7 text-white" />
+                      <Icon className="w-8 h-8 text-white drop-shadow-lg" />
                     </div>
                     <div className="flex-1">
                       <CardTitle
-                        className="text-xl md:text-2xl text-white mb-2"
+                        className="text-lg md:text-xl text-white mb-2 leading-tight"
                         style={{
                           textShadow: "0 3px 10px rgba(0, 0, 0, 0.8), 0 6px 20px rgba(0, 0, 0, 0.6)",
                         }}
@@ -107,9 +110,9 @@ export function Devotions() {
                         {devotion.title}
                       </CardTitle>
                       <CardDescription className="flex items-center gap-2">
-                        <BookOpen className="w-4 h-4" />
+                        <BookOpen className="w-4 h-4 text-white/90" />
                         <span
-                          className="text-white/90 font-semibold"
+                          className="text-white/90 font-semibold text-sm"
                           style={{
                             textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
                           }}
@@ -121,10 +124,9 @@ export function Devotions() {
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {/* Scripture verse */}
-                  <div className="p-4 rounded-xl bg-white/20 border-l-4 border-white/50 backdrop-blur-sm">
+                  <div className="p-4 rounded-xl bg-white/20 border-l-4 border-white/50 backdrop-blur-sm shadow-lg">
                     <p
-                      className="italic text-white leading-relaxed text-sm md:text-base"
+                      className="italic text-white leading-relaxed text-sm"
                       style={{
                         textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
                       }}
@@ -133,18 +135,17 @@ export function Devotions() {
                     </p>
                   </div>
 
-                  {/* Reflection */}
-                  <div className="p-4 rounded-xl bg-black/30 backdrop-blur-sm border-2 border-white/20">
+                  <div className="p-4 rounded-xl bg-black/30 backdrop-blur-sm border-2 border-white/20 shadow-lg">
                     <h4
-                      className="font-bold mb-2 text-white flex items-center gap-2"
+                      className="font-bold mb-2 text-white flex items-center gap-2 text-sm"
                       style={{
                         textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
                       }}
                     >
-                      <span className="text-lg">💭</span> Reflection
+                      <span className="text-base">💭</span> Reflection
                     </h4>
                     <p
-                      className="text-white/95 leading-relaxed text-sm md:text-base"
+                      className="text-white/95 leading-relaxed text-sm line-clamp-6"
                       style={{
                         textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
                       }}
@@ -153,18 +154,17 @@ export function Devotions() {
                     </p>
                   </div>
 
-                  {/* Application */}
-                  <div className="p-4 rounded-xl bg-black/30 backdrop-blur-sm border-2 border-white/20">
+                  <div className="p-4 rounded-xl bg-black/30 backdrop-blur-sm border-2 border-white/20 shadow-lg">
                     <h4
-                      className="font-bold mb-2 text-white flex items-center gap-2"
+                      className="font-bold mb-2 text-white flex items-center gap-2 text-sm"
                       style={{
                         textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
                       }}
                     >
-                      <span className="text-lg">🎯</span> Application
+                      <span className="text-base">🎯</span> Application
                     </h4>
                     <p
-                      className="text-white/95 leading-relaxed text-sm md:text-base"
+                      className="text-white/95 leading-relaxed text-sm"
                       style={{
                         textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
                       }}
@@ -178,8 +178,7 @@ export function Devotions() {
           })}
         </div>
 
-        {/* About section */}
-        <Card className="glass-surface-frosty bg-gradient-to-br from-amber-50/10 to-orange-50/10 border-2 border-white/30">
+        <Card className="glass-surface-frosty bg-gradient-to-br from-amber-50/10 to-orange-50/10 border-2 border-white/30 backdrop-blur-xl">
           <CardHeader>
             <CardTitle
               className="text-white text-xl md:text-2xl"

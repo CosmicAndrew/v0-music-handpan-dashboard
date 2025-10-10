@@ -679,6 +679,7 @@ export function InteractiveHandpan() {
                         cx={pos.x}
                         cy={pos.y}
                         r={noteRadius}
+                        data-highlighted={isHighlighted}
                         fill={
                           isHighlighted
                             ? activeChord && chordDefinitions[activeChord]
@@ -776,10 +777,16 @@ export function InteractiveHandpan() {
               {/* Scale Pattern */}
               <div>
                 <label className="text-sm font-medium mb-2 block">Scale Pattern</label>
-                <select className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm">
-                  <option>D Kurd 10</option>
-                  <option>C Major</option>
-                  <option>A Minor</option>
+                <select
+                  value={selectedPattern}
+                  onChange={(e) => setSelectedPattern(Number(e.target.value))}
+                  className="w-full px-4 py-3 rounded-lg bg-white/95 dark:bg-white/90 text-gray-900 font-medium border-2 border-white/30 shadow-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                >
+                  {worshipPatterns.map((pattern, index) => (
+                    <option key={pattern.name} value={index} className="py-2 text-gray-900 font-medium">
+                      {pattern.name}
+                    </option>
+                  ))}
                 </select>
               </div>
 
