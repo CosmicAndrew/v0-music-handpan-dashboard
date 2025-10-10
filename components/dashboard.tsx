@@ -4,6 +4,7 @@ import { Music, Library, BookOpen, Play, Clock } from "@/components/icons"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { useState, useEffect } from "react"
 
 type Section = "dashboard" | "handpan" | "songs" | "devotions"
 
@@ -12,6 +13,36 @@ interface DashboardProps {
 }
 
 export function Dashboard({ onNavigate }: DashboardProps) {
+  const [stats, setStats] = useState({
+    totalPracticeTime: 0,
+    songsPlayed: 0,
+    favoriteKey: "D Kurd",
+    sessionsThisWeek: 0,
+  })
+
+  useEffect(() => {
+    console.log("[v0] 📊 DASHBOARD: Loading user statistics")
+    const loadStats = () => {
+      const practiceTime = Number.parseInt(localStorage.getItem("totalPracticeTime") || "0")
+      const songsPlayed = Number.parseInt(localStorage.getItem("songsPlayed") || "0")
+      const sessions = Number.parseInt(localStorage.getItem("sessionsThisWeek") || "0")
+
+      setStats({
+        totalPracticeTime: practiceTime,
+        songsPlayed: songsPlayed,
+        favoriteKey: "D Kurd",
+        sessionsThisWeek: sessions,
+      })
+
+      console.log("[v0] ✅ DASHBOARD: Statistics loaded", {
+        practiceTime,
+        songsPlayed,
+        sessions,
+      })
+    }
+    loadStats()
+  }, [])
+
   const featuredSongs = [
     {
       title: "Way Maker",
@@ -68,6 +99,17 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     },
   ]
 
+  const handlePlayTrack = (track: (typeof recentlyPlayed)[0]) => {
+    console.log("[v0] ▶️ DASHBOARD: Playing track", track.title)
+
+    // Update statistics
+    const newSongsPlayed = stats.songsPlayed + 1
+    setStats((prev) => ({ ...prev, songsPlayed: newSongsPlayed }))
+    localStorage.setItem("songsPlayed", newSongsPlayed.toString())
+
+    console.log("[v0] ✅ DASHBOARD: Statistics updated - Songs played:", newSongsPlayed)
+  }
+
   return (
     <div className="space-y-8">
       <div className="text-center space-y-4 fade-up">
@@ -75,6 +117,68 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
           Experience worship through the harmonic resonance of the YataoPan D Kurd 10, tuned to 432 Hz
         </p>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 fade-up" style={{ animationDelay: "0.05s" }}>
+        <Card className="glass-card">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground font-medium">Practice Time</p>
+                <p className="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-1">
+                  {stats.totalPracticeTime} <span className="text-lg">min</span>
+                </p>
+              </div>
+              <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
+                <Clock className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="glass-card">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground font-medium">Songs Played</p>
+                <p className="text-3xl font-bold text-green-600 dark:text-green-400 mt-1">{stats.songsPlayed}</p>
+              </div>
+              <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center">
+                <Music className="w-6 h-6 text-green-600 dark:text-green-400" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="glass-card">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground font-medium">Favorite Key</p>
+                <p className="text-3xl font-bold text-purple-600 dark:text-purple-400 mt-1">{stats.favoriteKey}</p>
+              </div>
+              <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
+                <Library className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="glass-card">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground font-medium">This Week</p>
+                <p className="text-3xl font-bold text-amber-600 dark:text-amber-400 mt-1">
+                  {stats.sessionsThisWeek} <span className="text-lg">sessions</span>
+                </p>
+              </div>
+              <div className="w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center">
+                <Play className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="space-y-4 fade-up" style={{ animationDelay: "0.1s" }}>
@@ -88,7 +192,15 @@ export function Dashboard({ onNavigate }: DashboardProps) {
               <p className="text-sm text-muted-foreground">Your recent worship sessions</p>
             </div>
           </div>
-          <Button variant="ghost" size="sm" onClick={() => onNavigate("songs")} className="hidden md:flex">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              console.log("[v0] 📚 DASHBOARD: View All button clicked - navigating to songs")
+              onNavigate("songs")
+            }}
+            className="hidden md:flex"
+          >
             View All
           </Button>
         </div>
@@ -98,6 +210,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
               {recentlyPlayed.map((track, index) => (
                 <div
                   key={track.id}
+                  onClick={() => handlePlayTrack(track)}
                   className="flex items-center gap-4 p-4 rounded-xl hover:bg-muted/50 transition-all cursor-pointer group border border-transparent hover:border-border/50 fade-up"
                   style={{ animationDelay: `${0.15 + index * 0.05}s` }}
                 >
@@ -129,7 +242,10 @@ export function Dashboard({ onNavigate }: DashboardProps) {
             <Button
               variant="outline"
               className="w-full mt-6 bg-transparent hover:bg-muted/50"
-              onClick={() => onNavigate("songs")}
+              onClick={() => {
+                console.log("[v0] 📚 DASHBOARD: View All Songs button clicked")
+                onNavigate("songs")
+              }}
             >
               View All Songs
             </Button>

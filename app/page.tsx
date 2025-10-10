@@ -293,15 +293,8 @@ export default function HandpanWorshipStudio() {
                 className={`pastel-nav-item ${activeSection === "dashboard" ? "active" : ""}`}
                 onClick={() => handleButtonClick("dashboard")}
               >
-                <span className="nav-icon">🎴</span>
+                <span className="nav-icon">📊</span>
                 <span className="nav-label hidden sm:inline">Dashboard</span>
-              </button>
-              <button
-                className={`pastel-nav-item ${activeSection === "settings" ? "active" : ""}`}
-                onClick={() => handleButtonClick("settings")}
-              >
-                <span className="nav-icon">⚙️</span>
-                <span className="nav-label hidden sm:inline">Settings</span>
               </button>
               <button
                 className={`pastel-nav-item ${activeSection === "handpan" ? "active" : ""}`}
@@ -314,21 +307,28 @@ export default function HandpanWorshipStudio() {
                 className={`pastel-nav-item ${activeSection === "songs" ? "active" : ""}`}
                 onClick={() => handleButtonClick("songs")}
               >
-                <span className="nav-icon">🎵</span>
+                <span className="nav-icon">📚</span>
                 <span className="nav-label hidden sm:inline">Library</span>
               </button>
               <button
                 className={`pastel-nav-item ${activeSection === "devotions" ? "active" : ""}`}
                 onClick={() => handleButtonClick("devotions")}
               >
-                <span className="nav-icon">✞</span>
+                <span className="nav-icon">🙏</span>
                 <span className="nav-label hidden sm:inline">Devotions</span>
+              </button>
+              <button
+                className={`pastel-nav-item ${activeSection === "settings" ? "active" : ""}`}
+                onClick={() => handleButtonClick("settings")}
+              >
+                <span className="nav-icon">⚙️</span>
+                <span className="nav-label hidden sm:inline">Settings</span>
               </button>
               <button
                 className={`pastel-nav-item ${activeSection === "export" ? "active" : ""}`}
                 onClick={() => handleButtonClick("export")}
               >
-                <span className="nav-icon">📦</span>
+                <span className="nav-icon">📤</span>
                 <span className="nav-label hidden sm:inline">Export</span>
               </button>
             </nav>

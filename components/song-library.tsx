@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState, useMemo } from "react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -97,10 +99,56 @@ export function SongLibrary() {
   }
 
   const startHandpanPractice = (song: Song) => {
-    console.log("[v0] 🎵 Practice button clicked!")
+    console.log("[v0] 🎵 LIBRARY: Practice button clicked!")
     console.log("[v0] Song title:", song.title)
+    console.log("[v0] Song artist:", song.artist)
     console.log("[v0] Song chords:", song.chords)
-    console.log("[v0] This should navigate to Handpan section with these chords:", song.chords.join(", "))
+    console.log("[v0] Song key:", song.key)
+    console.log("[v0] Song tier:", song.tier)
+
+    // Store song data for handpan component to use
+    localStorage.setItem(
+      "currentSong",
+      JSON.stringify({
+        title: song.title,
+        artist: song.artist,
+        chords: song.chords,
+        key: song.key,
+        tier: song.tier,
+      }),
+    )
+
+    console.log("[v0] ✅ LIBRARY: Song data stored in localStorage")
+    console.log("[v0] 🎹 LIBRARY: This should navigate to Handpan section")
+
+    // Update statistics
+    const songsPlayed = Number.parseInt(localStorage.getItem("songsPlayed") || "0") + 1
+    localStorage.setItem("songsPlayed", songsPlayed.toString())
+    console.log("[v0] 📊 LIBRARY: Updated songs played count:", songsPlayed)
+  }
+
+  const handleChordClick = (chord: string, songTitle: string) => {
+    console.log("[v0] 🎼 LIBRARY: Chord clicked!")
+    console.log("[v0] Chord:", chord)
+    console.log("[v0] From song:", songTitle)
+    console.log("[v0] This chord should be highlighted in the handpan view")
+  }
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    console.log("[v0] 🔍 LIBRARY: Search input changed:", value)
+    setSearchQuery(value)
+    console.log("[v0] ✅ LIBRARY: Filtered results count:", filteredSongs.length)
+  }
+
+  const handleTierFilter = (tier: string) => {
+    console.log("[v0] 🎯 LIBRARY: Tier filter clicked:", tier)
+    setTierFilter(tier)
+  }
+
+  const handleKeyFilter = (key: string) => {
+    console.log("[v0] 🎹 LIBRARY: Key filter clicked:", key)
+    setKeyFilter(key)
   }
 
   return (
@@ -169,25 +217,25 @@ export function SongLibrary() {
               </label>
               <div className="flex gap-2 flex-wrap md:flex-nowrap overflow-x-auto mobile-tabs pb-2">
                 <button
-                  onClick={() => setTierFilter("")}
+                  onClick={() => handleTierFilter("")}
                   className={`filter-btn-enhanced ${!tierFilter ? "active" : ""}`}
                 >
                   All Tiers
                 </button>
                 <button
-                  onClick={() => setTierFilter("Perfect")}
+                  onClick={() => handleTierFilter("Perfect")}
                   className={`filter-btn-enhanced ${tierFilter === "Perfect" ? "active" : ""}`}
                 >
                   Perfect Match ({getTierCount("Perfect")})
                 </button>
                 <button
-                  onClick={() => setTierFilter("Strong")}
+                  onClick={() => handleTierFilter("Strong")}
                   className={`filter-btn-enhanced ${tierFilter === "Strong" ? "active" : ""}`}
                 >
                   Strong Match ({getTierCount("Strong")})
                 </button>
                 <button
-                  onClick={() => setTierFilter("Creative")}
+                  onClick={() => handleTierFilter("Creative")}
                   className={`filter-btn-enhanced ${tierFilter === "Creative" ? "active" : ""}`}
                 >
                   Creative Match ({getTierCount("Creative")})
@@ -206,31 +254,31 @@ export function SongLibrary() {
               </label>
               <div className="flex gap-2 flex-wrap">
                 <button
-                  onClick={() => setKeyFilter("")}
+                  onClick={() => handleKeyFilter("")}
                   className={`filter-btn-enhanced ${!keyFilter ? "active" : ""}`}
                 >
                   All Keys
                 </button>
                 <button
-                  onClick={() => setKeyFilter("F")}
+                  onClick={() => handleKeyFilter("F")}
                   className={`filter-btn-enhanced ${keyFilter === "F" ? "active" : ""}`}
                 >
                   Key: F ({getKeyCount("F")})
                 </button>
                 <button
-                  onClick={() => setKeyFilter("Dm")}
+                  onClick={() => handleKeyFilter("Dm")}
                   className={`filter-btn-enhanced ${keyFilter === "Dm" ? "active" : ""}`}
                 >
                   Key: Dm ({getKeyCount("Dm")})
                 </button>
                 <button
-                  onClick={() => setKeyFilter("C")}
+                  onClick={() => handleKeyFilter("C")}
                   className={`filter-btn-enhanced ${keyFilter === "C" ? "active" : ""}`}
                 >
                   Key: C ({getKeyCount("C")})
                 </button>
                 <button
-                  onClick={() => setKeyFilter("Bb")}
+                  onClick={() => handleKeyFilter("Bb")}
                   className={`filter-btn-enhanced ${keyFilter === "Bb" ? "active" : ""}`}
                 >
                   Key: Bb ({getKeyCount("Bb")})
@@ -246,7 +294,7 @@ export function SongLibrary() {
                 type="search"
                 placeholder="Search..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleSearchChange}
                 className="pl-9 md:pl-10 h-12 md:h-14 mobile-search-input bg-white/95 text-gray-900 font-medium border-2 border-white/40 placeholder:text-gray-600 text-sm md:text-base"
                 style={{
                   boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
@@ -255,7 +303,10 @@ export function SongLibrary() {
             </div>
             {(tierFilter || keyFilter || popularityFilter || searchQuery) && (
               <Button
-                onClick={clearAllFilters}
+                onClick={() => {
+                  console.log("[v0] ❌ LIBRARY: Clear filters button clicked")
+                  clearAllFilters()
+                }}
                 variant="outline"
                 size="icon"
                 className="h-12 w-12 md:h-14 md:w-14 mobile-touch-target bg-white/95 border-2 border-white/40"
@@ -413,7 +464,7 @@ export function SongLibrary() {
                       <div
                         key={idx}
                         className="px-5 py-3 rounded-lg bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 font-mono font-bold text-base md:text-lg hover:scale-105 transition-transform cursor-pointer border-2 border-amber-300/50 shadow-lg"
-                        onClick={() => console.log("[v0] Chord clicked:", chord)}
+                        onClick={() => handleChordClick(chord, song.title)}
                       >
                         {chord}
                       </div>
@@ -435,7 +486,15 @@ export function SongLibrary() {
                     variant="outline"
                     className="flex-1 gap-2 action-btn-secondary bg-white/95 h-12 md:h-14 text-sm md:text-base font-bold border-2 border-white/40"
                   >
-                    <a href={song.videoUrl} target="_blank" rel="noopener noreferrer">
+                    <a
+                      href={song.videoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => {
+                        console.log("[v0] 🔗 LIBRARY: External link clicked for:", song.title)
+                        console.log("[v0] Opening video URL:", song.videoUrl)
+                      }}
+                    >
                       <ExternalLink className="w-4 h-4 md:w-5 md:h-5" />
                       <span className="hidden sm:inline">Add to Setlist</span>
                       <span className="sm:hidden">Add</span>

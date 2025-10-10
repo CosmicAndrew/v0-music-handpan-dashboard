@@ -400,6 +400,24 @@ export function InteractiveHandpan() {
     setShowChordModal(true)
   }
 
+  const handleModalClose = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    console.log("[v0] FORCE CLOSING MODAL")
+
+    // Force close with multiple methods
+    setShowChordModal(false)
+    setSelectedChordForVariations(null)
+
+    // Force DOM manipulation if needed
+    const modal = document.querySelector('[data-modal="chord-variations"]')
+    if (modal) {
+      ;(modal as HTMLElement).style.display = "none"
+    }
+
+    console.log("[v0] ✅ Modal forcefully closed")
+  }
+
   return (
     <div className="layout-designer space-y-4 md:space-y-6 fade-in">
       <div className="bento-card">
@@ -916,22 +934,17 @@ export function InteractiveHandpan() {
       {showChordModal && selectedChordForVariations && (
         <div
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3 md:p-4"
-          onClick={() => {
-            console.log("[v0] MODAL BACKDROP CLICKED")
-            setShowChordModal(false)
-          }}
+          data-modal="chord-variations"
+          onClick={handleModalClose}
         >
           <Card
             className="glass-card max-w-2xl w-full mobile-modal max-h-[85vh] overflow-y-auto relative"
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              onClick={() => {
-                console.log("[v0] ✕ CLOSE BUTTON CLICKED")
-                console.log("[v0] Closing chord modal...")
-                setShowChordModal(false)
-                console.log("[v0] ✅ Modal closed")
-              }}
+              onClick={handleModalClose}
+              onMouseDown={handleModalClose}
+              onTouchEnd={handleModalClose}
               className="absolute top-4 right-4 w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors z-10 shadow-lg"
               aria-label="Close modal"
             >

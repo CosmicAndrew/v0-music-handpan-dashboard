@@ -13,6 +13,55 @@ export function Settings({ theme, setTheme }: SettingsProps) {
   const [tuningStandard, setTuningStandard] = useState("432hz")
   const [autoSave, setAutoSave] = useState(true)
 
+  const forceThemeChange = (themeName: "light" | "dark" | "system") => {
+    console.log(`[v0] FORCE THEME: ${themeName}`)
+
+    const root = document.documentElement
+    const body = document.body
+
+    // Remove all theme classes first
+    root.classList.remove("light", "dark")
+    body.classList.remove("light", "dark")
+    root.removeAttribute("data-theme")
+    body.removeAttribute("data-theme")
+
+    // Determine actual theme to apply
+    let actualTheme = themeName
+    if (themeName === "system") {
+      actualTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+      console.log(`[v0] System theme detected: ${actualTheme}`)
+    }
+
+    // Multiple methods to ensure theme changes
+    root.className = actualTheme
+    body.className = actualTheme
+    root.setAttribute("data-theme", actualTheme)
+    body.setAttribute("data-theme", actualTheme)
+
+    // Force CSS custom properties
+    if (actualTheme === "dark") {
+      root.style.setProperty("--bg-color", "#1a1a1a")
+      root.style.setProperty("--text-color", "#ffffff")
+      console.log("[v0] Applied dark theme CSS variables")
+    } else {
+      root.style.setProperty("--bg-color", "#ffffff")
+      root.style.setProperty("--text-color", "#000000")
+      console.log("[v0] Applied light theme CSS variables")
+    }
+
+    // Save to localStorage
+    localStorage.setItem("theme", themeName)
+
+    console.log("[v0] ✅ Theme forcefully applied")
+    console.log("[v0] Root classes:", root.className)
+    console.log("[v0] Body classes:", body.className)
+    console.log("[v0] Root data-theme:", root.getAttribute("data-theme"))
+    console.log("[v0] Body data-theme:", body.getAttribute("data-theme"))
+
+    // Update state
+    setTheme(themeName)
+  }
+
   useEffect(() => {
     console.log("[v0] 🎨 Theme change triggered!")
     console.log("[v0] New theme value:", theme)
@@ -110,7 +159,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                   onClick={() => {
                     console.log("[v0] ☀️ LIGHT THEME BUTTON CLICKED!")
                     console.log("[v0] Changing theme to: light")
-                    setTheme("light")
+                    forceThemeChange("light")
                     if (navigator.vibrate) navigator.vibrate(10)
                   }}
                   className={`p-3 rounded-lg border-2 transition-all ${
@@ -133,7 +182,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                   onClick={() => {
                     console.log("[v0] 🌙 DARK THEME BUTTON CLICKED!")
                     console.log("[v0] Changing theme to: dark")
-                    setTheme("dark")
+                    forceThemeChange("dark")
                     if (navigator.vibrate) navigator.vibrate(10)
                   }}
                   className={`p-3 rounded-lg border-2 transition-all ${
@@ -156,7 +205,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                   onClick={() => {
                     console.log("[v0] 💻 SYSTEM THEME BUTTON CLICKED!")
                     console.log("[v0] Changing theme to: system")
-                    setTheme("system")
+                    forceThemeChange("system")
                     if (navigator.vibrate) navigator.vibrate(10)
                   }}
                   className={`p-3 rounded-lg border-2 transition-all ${
