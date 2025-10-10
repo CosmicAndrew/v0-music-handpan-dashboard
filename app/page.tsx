@@ -142,13 +142,16 @@ export default function HandpanWorshipStudio() {
         e.stopPropagation()
         e.preventDefault()
       }
-      console.log("[v0] 🔄 Navigation triggered")
+      console.log("[v0] 🔄 Navigation button clicked!")
       console.log("[v0] Current section:", activeSection)
       console.log("[v0] Target section:", section)
+      console.log("[v0] Button click event:", e?.type || "programmatic")
 
       setActiveSection(section)
 
-      console.log("[v0] ✅ Navigation complete to:", section)
+      console.log("[v0] ✅ Navigation state updated to:", section)
+      console.log("[v0] Check if UI updated - activeSection should now be:", section)
+
       if (navigator.vibrate) navigator.vibrate(10)
     },
     [activeSection],

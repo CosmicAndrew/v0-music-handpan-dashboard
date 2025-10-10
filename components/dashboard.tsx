@@ -164,7 +164,10 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         <Card
           className="glass-card group cursor-pointer hover:scale-105 transition-transform fade-up"
           style={{ animationDelay: "0.5s" }}
-          onClick={() => onNavigate("handpan")}
+          onClick={() => {
+            console.log("[v0] 🎵 Dashboard: Navigating to handpan")
+            onNavigate("handpan")
+          }}
         >
           <CardHeader>
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
@@ -184,7 +187,10 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         <Card
           className="glass-card group cursor-pointer hover:scale-105 transition-transform fade-up"
           style={{ animationDelay: "0.6s" }}
-          onClick={() => onNavigate("songs")}
+          onClick={() => {
+            console.log("[v0] 📚 Dashboard: Navigating to songs")
+            onNavigate("songs")
+          }}
         >
           <CardHeader>
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-rose-400 to-pink-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
@@ -204,7 +210,10 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         <Card
           className="glass-card group cursor-pointer hover:scale-105 transition-transform fade-up"
           style={{ animationDelay: "0.7s" }}
-          onClick={() => onNavigate("devotions")}
+          onClick={() => {
+            console.log("[v0] 📖 Dashboard: Navigating to devotions")
+            onNavigate("devotions")
+          }}
         >
           <CardHeader>
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">

@@ -97,8 +97,10 @@ export function SongLibrary() {
   }
 
   const startHandpanPractice = (song: Song) => {
-    console.log("[v0] Starting practice for:", song.title, "with chords:", song.chords)
-    console.log("[v0] Navigate to Handpan section to practice chords:", song.chords.join(", "))
+    console.log("[v0] 🎵 Practice button clicked!")
+    console.log("[v0] Song title:", song.title)
+    console.log("[v0] Song chords:", song.chords)
+    console.log("[v0] This should navigate to Handpan section with these chords:", song.chords.join(", "))
   }
 
   return (

@@ -14,21 +14,35 @@ export function Settings({ theme, setTheme }: SettingsProps) {
   const [autoSave, setAutoSave] = useState(true)
 
   useEffect(() => {
-    // Save theme to localStorage
-    localStorage.setItem("theme", theme)
+    console.log("[v0] 🎨 Theme change triggered!")
+    console.log("[v0] New theme value:", theme)
 
-    // Apply theme immediately to document
     const root = document.documentElement
+    const body = document.body
+
+    console.log("[v0] Applying theme to DOM...")
+
+    // Remove all theme classes
+    root.classList.remove("light", "dark")
+    body.classList.remove("light", "dark")
+
     if (theme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-      root.classList.remove("light", "dark")
+      console.log("[v0] System theme detected:", systemTheme)
       root.classList.add(systemTheme)
+      body.classList.add(systemTheme)
+      body.setAttribute("data-theme", systemTheme)
     } else {
-      root.classList.remove("light", "dark")
       root.classList.add(theme)
+      body.classList.add(theme)
+      body.setAttribute("data-theme", theme)
     }
 
-    console.log("[v0] Theme changed to:", theme)
+    // Save to localStorage
+    localStorage.setItem("theme", theme)
+    console.log("[v0] ✅ Theme applied:", theme)
+    console.log("[v0] Document classes:", root.className)
+    console.log("[v0] Body classes:", body.className)
   }, [theme])
 
   return (
@@ -94,6 +108,8 @@ export function Settings({ theme, setTheme }: SettingsProps) {
               <div className="grid grid-cols-3 gap-2">
                 <button
                   onClick={() => {
+                    console.log("[v0] ☀️ LIGHT THEME BUTTON CLICKED!")
+                    console.log("[v0] Changing theme to: light")
                     setTheme("light")
                     if (navigator.vibrate) navigator.vibrate(10)
                   }}
@@ -115,6 +131,8 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                 </button>
                 <button
                   onClick={() => {
+                    console.log("[v0] 🌙 DARK THEME BUTTON CLICKED!")
+                    console.log("[v0] Changing theme to: dark")
                     setTheme("dark")
                     if (navigator.vibrate) navigator.vibrate(10)
                   }}
@@ -136,6 +154,8 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                 </button>
                 <button
                   onClick={() => {
+                    console.log("[v0] 💻 SYSTEM THEME BUTTON CLICKED!")
+                    console.log("[v0] Changing theme to: system")
                     setTheme("system")
                     if (navigator.vibrate) navigator.vibrate(10)
                   }}
@@ -343,7 +363,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                   <span
                     className="text-sm font-bold text-white"
                     style={{
-                      textShadow: "0 2px 6px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3)",
+                      textShadow: "0 2px 8px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3)",
                     }}
                   >
                     Sacred Frequency Active

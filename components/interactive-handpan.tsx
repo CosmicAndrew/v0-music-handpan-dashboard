@@ -412,25 +412,14 @@ export function InteractiveHandpan() {
           </div>
           <div className="designer-controls flex gap-2 w-full md:w-auto">
             <Button
-              variant={!showControls ? "default" : "outline"}
-              className="control-btn flex-1 md:flex-none text-xs md:text-sm"
-              onClick={() => setShowControls(false)}
-            >
-              <span className="hidden md:inline">👁️ Preview Mode</span>
-              <span className="md:hidden">👁️ Preview</span>
-            </Button>
-            <Button
-              variant={showControls ? "default" : "outline"}
-              className="control-btn flex-1 md:flex-none text-xs md:text-sm"
-              onClick={() => setShowControls(true)}
-            >
-              <span className="hidden md:inline">🎯 Practice Mode</span>
-              <span className="md:hidden">🎯 Practice</span>
-            </Button>
-            <Button
               variant="outline"
               size="icon"
-              onClick={() => setIsMuted(!isMuted)}
+              onClick={() => {
+                console.log("[v0] 🔇 Mute button clicked!")
+                console.log("[v0] Current mute state:", isMuted)
+                setIsMuted(!isMuted)
+                console.log("[v0] New mute state:", !isMuted)
+              }}
               className="glass-button bg-white/90 hover:bg-white mobile-touch-target"
             >
               {isMuted ? (
@@ -927,12 +916,28 @@ export function InteractiveHandpan() {
       {showChordModal && selectedChordForVariations && (
         <div
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3 md:p-4"
-          onClick={() => setShowChordModal(false)}
+          onClick={() => {
+            console.log("[v0] MODAL BACKDROP CLICKED")
+            setShowChordModal(false)
+          }}
         >
           <Card
-            className="glass-card max-w-2xl w-full mobile-modal max-h-[85vh] overflow-y-auto"
+            className="glass-card max-w-2xl w-full mobile-modal max-h-[85vh] overflow-y-auto relative"
             onClick={(e) => e.stopPropagation()}
           >
+            <button
+              onClick={() => {
+                console.log("[v0] ✕ CLOSE BUTTON CLICKED")
+                console.log("[v0] Closing chord modal...")
+                setShowChordModal(false)
+                console.log("[v0] ✅ Modal closed")
+              }}
+              className="absolute top-4 right-4 w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors z-10 shadow-lg"
+              aria-label="Close modal"
+            >
+              <span className="text-xl font-bold">✕</span>
+            </button>
+
             <CardHeader>
               <CardTitle>Chord Variations: {selectedChordForVariations}</CardTitle>
               <CardDescription>Explore different voicings and extensions - Click to play</CardDescription>
@@ -948,6 +953,7 @@ export function InteractiveHandpan() {
                     <Button
                       key={key}
                       onClick={() => {
+                        console.log("[v0] 🎵 Chord variation clicked:", key)
                         playChord(key)
                         setShowChordModal(false)
                       }}
@@ -980,16 +986,6 @@ export function InteractiveHandpan() {
                     </Button>
                   ))}
               </div>
-              <Button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setShowChordModal(false)
-                }}
-                variant="outline"
-                className="w-full mt-4 mobile-touch-target"
-              >
-                Close
-              </Button>
             </CardContent>
           </Card>
         </div>
