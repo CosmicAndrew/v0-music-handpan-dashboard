@@ -4,6 +4,24 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* Sacred Worship Color Palette - Deep backgrounds with golden bronze accents */
+  --sacred-deep-bg-start: #0f0f23;
+  --sacred-deep-bg-end: #1a1a2e;
+  --sacred-bronze: #cd7f32;
+  --sacred-gold: #b8860b;
+  --sacred-amber: #daa520;
+  --sacred-amber-glow: #ffa500;
+
+  /* Sacred glassmorphism system */
+  --sacred-glass-bg: rgba(15, 15, 35, 0.4);
+  --sacred-glass-border: rgba(218, 165, 32, 0.3);
+  --sacred-glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+
+  /* Sacred text colors */
+  --sacred-text-primary: rgba(255, 255, 255, 0.95);
+  --sacred-text-secondary: rgba(255, 255, 255, 0.75);
+  --sacred-text-muted: rgba(255, 255, 255, 0.6);
+
   /* Design Studio gradient background from reference screenshot */
   --studio-gradient-start: #5b8def;
   --studio-gradient-mid: #7c6fd6;
@@ -99,6 +117,8 @@
   --sidebar-ring: oklch(0.708 0 0);
   --font-inter: "Inter", sans-serif;
   --font-outfit: "Outfit", sans-serif; /* Added font configuration for Outfit */
+  /* Added serif font configuration for sacred headers */
+  --font-crimson: "Crimson Text", serif;
 }
 
 /* Enhanced light mode with brighter, more vibrant appearance */
@@ -131,6 +151,19 @@
   --pastel-blue: rgba(59, 130, 246, 0.2);
   --pastel-purple: rgba(139, 92, 246, 0.2);
   --pastel-pink: rgba(236, 72, 153, 0.2);
+}
+
+/* Sacred dark mode with deep backgrounds and golden accents */
+[data-theme="light"],
+[data-theme="dark"],
+.dark {
+  --bg-gradient: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+  --text-primary: var(--sacred-text-primary);
+  --text-secondary: var(--sacred-text-secondary);
+  --glass-bg: var(--sacred-glass-bg);
+  --glass-bg-strong: rgba(15, 15, 35, 0.6);
+  --glass-border: var(--sacred-glass-border);
+  --glass-shadow: var(--sacred-glass-shadow);
 }
 
 .dark {
@@ -177,6 +210,9 @@
 @theme inline {
   /* Configure Outfit as the primary sans-serif font with Inter as fallback */
   --font-sans: var(--font-outfit), var(--font-inter), "Inter", "Outfit", sans-serif;
+  /* Added serif font configuration for sacred headers */
+  --font-serif: var(--font-crimson), "Crimson Text", "Playfair Display", serif;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -226,22 +262,13 @@
   }
 
   body {
-    /* Sacred Bohemian Gradient Background */
-    background: var(
-      --bg-gradient,
-      linear-gradient(
-        135deg,
-        var(--divine-purple) 0%,
-        var(--wine-red) 25%,
-        var(--desert-sand) 50%,
-        var(--olive-green) 75%,
-        var(--royal-indigo) 100%
-      )
-    );
+    /* Sacred deep gradient background */
+    background: linear-gradient(135deg, var(--sacred-deep-bg-start) 0%, var(--sacred-deep-bg-end) 100%);
     @apply text-foreground;
     min-height: 100vh;
     width: 100%;
     font-family: var(--font-sans);
+    color: var(--sacred-text-primary);
     /* Ensure body is visible */
     opacity: 1 !important;
     visibility: visible !important;
@@ -256,111 +283,93 @@
   }
 }
 
-/* Advanced glassmorphism component styles - Light Futurist */
+/* Premium glassmorphism with golden bronze borders and elegant shadows */
 @layer components {
   .glass-card {
-    background: rgba(255, 255, 255, 0.25) !important;
-    backdrop-filter: blur(70px) saturate(200%) !important;
-    -webkit-backdrop-filter: blur(70px) saturate(200%) !important;
-    border: 3px solid rgba(255, 255, 255, 0.35) !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(255, 255, 255, 0.3) !important;
-    transition: var(--liquid-transition);
-    color: rgba(255, 255, 255, 0.95);
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    background: var(--sacred-glass-bg) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 2px solid var(--sacred-glass-border) !important;
+    box-shadow: var(--sacred-glass-shadow), 0 0 20px rgba(218, 165, 32, 0.1) !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    color: var(--sacred-text-primary);
   }
 
   .glass-card:hover {
-    background: rgba(255, 255, 255, 0.3) !important;
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.35) !important;
+    background: rgba(15, 15, 35, 0.5) !important;
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: var(--sacred-glass-shadow), 0 0 30px rgba(218, 165, 32, 0.3) !important;
+    border-color: var(--sacred-amber) !important;
   }
 
   .glass-button {
     position: relative;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(70px) saturate(200%);
-    -webkit-backdrop-filter: blur(70px) saturate(200%);
-    border: 3px solid rgba(255, 255, 255, 0.35);
-    color: rgba(255, 255, 255, 0.95);
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    background: var(--sacred-glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid var(--sacred-glass-border);
+    color: var(--sacred-text-primary);
     font-weight: 600;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-
-  .glass-button::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.6s;
-  }
-
-  .glass-button:hover::before {
-    left: 100%;
+    box-shadow: 0 0 15px rgba(218, 165, 32, 0.2);
   }
 
   .glass-button:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
-  }
-
-  .glass-button:focus-visible {
-    outline: 2px solid #4f46e5;
-    outline-offset: 2px;
+    background: rgba(15, 15, 35, 0.6);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 0 25px var(--sacred-amber-glow);
+    border-color: var(--sacred-amber);
   }
 
   .handpan-note {
     position: relative;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
   }
 
   .handpan-note:hover {
-    transform: scale(1.05) translateY(-2px);
-    filter: drop-shadow(0 8px 25px rgba(0, 0, 0, 0.2));
+    transform: scale(1.08) translateY(-3px);
+    filter: drop-shadow(0 0 20px var(--sacred-amber));
   }
 
   .handpan-note:active {
-    transform: scale(1.02);
+    transform: scale(1.03);
   }
 
   .handpan-note.active {
-    animation: noteRipple 0.6s ease-out;
+    animation: sacredNoteGlow 0.6s ease-out;
   }
 
-  @keyframes noteRipple {
+  @keyframes sacredNoteGlow {
     0% {
       transform: scale(1);
-      box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+      filter: drop-shadow(0 0 0 rgba(218, 165, 32, 0));
     }
     50% {
-      transform: scale(1.05);
-      box-shadow: 0 0 0 10px rgba(79, 70, 229, 0.1);
+      transform: scale(1.1);
+      filter: drop-shadow(0 0 30px var(--sacred-amber));
     }
     100% {
       transform: scale(1);
-      box-shadow: 0 0 0 20px rgba(79, 70, 229, 0);
+      filter: drop-shadow(0 0 0 rgba(218, 165, 32, 0));
     }
   }
 
   .song-card {
-    background: rgba(255, 255, 255, 0.25) !important;
-    backdrop-filter: blur(70px) saturate(200%) !important;
-    -webkit-backdrop-filter: blur(70px) saturate(200%) !important;
-    border: 3px solid rgba(255, 255, 255, 0.35) !important;
+    background: var(--sacred-glass-bg) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 2px solid transparent !important;
+    border-image: linear-gradient(135deg, var(--sacred-bronze), var(--sacred-amber)) 1 !important;
     border-radius: 1.5rem;
     padding: 1.5rem;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(255, 255, 255, 0.3) !important;
+    box-shadow: var(--sacred-glass-shadow) !important;
     position: relative;
     overflow: hidden;
-    color: rgba(255, 255, 255, 0.95);
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    color: var(--sacred-text-primary);
   }
 
   .song-card::before {
@@ -369,11 +378,11 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #4f46e5, #7c3aed, #db2777);
+    height: 3px;
+    background: linear-gradient(90deg, var(--sacred-bronze), var(--sacred-gold), var(--sacred-amber));
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s ease;
   }
 
   .song-card:hover::before {
@@ -381,10 +390,9 @@
   }
 
   .song-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.35) !important;
-    background: rgba(255, 255, 255, 0.3) !important;
-    border-color: rgba(255, 255, 255, 0.4) !important;
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.5), 0 0 40px rgba(218, 165, 32, 0.3) !important;
+    background: rgba(15, 15, 35, 0.6) !important;
   }
 
   .progress-container {
@@ -1161,18 +1169,18 @@
   /* Added sacred slider styling */
   .sacred-slider {
     background: rgba(255, 255, 255, 0.2) !important;
-    border: 2px solid var(--holy-gold) !important;
+    border: 2px solid var(--sacred-gold) !important;
     border-radius: 10px !important;
   }
 
   .sacred-slider::-webkit-slider-thumb {
-    background: var(--holy-gold) !important;
+    background: var(--sacred-gold) !important;
     border: 2px solid var(--sacred-amber) !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
   }
 
   .sacred-slider::-moz-range-thumb {
-    background: var(--holy-gold) !important;
+    background: var(--sacred-gold) !important;
     border: 2px solid var(--sacred-amber) !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
   }
