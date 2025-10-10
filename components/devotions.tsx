@@ -14,6 +14,8 @@ const devotions = [
       "The blood of Jesus is not merely a symbol—it is the covenant seal of our righteousness. When Christ shed His blood, He didn't just cover our sins; He exchanged His righteousness for our sin. This is the great exchange: His perfection for our imperfection, His holiness for our brokenness. As you play the handpan, let each note remind you that you are not striving to become righteous—you already are righteous in Christ. The 432 Hz frequency resonates with this truth: you are in harmony with God through the blood covenant.",
     application:
       "Today, reject any thought that says you must earn God's favor. You are already favored, already righteous, already loved. Play your handpan as an act of worship, celebrating the finished work of the cross.",
+    theme: "blood-covenant",
+    color: "from-red-500/20 to-pink-500/20",
   },
   {
     title: "Cross Victory Meditation",
@@ -25,6 +27,8 @@ const devotions = [
       "The cross is not a place of defeat—it is the throne of victory. Every accusation, every legal claim against you was nailed to the cross and canceled. The enemy has no authority over you because Jesus disarmed him publicly. When you worship, you are not begging God to move on your behalf; you are celebrating the victory that has already been won. The D Kurd scale, with its contemplative minor tonality, invites you into this mystery: the cross looked like defeat but was actually the greatest triumph in history.",
     application:
       "Identify one area where you feel defeated or accused. Declare over it: 'The cross has already won this battle.' Let your handpan playing be a declaration of victory, not a plea for help.",
+    theme: "cross-victory",
+    color: "from-purple-500/20 to-blue-500/20",
   },
   {
     title: "Gospel Foundation",
@@ -36,6 +40,8 @@ const devotions = [
       "The gospel is simple yet profound: Christ died, was buried, and rose again. This is the foundation of everything. Your righteousness is not based on your performance but on His resurrection. Because He lives, you live. Because He is righteous, you are righteous. The handpan's harmonic resonance at 432 Hz mirrors this truth—everything in creation is designed to resonate with the frequency of God's love and righteousness. When you play, you are participating in the cosmic song of redemption.",
     application:
       "Meditate on the resurrection today. Jesus didn't just die for you—He rose for you. You are not defined by your past but by His future. Play your handpan as a celebration of resurrection life.",
+    theme: "gospel-foundation",
+    color: "from-green-500/20 to-emerald-500/20",
   },
 ]
 
@@ -54,9 +60,9 @@ export function Devotions() {
       </div>
 
       <div className="space-y-6 relative z-10">
-        <div className="fade-up glass-surface-frosty p-8 rounded-2xl border-2 border-white/30">
+        <div className="fade-up glass-surface-frosty p-6 md:p-8 rounded-2xl border-2 border-white/30">
           <h1
-            className="text-3xl font-bold text-white"
+            className="text-3xl md:text-4xl font-bold text-white mb-2"
             style={{
               textShadow: "0 3px 10px rgba(0, 0, 0, 0.8), 0 6px 20px rgba(0, 0, 0, 0.6)",
             }}
@@ -64,7 +70,7 @@ export function Devotions() {
             Righteousness Devotions
           </h1>
           <p
-            className="text-white text-lg mt-2"
+            className="text-white text-lg"
             style={{
               textShadow: "0 2px 8px rgba(0, 0, 0, 0.7), 0 4px 12px rgba(0, 0, 0, 0.5)",
             }}
@@ -73,33 +79,37 @@ export function Devotions() {
           </p>
         </div>
 
-        <div className="grid gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           {devotions.map((devotion, index) => {
             const Icon = devotion.icon
             return (
               <Card
                 key={devotion.title}
-                className="glass-surface-frosty fade-up border-2 border-white/30"
+                className={`glass-surface-frosty fade-up border-2 border-white/30 hover:scale-[1.02] transition-transform duration-300 ${
+                  index === 0 ? "lg:col-span-2" : ""
+                }`}
                 style={{ animationDelay: `${0.1 + index * 0.15}s` }}
               >
                 <CardHeader>
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center flex-shrink-0">
-                      <Icon className="w-6 h-6 text-white" />
+                    <div
+                      className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${devotion.color} flex items-center justify-center flex-shrink-0 border-2 border-white/20`}
+                    >
+                      <Icon className="w-7 h-7 text-white" />
                     </div>
                     <div className="flex-1">
                       <CardTitle
-                        className="text-2xl text-white"
+                        className="text-xl md:text-2xl text-white mb-2"
                         style={{
                           textShadow: "0 3px 10px rgba(0, 0, 0, 0.8), 0 6px 20px rgba(0, 0, 0, 0.6)",
                         }}
                       >
                         {devotion.title}
                       </CardTitle>
-                      <CardDescription className="mt-2">
-                        <BookOpen className="w-4 h-4 inline mr-2" />
+                      <CardDescription className="flex items-center gap-2">
+                        <BookOpen className="w-4 h-4" />
                         <span
-                          className="text-white/90"
+                          className="text-white/90 font-semibold"
                           style={{
                             textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
                           }}
@@ -111,9 +121,10 @@ export function Devotions() {
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="p-4 rounded-lg bg-white/20 border-l-4 border-primary backdrop-blur-sm">
+                  {/* Scripture verse */}
+                  <div className="p-4 rounded-xl bg-white/20 border-l-4 border-white/50 backdrop-blur-sm">
                     <p
-                      className="italic text-white leading-relaxed"
+                      className="italic text-white leading-relaxed text-sm md:text-base"
                       style={{
                         textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
                       }}
@@ -122,17 +133,18 @@ export function Devotions() {
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-lg bg-black/30 backdrop-blur-sm border-2 border-white/20">
+                  {/* Reflection */}
+                  <div className="p-4 rounded-xl bg-black/30 backdrop-blur-sm border-2 border-white/20">
                     <h4
-                      className="font-semibold mb-2 text-white"
+                      className="font-bold mb-2 text-white flex items-center gap-2"
                       style={{
                         textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
                       }}
                     >
-                      Reflection
+                      <span className="text-lg">💭</span> Reflection
                     </h4>
                     <p
-                      className="text-white/95 leading-relaxed"
+                      className="text-white/95 leading-relaxed text-sm md:text-base"
                       style={{
                         textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
                       }}
@@ -141,17 +153,18 @@ export function Devotions() {
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-lg bg-black/30 backdrop-blur-sm border-2 border-white/20">
+                  {/* Application */}
+                  <div className="p-4 rounded-xl bg-black/30 backdrop-blur-sm border-2 border-white/20">
                     <h4
-                      className="font-semibold mb-2 text-white"
+                      className="font-bold mb-2 text-white flex items-center gap-2"
                       style={{
                         textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
                       }}
                     >
-                      Application
+                      <span className="text-lg">🎯</span> Application
                     </h4>
                     <p
-                      className="text-white/95 leading-relaxed"
+                      className="text-white/95 leading-relaxed text-sm md:text-base"
                       style={{
                         textShadow: "0 2px 6px rgba(0, 0, 0, 0.7)",
                       }}
@@ -165,10 +178,11 @@ export function Devotions() {
           })}
         </div>
 
+        {/* About section */}
         <Card className="glass-surface-frosty bg-gradient-to-br from-amber-50/10 to-orange-50/10 border-2 border-white/30">
           <CardHeader>
             <CardTitle
-              className="text-white"
+              className="text-white text-xl md:text-2xl"
               style={{
                 textShadow: "0 3px 10px rgba(0, 0, 0, 0.8), 0 6px 20px rgba(0, 0, 0, 0.6)",
               }}
@@ -176,7 +190,7 @@ export function Devotions() {
               About Righteousness Theology
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3 text-sm leading-relaxed">
+          <CardContent className="space-y-3 text-sm md:text-base leading-relaxed">
             <p
               className="text-white/95"
               style={{

@@ -135,15 +135,23 @@ export default function HandpanWorshipStudio() {
     setDragOffset(0)
   }, [isDragging, dragOffset, dragStartTime, activeCard])
 
-  const handleButtonClick = useCallback((section: Section, e?: React.MouseEvent) => {
-    if (e) {
-      e.stopPropagation()
-      e.preventDefault()
-    }
-    console.log("[v0] Navigating to section:", section)
-    setActiveSection(section)
-    if (navigator.vibrate) navigator.vibrate(10)
-  }, [])
+  const handleButtonClick = useCallback(
+    (section: Section, e?: React.MouseEvent) => {
+      if (e) {
+        e.stopPropagation()
+        e.preventDefault()
+      }
+      console.log("[v0] 🔄 Navigation triggered")
+      console.log("[v0] Current section:", activeSection)
+      console.log("[v0] Target section:", section)
+
+      setActiveSection(section)
+
+      console.log("[v0] ✅ Navigation complete to:", section)
+      if (navigator.vibrate) navigator.vibrate(10)
+    },
+    [activeSection],
+  )
 
   const cardData = useMemo(
     () => [

@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState, useEffect, useRef } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Volume2, VolumeX, Play, Pause } from "@/components/icons"
@@ -142,18 +144,21 @@ export function InteractiveHandpan() {
   useEffect(() => {
     const initAudio = async () => {
       try {
+        console.log("[v0] Initializing audio engine...")
         await audioEngine.initialize()
         setAudioInitialized(true)
-        console.log("[v0] Audio engine initialized successfully")
+        console.log("[v0] ✅ Audio engine initialized successfully")
 
         const savedVolume = localStorage.getItem("handpan-volume")
         if (savedVolume) {
           const vol = Number.parseInt(savedVolume)
           setVolume(vol)
           audioEngine.setVolume(vol)
+          console.log("[v0] Restored volume from localStorage:", vol)
         }
       } catch (error) {
-        console.error("[v0] Failed to initialize audio:", error)
+        console.error("[v0] ❌ Failed to initialize audio:", error)
+        console.log("[v0] Audio will initialize on first user interaction")
       }
     }
 
@@ -182,30 +187,41 @@ export function InteractiveHandpan() {
   }, [sustain])
 
   useEffect(() => {
-    if (selectedPattern !== null && !isPlaying) {
+    if (selectedPattern !== null && isPlaying) {
       const pattern = worshipPatterns[selectedPattern]
       setHighlightedNotes(pattern.notes)
-      console.log("[v0] Pattern selected, highlighting notes:", pattern.notes)
-    } else if (!isPlaying && !activeChord) {
+      console.log("[v0] 🎵 Pattern playing:", pattern.name)
+      console.log("[v0] 🎯 Highlighting notes:", pattern.notes)
+    } else {
       setHighlightedNotes([])
+      console.log("[v0] Cleared highlighted notes")
     }
-  }, [selectedPattern, isPlaying, activeChord])
+  }, [selectedPattern, isPlaying])
 
   const playNote = async (frequency: number, note: string, x?: number, y?: number) => {
-    if (isMuted) return
+    console.log("[v0] 🎹 playNote called:", { frequency, note, x, y, isMuted, audioInitialized })
+
+    if (isMuted) {
+      console.log("[v0] ⏸️ Audio is muted, skipping playback")
+      return
+    }
 
     if (!audioInitialized) {
+      console.log("[v0] ⚠️ Audio not initialized, attempting initialization...")
       try {
         await audioEngine.initialize()
         setAudioInitialized(true)
+        console.log("[v0] ✅ Audio initialized on user interaction")
       } catch (error) {
-        console.error("[v0] Failed to initialize audio on interaction:", error)
+        console.error("[v0] ❌ Failed to initialize audio on interaction:", error)
         return
       }
     }
 
+    console.log("[v0] 🔊 Resuming audio context...")
     await audioEngine.resume()
 
+    console.log("[v0] ▶️ Playing note:", note, "at", frequency, "Hz")
     audioEngine.playNote(frequency, note, x && y ? { x, y } : undefined)
 
     setActiveNote(note)
@@ -287,18 +303,30 @@ export function InteractiveHandpan() {
 
     await audioEngine.resume()
 
-    const scaleNotes = [
-      handpanNotes.center,
-      ...handpanNotes.outerRing.filter((n) => ["A3", "Bb3", "C4", "D4", "E4", "F4", "G4", "A4", "C5"].includes(n.note)),
+    // D3→A3→Bb3→C4→D4→E4→F4→G4→A4→C5
+    const scaleNotesInOrder = [
+      { note: "D3", frequency: 144.548 }, // D3 - Root note
+      { note: "A3", frequency: 216.0 }, // A3 - Perfect fifth
+      { note: "Bb3", frequency: 228.874 }, // Bb3 - Minor sixth
+      { note: "C4", frequency: 257.432 }, // C4 - Minor seventh
+      { note: "D4", frequency: 288.0 }, // D4 - Octave
+      { note: "E4", frequency: 323.551 }, // E4 - Major second
+      { note: "F4", frequency: 342.338 }, // F4 - Minor third
+      { note: "G4", frequency: 384.444 }, // G4 - Perfect fourth
+      { note: "A4", frequency: 432.0 }, // A4 - Perfect fifth (octave)
+      { note: "C5", frequency: 514.864 }, // C5 - Minor seventh (octave)
     ]
 
-    scaleNotes.forEach((noteData, index) => {
+    console.log("[v0] 🎵 Playing D Kurd scale in frequency order")
+
+    scaleNotesInOrder.forEach((noteData, index) => {
       setTimeout(() => {
         const position =
           noteData.note === handpanNotes.center.note
             ? { x: centerX, y: centerY }
             : nonagonPositions[handpanNotes.outerRing.findIndex((n) => n.note === noteData.note)]
 
+        console.log(`[v0] Playing note ${index + 1}/10: ${noteData.note} at ${noteData.frequency}Hz`)
         playNote(noteData.frequency, noteData.note, position.x, position.y)
       }, index * 400)
     })
@@ -363,7 +391,13 @@ export function InteractiveHandpan() {
   }
 
   const isNoteHighlighted = (noteName: string) => {
-    return highlightedNotes.includes(noteName)
+    return (isPlaying && highlightedNotes.includes(noteName)) || (activeChord && highlightedNotes.includes(noteName))
+  }
+
+  const handleChordRightClick = (e: React.MouseEvent, chordKey: string) => {
+    e.preventDefault()
+    setSelectedChordForVariations(chordKey)
+    setShowChordModal(true)
   }
 
   return (
@@ -853,8 +887,8 @@ export function InteractiveHandpan() {
                 Chord Pads
               </label>
               <p className="text-xs mb-3 text-shadow-strong bg-black/15 px-2 py-1 rounded">
-                <span className="hidden md:inline">Tap to play chords</span>
-                <span className="md:hidden">Tap to play chords</span>
+                <span className="hidden md:inline">Click to play • Right-click for variations</span>
+                <span className="md:hidden">Tap to play • Long-press for variations</span>
               </p>
               <div className="grid grid-cols-3 gap-2 chord-grid-mobile">
                 {Object.entries(chordDefinitions)
@@ -863,6 +897,7 @@ export function InteractiveHandpan() {
                     <Button
                       key={key}
                       onClick={() => playChord(key)}
+                      onContextMenu={(e) => handleChordRightClick(e, key)}
                       variant={activeChord === key ? "default" : "outline"}
                       className="text-xs md:text-sm h-14 md:h-16 flex flex-col items-center justify-center font-bold shadow-lg chord-button-mobile"
                       style={{
@@ -893,10 +928,10 @@ export function InteractiveHandpan() {
           >
             <CardHeader>
               <CardTitle>Chord Variations: {selectedChordForVariations}</CardTitle>
-              <CardDescription>Explore different voicings and extensions</CardDescription>
+              <CardDescription>Explore different voicings and extensions - Click to play</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {Object.entries(chordDefinitions)
                   .filter(([key]) => {
                     const baseNote = selectedChordForVariations.replace(/[^A-G#b]/g, "")
@@ -910,12 +945,31 @@ export function InteractiveHandpan() {
                         setShowChordModal(false)
                       }}
                       variant="outline"
-                      className="h-auto py-3 flex flex-col items-start"
-                      style={{ borderColor: chord.color }}
+                      className="h-auto py-4 flex flex-col items-start gap-2 hover:bg-white/10"
+                      style={{ borderColor: chord.color, borderWidth: "2px" }}
                     >
-                      <span className="font-bold text-lg">{key}</span>
-                      <span className="text-xs text-muted-foreground">{chord.name}</span>
-                      <span className="text-xs text-muted-foreground mt-1">{chord.notes.join(", ")}</span>
+                      <div className="flex items-center justify-between w-full">
+                        <span className="font-bold text-xl">{key}</span>
+                        <span
+                          className="text-xs px-2 py-1 rounded"
+                          style={{ backgroundColor: chord.color, color: "white" }}
+                        >
+                          {chord.name}
+                        </span>
+                      </div>
+                      <div className="text-left">
+                        <p className="text-xs text-muted-foreground font-semibold mb-1">Notes to play:</p>
+                        <div className="flex gap-1 flex-wrap">
+                          {chord.notes.map((note, idx) => (
+                            <span
+                              key={idx}
+                              className="text-xs font-mono font-bold px-2 py-1 rounded bg-white/10 border border-white/20"
+                            >
+                              {note}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </Button>
                   ))}
               </div>

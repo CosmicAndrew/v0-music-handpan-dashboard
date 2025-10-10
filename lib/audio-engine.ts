@@ -40,14 +40,22 @@ export class HandpanAudioEngine {
   }
 
   async initialize() {
-    if (this.initialized) return
+    if (this.initialized) {
+      console.log("[v0] Audio engine already initialized")
+      return
+    }
 
     try {
+      console.log("[v0] Creating AudioContext...")
       this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+      console.log("[v0] AudioContext created, state:", this.audioContext.state)
+
+      console.log("[v0] Creating audio nodes...")
 
       // Create master gain
       this.masterGain = this.audioContext.createGain()
       this.masterGain.gain.value = this.settings.volume
+      console.log("[v0] Master gain created, volume:", this.settings.volume)
 
       // Create compressor for dynamic range control
       this.compressor = this.audioContext.createDynamicsCompressor()
@@ -56,20 +64,28 @@ export class HandpanAudioEngine {
       this.compressor.ratio.value = 12
       this.compressor.attack.value = 0.003
       this.compressor.release.value = 0.25
+      console.log("[v0] Compressor created")
 
       // Create reverb with impulse response
       this.reverbNode = this.audioContext.createConvolver()
       await this.createReverbImpulse()
+      console.log("[v0] Reverb node created")
 
       // Connect audio graph: reverb -> compressor -> master
       this.reverbNode.connect(this.compressor)
       this.compressor.connect(this.masterGain)
       this.masterGain.connect(this.audioContext.destination)
+      console.log("[v0] Audio graph connected")
 
       this.initialized = true
-      console.log("[v0] Enhanced audio engine initialized with reverb and compression")
+      console.log("[v0] ✅ Enhanced audio engine initialized with reverb and compression")
     } catch (error) {
-      console.error("[v0] Failed to initialize audio engine:", error)
+      console.error("[v0] ❌ Failed to initialize audio engine:", error)
+      console.error("[v0] Error details:", {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+      })
       throw error
     }
   }
@@ -95,9 +111,17 @@ export class HandpanAudioEngine {
 
   playNote(frequency: number, note: string, position?: { x: number; y: number }, duration?: number): void {
     if (!this.audioContext || !this.initialized) {
-      console.warn("[v0] Audio engine not initialized")
+      console.warn("[v0] ⚠️ Audio engine not initialized, cannot play note")
+      console.warn("[v0] State:", {
+        hasContext: !!this.audioContext,
+        initialized: this.initialized,
+        contextState: this.audioContext?.state,
+      })
       return
     }
+
+    console.log("[v0] 🎵 Playing note:", note, "at", frequency, "Hz")
+    console.log("[v0] Audio context state:", this.audioContext.state)
 
     const now = this.audioContext.currentTime
     const sustainTime = duration || this.settings.sustain * 4
@@ -134,8 +158,6 @@ export class HandpanAudioEngine {
     // Start and stop oscillator
     osc.start(now)
     osc.stop(now + sustainTime)
-
-    console.log("[v0] Playing note:", note, "at", frequency, "Hz")
   }
 
   playChord(frequencies: number[], notes: string[], duration?: number): void {
