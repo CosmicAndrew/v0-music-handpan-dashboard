@@ -13,11 +13,21 @@ interface DashboardProps {
 }
 
 export function Dashboard({ onNavigate }: DashboardProps) {
+  const [expandedCard, setExpandedCard] = useState<string | null>(null)
+
   const [stats, setStats] = useState({
     totalPracticeTime: 0,
     songsPlayed: 0,
     favoriteKey: "D Kurd",
     sessionsThisWeek: 0,
+    practiceTimeThisWeek: 0,
+    averageSessionTime: 0,
+    recentSongs: [] as string[],
+    achievements: 7,
+    latestAchievement: "Perfect Chord Master",
+    nextGoal: "Scale Virtuoso",
+    weeklyGoalProgress: 75,
+    skillLevelProgress: 70,
   })
 
   useEffect(() => {
@@ -26,22 +36,56 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       const practiceTime = Number.parseInt(localStorage.getItem("totalPracticeTime") || "0")
       const songsPlayed = Number.parseInt(localStorage.getItem("songsPlayed") || "0")
       const sessions = Number.parseInt(localStorage.getItem("sessionsThisWeek") || "0")
+      const practiceThisWeek = Number.parseInt(localStorage.getItem("practiceTimeThisWeek") || "12")
+      const recentSongsStr = localStorage.getItem("recentSongs") || "[]"
+      const recentSongs = JSON.parse(recentSongsStr)
+
+      const avgSession = sessions > 0 ? Math.round(practiceTime / sessions) : 0
 
       setStats({
         totalPracticeTime: practiceTime,
         songsPlayed: songsPlayed,
         favoriteKey: "D Kurd",
         sessionsThisWeek: sessions,
+        practiceTimeThisWeek: practiceThisWeek,
+        averageSessionTime: avgSession,
+        recentSongs: recentSongs.slice(0, 3),
+        achievements: 7,
+        latestAchievement: "Perfect Chord Master",
+        nextGoal: "Scale Virtuoso",
+        weeklyGoalProgress: Math.min(100, Math.round((practiceTime / 60) * 100)),
+        skillLevelProgress: Math.min(100, Math.round((songsPlayed / 10) * 100)),
       })
 
       console.log("[v0] ✅ DASHBOARD: Statistics loaded", {
         practiceTime,
         songsPlayed,
         sessions,
+        avgSession,
       })
     }
     loadStats()
   }, [])
+
+  const handleCardClick = (cardType: string) => {
+    console.log("[v0] 📊 DASHBOARD CARD CLICKED:", cardType)
+    setExpandedCard(expandedCard === cardType ? null : cardType)
+  }
+
+  const handleStartPractice = () => {
+    console.log("[v0] ▶️ STARTING PRACTICE SESSION")
+    onNavigate("handpan")
+  }
+
+  const handleBrowseSongs = () => {
+    console.log("[v0] 📚 OPENING LIBRARY")
+    onNavigate("songs")
+  }
+
+  const handleSetGoals = () => {
+    console.log("[v0] 🎯 OPENING GOAL SETTINGS")
+    // Future: Open goals modal
+  }
 
   const featuredSongs = [
     {
@@ -102,7 +146,6 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   const handlePlayTrack = (track: (typeof recentlyPlayed)[0]) => {
     console.log("[v0] ▶️ DASHBOARD: Playing track", track.title)
 
-    // Update statistics
     const newSongsPlayed = stats.songsPlayed + 1
     setStats((prev) => ({ ...prev, songsPlayed: newSongsPlayed }))
     localStorage.setItem("songsPlayed", newSongsPlayed.toString())
@@ -119,12 +162,41 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         </p>
       </div>
 
+      <div className="flex flex-wrap gap-3 mb-6 fade-up" style={{ animationDelay: "0.025s" }}>
+        <button
+          onClick={handleStartPractice}
+          className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 px-4 py-2 min-h-[44px] rounded-lg shadow-sm hover:shadow-md transition-all duration-200 flex items-center gap-2"
+        >
+          <span>▶️</span>
+          <span className="font-medium">Start Practice</span>
+        </button>
+        <button
+          onClick={handleBrowseSongs}
+          className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 px-4 py-2 min-h-[44px] rounded-lg shadow-sm hover:shadow-md transition-all duration-200 flex items-center gap-2"
+        >
+          <span>📚</span>
+          <span className="font-medium">Browse Songs</span>
+        </button>
+        <button
+          onClick={handleSetGoals}
+          className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 px-4 py-2 min-h-[44px] rounded-lg shadow-sm hover:shadow-md transition-all duration-200 flex items-center gap-2"
+        >
+          <span>🎯</span>
+          <span className="font-medium">Set Goals</span>
+        </button>
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 fade-up" style={{ animationDelay: "0.05s" }}>
-        <Card className="glass-card">
+        <div
+          onClick={() => handleCardClick("practice")}
+          className={`glass-card cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl ${
+            expandedCard === "practice" ? "col-span-1 sm:col-span-2 lg:col-span-4" : ""
+          }`}
+        >
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground font-medium">Practice Time</p>
+                <p className="text-sm text-muted-foreground font-medium">🕐 Practice Time</p>
                 <p className="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-1">
                   {stats.totalPracticeTime} <span className="text-lg">min</span>
                 </p>
@@ -133,36 +205,84 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                 <Clock className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
             </div>
+            {expandedCard === "practice" && (
+              <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-blue-500/10 dark:bg-blue-500/20 p-4 rounded">
+                  <p className="text-sm opacity-80">This Week</p>
+                  <p className="text-2xl font-bold">{stats.practiceTimeThisWeek} min</p>
+                </div>
+                <div className="bg-blue-500/10 dark:bg-blue-500/20 p-4 rounded">
+                  <p className="text-sm opacity-80">Sessions</p>
+                  <p className="text-2xl font-bold">{stats.sessionsThisWeek}</p>
+                </div>
+                <div className="bg-blue-500/10 dark:bg-blue-500/20 p-4 rounded">
+                  <p className="text-sm opacity-80">Avg/Session</p>
+                  <p className="text-2xl font-bold">{stats.averageSessionTime} min</p>
+                </div>
+              </div>
+            )}
           </CardContent>
-        </Card>
+        </div>
 
-        <Card className="glass-card">
+        <div
+          onClick={() => handleCardClick("songs")}
+          className={`glass-card cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl ${
+            expandedCard === "songs" ? "col-span-1 sm:col-span-2" : ""
+          }`}
+        >
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground font-medium">Songs Played</p>
+                <p className="text-sm text-muted-foreground font-medium">🎵 Songs Played</p>
                 <p className="text-3xl font-bold text-green-600 dark:text-green-400 mt-1">{stats.songsPlayed}</p>
               </div>
               <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center">
                 <Music className="w-6 h-6 text-green-600 dark:text-green-400" />
               </div>
             </div>
+            {expandedCard === "songs" && stats.recentSongs.length > 0 && (
+              <div className="mt-4 space-y-2">
+                <p className="text-sm opacity-80">Recent Favorites:</p>
+                {stats.recentSongs.map((song, index) => (
+                  <div key={index} className="bg-green-500/10 dark:bg-green-500/20 p-2 rounded text-sm">
+                    {song}
+                  </div>
+                ))}
+              </div>
+            )}
           </CardContent>
-        </Card>
+        </div>
 
-        <Card className="glass-card">
+        <div
+          onClick={() => handleCardClick("achievements")}
+          className={`glass-card cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl ${
+            expandedCard === "achievements" ? "col-span-1 sm:col-span-2" : ""
+          }`}
+        >
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground font-medium">Favorite Key</p>
-                <p className="text-3xl font-bold text-purple-600 dark:text-purple-400 mt-1">{stats.favoriteKey}</p>
+                <p className="text-sm text-muted-foreground font-medium">🏆 Achievements</p>
+                <p className="text-3xl font-bold text-purple-600 dark:text-purple-400 mt-1">{stats.achievements}</p>
               </div>
               <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
                 <Library className="w-6 h-6 text-purple-600 dark:text-purple-400" />
               </div>
             </div>
+            {expandedCard === "achievements" && (
+              <div className="mt-4 space-y-2">
+                <div className="bg-purple-500/10 dark:bg-purple-500/20 p-3 rounded">
+                  <p className="text-sm opacity-80">Latest Achievement</p>
+                  <p className="font-semibold">{stats.latestAchievement}</p>
+                </div>
+                <div className="bg-purple-500/10 dark:bg-purple-500/20 p-3 rounded">
+                  <p className="text-sm opacity-80">Next Goal</p>
+                  <p className="font-semibold">{stats.nextGoal}</p>
+                </div>
+              </div>
+            )}
           </CardContent>
-        </Card>
+        </div>
 
         <Card className="glass-card">
           <CardContent className="p-6">
@@ -179,6 +299,38 @@ export function Dashboard({ onNavigate }: DashboardProps) {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg fade-up" style={{ animationDelay: "0.075s" }}>
+        <h3 className="text-lg font-semibold mb-4">Progress This Week</h3>
+
+        <div className="space-y-4">
+          <div>
+            <div className="flex justify-between text-sm mb-1">
+              <span>Weekly Practice Goal</span>
+              <span>{stats.totalPracticeTime}/60 min</span>
+            </div>
+            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+              <div
+                className="bg-blue-600 h-2 rounded-full transition-all duration-500"
+                style={{ width: `${stats.weeklyGoalProgress}%` }}
+              ></div>
+            </div>
+          </div>
+
+          <div>
+            <div className="flex justify-between text-sm mb-1">
+              <span>Skill Development</span>
+              <span>Level {Math.floor(stats.skillLevelProgress / 10)}/10</span>
+            </div>
+            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+              <div
+                className="bg-green-600 h-2 rounded-full transition-all duration-500"
+                style={{ width: `${stats.skillLevelProgress}%` }}
+              ></div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="space-y-4 fade-up" style={{ animationDelay: "0.1s" }}>

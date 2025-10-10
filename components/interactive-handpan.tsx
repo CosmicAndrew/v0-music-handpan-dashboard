@@ -438,7 +438,7 @@ export function InteractiveHandpan() {
                 setIsMuted(!isMuted)
                 console.log("[v0] New mute state:", !isMuted)
               }}
-              className="glass-button bg-white/90 hover:bg-white mobile-touch-target"
+              className="glass-button bg-white/90 hover:bg-white mobile-touch-target min-h-[44px] min-w-[44px]"
             >
               {isMuted ? (
                 <VolumeX className="w-4 h-4 md:w-5 md:h-5 text-gray-900" />

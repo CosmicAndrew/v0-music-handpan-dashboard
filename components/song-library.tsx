@@ -463,7 +463,7 @@ export function SongLibrary() {
                     {song.chords.map((chord, idx) => (
                       <div
                         key={idx}
-                        className="px-5 py-3 rounded-lg bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 font-mono font-bold text-base md:text-lg hover:scale-105 transition-transform cursor-pointer border-2 border-amber-300/50 shadow-lg"
+                        className="px-5 py-3 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 font-mono font-bold text-base md:text-lg hover:scale-105 transition-transform cursor-pointer border-2 border-amber-300/50 shadow-lg"
                         onClick={() => handleChordClick(chord, song.title)}
                       >
                         {chord}

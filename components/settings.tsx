@@ -95,12 +95,12 @@ export function Settings({ theme, setTheme }: SettingsProps) {
   }, [theme])
 
   return (
-    <div className="min-h-screen p-6">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="min-h-screen p-4 md:p-6">
+      <div className="max-w-6xl mx-auto space-y-4 md:space-y-6">
         {/* Header */}
-        <div className="glass-elevated p-8 rounded-2xl">
+        <div className="glass-elevated p-6 md:p-8 rounded-2xl">
           <h1
-            className="text-4xl font-bold text-white mb-2"
+            className="text-3xl md:text-4xl font-bold text-white mb-2"
             style={{
               textShadow: "0 2px 8px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.4)",
             }}
@@ -108,7 +108,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
             System Settings
           </h1>
           <p
-            className="text-white/95"
+            className="text-sm md:text-base text-white/95"
             style={{
               textShadow: "0 2px 6px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3)",
             }}
@@ -118,16 +118,16 @@ export function Settings({ theme, setTheme }: SettingsProps) {
         </div>
 
         {/* Settings Grid */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-4 md:gap-6">
           {/* Appearance */}
-          <div className="glass-surface p-6 rounded-2xl space-y-4">
+          <div className="glass-surface p-4 md:p-6 rounded-2xl space-y-4">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-white/30 flex items-center justify-center text-2xl backdrop-blur-sm border-2 border-white/40">
                 🌙
               </div>
               <div>
                 <h2
-                  className="text-xl font-bold text-white"
+                  className="text-lg md:text-xl font-bold text-white"
                   style={{
                     textShadow: "0 2px 8px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.4)",
                   }}
@@ -135,7 +135,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                   Appearance
                 </h2>
                 <p
-                  className="text-sm text-white/95"
+                  className="text-xs md:text-sm text-white/95"
                   style={{
                     textShadow: "0 2px 6px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3)",
                   }}
@@ -162,7 +162,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                     forceThemeChange("light")
                     if (navigator.vibrate) navigator.vibrate(10)
                   }}
-                  className={`p-3 rounded-lg border-2 transition-all ${
+                  className={`p-3 min-h-[44px] rounded-lg border-2 transition-all ${
                     theme === "light"
                       ? "bg-white/40 border-white/60 shadow-lg scale-105"
                       : "bg-white/20 border-white/30 hover:bg-white/25"
@@ -185,7 +185,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                     forceThemeChange("dark")
                     if (navigator.vibrate) navigator.vibrate(10)
                   }}
-                  className={`p-3 rounded-lg border-2 transition-all ${
+                  className={`p-3 min-h-[44px] rounded-lg border-2 transition-all ${
                     theme === "dark"
                       ? "bg-white/40 border-white/60 shadow-lg scale-105"
                       : "bg-white/20 border-white/30 hover:bg-white/25"
@@ -208,7 +208,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                     forceThemeChange("system")
                     if (navigator.vibrate) navigator.vibrate(10)
                   }}
-                  className={`p-3 rounded-lg border-2 transition-all ${
+                  className={`p-3 min-h-[44px] rounded-lg border-2 transition-all ${
                     theme === "system"
                       ? "bg-white/40 border-white/60 shadow-lg scale-105"
                       : "bg-white/20 border-white/30 hover:bg-white/25"
@@ -239,14 +239,14 @@ export function Settings({ theme, setTheme }: SettingsProps) {
           </div>
 
           {/* Audio Preferences */}
-          <div className="glass-surface p-6 rounded-2xl space-y-4">
+          <div className="glass-surface p-4 md:p-6 rounded-2xl space-y-4">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-white/30 flex items-center justify-center text-2xl backdrop-blur-sm border-2 border-white/40">
                 🎵
               </div>
               <div>
                 <h2
-                  className="text-xl font-bold text-white"
+                  className="text-lg md:text-xl font-bold text-white"
                   style={{
                     textShadow: "0 2px 8px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.4)",
                   }}
@@ -254,7 +254,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                   Audio Preferences
                 </h2>
                 <p
-                  className="text-sm text-white/95"
+                  className="text-xs md:text-sm text-white/95"
                   style={{
                     textShadow: "0 2px 6px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3)",
                   }}
@@ -334,7 +334,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
 
               <div className="flex items-center justify-between bg-black/20 p-3 rounded-lg backdrop-blur-sm border-2 border-white/30">
                 <span
-                  className="text-sm font-bold text-white"
+                  className="text-sm md:text-base font-bold text-white"
                   style={{
                     textShadow: "0 2px 6px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3)",
                   }}
@@ -361,14 +361,14 @@ export function Settings({ theme, setTheme }: SettingsProps) {
           </div>
 
           {/* Tuning Configuration */}
-          <div className="glass-surface p-6 rounded-2xl space-y-4">
+          <div className="glass-surface p-4 md:p-6 rounded-2xl space-y-4">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-white/30 flex items-center justify-center text-2xl backdrop-blur-sm border-2 border-white/40">
                 🎚️
               </div>
               <div>
                 <h2
-                  className="text-xl font-bold text-white"
+                  className="text-lg md:text-xl font-bold text-white"
                   style={{
                     textShadow: "0 2px 8px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.4)",
                   }}
@@ -376,7 +376,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                   Tuning Configuration
                 </h2>
                 <p
-                  className="text-sm text-white/95"
+                  className="text-xs md:text-sm text-white/95"
                   style={{
                     textShadow: "0 2px 6px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3)",
                   }}
@@ -410,7 +410,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-2xl">✨</span>
                   <span
-                    className="text-sm font-bold text-white"
+                    className="text-sm md:text-base font-bold text-white"
                     style={{
                       textShadow: "0 2px 8px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3)",
                     }}
@@ -419,7 +419,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                   </span>
                 </div>
                 <p
-                  className="text-xs text-white/95 leading-relaxed"
+                  className="text-xs md:text-sm text-white/95 leading-relaxed"
                   style={{
                     textShadow: "0 2px 6px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3)",
                   }}
@@ -431,14 +431,14 @@ export function Settings({ theme, setTheme }: SettingsProps) {
           </div>
 
           {/* Practice History */}
-          <div className="glass-surface p-6 rounded-2xl space-y-4">
+          <div className="glass-surface p-4 md:p-6 rounded-2xl space-y-4">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-white/30 flex items-center justify-center text-2xl backdrop-blur-sm border-2 border-white/40">
                 📊
               </div>
               <div>
                 <h2
-                  className="text-xl font-bold text-white"
+                  className="text-lg md:text-xl font-bold text-white"
                   style={{
                     textShadow: "0 2px 8px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.4)",
                   }}
@@ -446,7 +446,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                   Practice History
                 </h2>
                 <p
-                  className="text-sm text-white/95"
+                  className="text-xs md:text-sm text-white/95"
                   style={{
                     textShadow: "0 2px 6px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3)",
                   }}
@@ -465,7 +465,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                 <div key={i} className="p-3 rounded-lg bg-white/20 border-2 border-white/30 backdrop-blur-sm">
                   <div className="flex items-center justify-between mb-1">
                     <span
-                      className="text-sm font-bold text-white"
+                      className="text-sm md:text-base font-bold text-white"
                       style={{
                         textShadow: "0 2px 8px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3)",
                       }}
@@ -473,7 +473,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                       {session.date}
                     </span>
                     <span
-                      className="text-xs text-white/95 bg-black/20 px-2 py-1 rounded font-semibold"
+                      className="text-xs md:text-sm text-white/95 bg-black/20 px-2 py-1 rounded font-semibold"
                       style={{
                         textShadow: "0 2px 6px rgba(0, 0, 0, 0.5)",
                       }}
@@ -482,7 +482,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                     </span>
                   </div>
                   <p
-                    className="text-xs text-white/90"
+                    className="text-xs md:text-sm text-white/90"
                     style={{
                       textShadow: "0 2px 6px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3)",
                     }}
@@ -495,14 +495,14 @@ export function Settings({ theme, setTheme }: SettingsProps) {
           </div>
 
           {/* Worship Sessions */}
-          <div className="glass-surface p-6 rounded-2xl space-y-4">
+          <div className="glass-surface p-4 md:p-6 rounded-2xl space-y-4">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-white/30 flex items-center justify-center text-2xl backdrop-blur-sm border-2 border-white/40">
                 ✞
               </div>
               <div>
                 <h2
-                  className="text-xl font-bold text-white"
+                  className="text-lg md:text-xl font-bold text-white"
                   style={{
                     textShadow: "0 2px 8px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.4)",
                   }}
@@ -510,7 +510,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                   Worship Sessions
                 </h2>
                 <p
-                  className="text-sm text-white/95"
+                  className="text-xs md:text-sm text-white/95"
                   style={{
                     textShadow: "0 2px 6px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3)",
                   }}
@@ -524,7 +524,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
               <div className="p-4 rounded-lg bg-white/20 border-2 border-white/30 backdrop-blur-sm">
                 <div className="flex items-center justify-between mb-2">
                   <span
-                    className="text-sm font-bold text-white"
+                    className="text-sm md:text-base font-bold text-white mb-1"
                     style={{
                       textShadow: "0 2px 8px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.4)",
                     }}
@@ -559,7 +559,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                     12
                   </div>
                   <div
-                    className="text-xs text-white/95 font-semibold"
+                    className="text-xs md:text-sm text-white/95 font-semibold"
                     style={{
                       textShadow: "0 2px 6px rgba(0, 0, 0, 0.5)",
                     }}
@@ -577,7 +577,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                     8h
                   </div>
                   <div
-                    className="text-xs text-white/95 font-semibold"
+                    className="text-xs md:text-sm text-white/95 font-semibold"
                     style={{
                       textShadow: "0 2px 6px rgba(0, 0, 0, 0.5)",
                     }}
