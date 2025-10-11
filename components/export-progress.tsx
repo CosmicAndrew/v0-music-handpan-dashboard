@@ -21,6 +21,41 @@ export function ExportProgress() {
     { icon: Check, text: "Sacred content loaded", status: "Ready", color: "text-blue-400" },
   ]
 
+  const expandedSongLibrary = [
+    { title: "Song 1", artist: "Artist 1" },
+    { title: "Song 2", artist: "Artist 2" },
+    // ... more songs
+  ]
+
+  const handleExportPlaylist = () => {
+    console.log("[v0] 📥 EXPORT: Exporting playlist...")
+
+    const playlist = {
+      name: "Sacred Handpan Worship",
+      songs: expandedSongLibrary,
+      tuning: "432Hz",
+      scale: "D Kurd",
+      exportDate: new Date().toISOString(),
+    }
+
+    const dataStr = JSON.stringify(playlist, null, 2)
+    const blob = new Blob([dataStr], { type: "application/json" })
+    const url = URL.createObjectURL(blob)
+
+    const link = document.createElement("a")
+    link.href = url
+    link.download = `handpan-worship-playlist-${Date.now()}.json`
+    link.click()
+
+    URL.revokeObjectURL(url)
+    console.log("[v0] ✅ EXPORT: Playlist exported successfully")
+  }
+
+  const handleExportAudio = () => {
+    console.log("[v0] 🎵 EXPORT: Audio export coming soon...")
+    alert("Audio recording export feature coming soon!")
+  }
+
   return (
     <div className="relative min-h-screen">
       <div className="absolute top-0 left-0 w-full h-full -z-10">
@@ -98,9 +133,16 @@ export function ExportProgress() {
                 className="w-full bg-white/20 hover:bg-white/30 text-white border border-white/20"
                 size="lg"
                 disabled={!selectedFormat}
+                onClick={() => {
+                  if (selectedFormat === "audio") {
+                    handleExportAudio()
+                  } else {
+                    handleExportPlaylist()
+                  }
+                }}
               >
                 <Download className="w-4 h-4 mr-2" />
-                Ready to Export
+                {selectedFormat ? "Export Now" : "Select Format First"}
               </Button>
             </div>
 

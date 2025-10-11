@@ -166,7 +166,7 @@ export function RecentlyPlayed() {
           </div>
 
           {/* Stats Bar */}
-          <div className="glass-card rounded-2xl p-6 mt-6">
+          <div className="glass-card rounded-2xl p-6 mt-6 text-transparent">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="flex items-center gap-4 transition-transform duration-300 hover:scale-105">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
@@ -205,7 +205,7 @@ export function RecentlyPlayed() {
         <div className="relative mb-8">
           <div
             ref={scrollContainerRef}
-            className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide cursor-grab active:cursor-grabbing"
+            className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide cursor-grab active:cursor-grabbing text-transparent"
             style={{
               scrollBehavior: isDragging ? "auto" : "smooth",
               userSelect: "none",

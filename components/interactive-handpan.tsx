@@ -12,26 +12,26 @@ import { audioEngine } from "@/lib/audio-engine"
 // Layout: clockwise from 6:00 position: A3, Bb3, D4, F4, A4, C5, G4, E4, C4
 const handpanNotes = {
   center: { note: "D3", frequency: 144.548 },
-  // Outer ring in clockwise order starting at 6:00 (bottom)
+  // Outer ring in clockwise order starting at 6:00 (bottom) with authentic angles
   outerRing: [
-    { note: "A3", frequency: 216.0, position: "6:00" },
-    { note: "Bb3", frequency: 228.874, position: "7:20" },
-    { note: "D4", frequency: 288.0, position: "8:40" },
-    { note: "F4", frequency: 342.338, position: "10:00" },
-    { note: "A4", frequency: 432.0, position: "11:20" },
-    { note: "C5", frequency: 514.864, position: "12:40" },
-    { note: "G4", frequency: 384.444, position: "2:00" },
-    { note: "E4", frequency: 323.551, position: "3:20" },
-    { note: "C4", frequency: 257.432, position: "4:40" },
+    { note: "A3", frequency: 216.0, position: "6:00", angle: 0 }, // 6:00 position
+    { note: "Bb3", frequency: 228.874, position: "7:20", angle: 40 }, // 7:20 position (was 45°)
+    { note: "D4", frequency: 288.0, position: "8:40", angle: 80 }, // 8:40 position (was 90°)
+    { note: "F4", frequency: 342.338, position: "10:00", angle: 120 }, // 10:00 position
+    { note: "A4", frequency: 432.0, position: "11:20", angle: 160 }, // 11:20 position (was 180°)
+    { note: "C5", frequency: 514.864, position: "12:40", angle: 200 }, // 12:40 position (was 225°)
+    { note: "G4", frequency: 384.444, position: "2:00", angle: 240 }, // 2:00 position
+    { note: "E4", frequency: 323.551, position: "3:20", angle: 280 }, // 3:20 position (was 315°)
+    { note: "C4", frequency: 257.432, position: "4:40", angle: 320 }, // 4:40 position (was 360°)
   ],
 }
 
-// Calculate nonagon positions using the exact mathematical formula
-// angle(i) = π/2 + i * (2π/9); pos = center + r*[cos(angle), sin(angle)]
 function calculateNonagonPositions(centerX: number, centerY: number, radius: number) {
   const positions = []
   for (let i = 0; i < 9; i++) {
-    const angle = Math.PI / 2 + i * ((2 * Math.PI) / 9)
+    // Use the authentic angles from handpanNotes.outerRing
+    const angleInDegrees = handpanNotes.outerRing[i].angle
+    const angle = (angleInDegrees * Math.PI) / 180 + Math.PI / 2 // Convert to radians and rotate
     const x = centerX + radius * Math.cos(angle)
     const y = centerY + radius * Math.sin(angle)
     positions.push({ x, y })
@@ -199,29 +199,41 @@ export function InteractiveHandpan() {
   }, [selectedPattern, isPlaying])
 
   const playNote = async (frequency: number, note: string, x?: number, y?: number) => {
-    console.log("[v0] 🎹 playNote called:", { frequency, note, x, y, isMuted, audioInitialized })
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] 🎹 playNote called:", { frequency, note, x, y, isMuted, audioInitialized })
+    }
 
     if (isMuted) {
-      console.log("[v0] ⏸️ Audio is muted, skipping playback")
+      if (process.env.NODE_ENV === "development") {
+        console.log("[v0] ⏸️ Audio is muted, skipping playback")
+      }
       return
     }
 
     if (!audioInitialized) {
-      console.log("[v0] ⚠️ Audio not initialized, attempting initialization...")
+      if (process.env.NODE_ENV === "development") {
+        console.log("[v0] ⚠️ Audio not initialized, attempting initialization...")
+      }
       try {
         await audioEngine.initialize()
         setAudioInitialized(true)
-        console.log("[v0] ✅ Audio initialized on user interaction")
+        if (process.env.NODE_ENV === "development") {
+          console.log("[v0] ✅ Audio initialized on user interaction")
+        }
       } catch (error) {
         console.error("[v0] ❌ Failed to initialize audio on interaction:", error)
         return
       }
     }
 
-    console.log("[v0] 🔊 Resuming audio context...")
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] 🔊 Resuming audio context...")
+    }
     await audioEngine.resume()
 
-    console.log("[v0] ▶️ Playing note:", note, "at", frequency, "Hz")
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] ▶️ Playing note:", note, "at", frequency, "Hz")
+    }
     audioEngine.playNote(frequency, note, x && y ? { x, y } : undefined)
 
     setActiveNote(note)
@@ -552,7 +564,7 @@ export function InteractiveHandpan() {
                 viewBox="0 0 800 800"
                 className="w-full max-w-full md:max-w-2xl touch-none select-none"
                 role="img"
-                aria-label="Interactive Handpan Instrument"
+                aria-label="Interactive Handpan Instrument - YataoPan D Kurd 10 tuned to 432Hz sacred frequency"
               >
                 <defs>
                   <radialGradient id="handpanGradient" cx="50%" cy="50%">
@@ -604,7 +616,7 @@ export function InteractiveHandpan() {
                   className="handpan-note"
                   onClick={() => playNote(handpanNotes.center.frequency, handpanNotes.center.note, centerX, centerY)}
                   role="button"
-                  aria-label={`Play center note ${handpanNotes.center.note} at ${handpanNotes.center.frequency.toFixed(1)} Hz`}
+                  aria-label={`Play center ding note ${handpanNotes.center.note} at ${handpanNotes.center.frequency.toFixed(1)} Hz - Root note and grounding tone`}
                   tabIndex={0}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
@@ -673,7 +685,7 @@ export function InteractiveHandpan() {
                       className="handpan-note"
                       onClick={() => playNote(noteData.frequency, noteData.note, pos.x, pos.y)}
                       role="button"
-                      aria-label={`Play note ${noteData.note} at ${noteData.frequency.toFixed(1)} Hz, position ${noteData.position}`}
+                      aria-label={`Play ${noteData.note} note at ${noteData.frequency.toFixed(1)} Hz, clock position ${noteData.position}`}
                       tabIndex={0}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" || e.key === " ") {

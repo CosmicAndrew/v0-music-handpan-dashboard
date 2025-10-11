@@ -94,6 +94,14 @@ export function Settings({ theme, setTheme }: SettingsProps) {
     console.log("[v0] Body classes:", body.className)
   }, [theme])
 
+  const getThemeStatus = () => {
+    if (theme === "system") {
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+      return `System (${systemTheme === "light" ? "☀️ Bright" : "🌙 Dark"} interface)`
+    }
+    return theme === "light" ? "☀️ Bright interface" : "🌙 Dark interface"
+  }
+
   return (
     <div className="min-h-screen p-4 md:p-6">
       <div className="max-w-6xl mx-auto space-y-4 md:space-y-6">
@@ -154,6 +162,14 @@ export function Settings({ theme, setTheme }: SettingsProps) {
               >
                 Theme Mode
               </label>
+
+              <div className="theme-status p-3 rounded-lg bg-white/20 border-2 border-white/30 backdrop-blur-sm mb-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-white/90">Currently using:</span>
+                  <strong className="text-white font-bold">{getThemeStatus()}</strong>
+                </div>
+              </div>
+
               <div className="grid grid-cols-3 gap-2">
                 <button
                   onClick={() => {
@@ -336,7 +352,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                 <span
                   className="text-sm md:text-base font-bold text-white"
                   style={{
-                    textShadow: "0 2px 6px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3)",
+                    textShadow: "0 2px 8px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3)",
                   }}
                 >
                   Auto-save recordings
