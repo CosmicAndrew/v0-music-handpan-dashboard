@@ -41,44 +41,62 @@ export class HandpanAudioEngine {
 
   async initialize() {
     if (this.initialized) {
-      console.log("[v0] Audio engine already initialized")
+      if (process.env.NODE_ENV === "development") {
+        console.log("[v0] Audio engine already initialized")
+      }
       return
     }
 
     try {
-      console.log("[v0] Creating AudioContext...")
+      if (process.env.NODE_ENV === "development") {
+        console.log("[v0] Creating AudioContext...")
+      }
+
       this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
-      console.log("[v0] AudioContext created, state:", this.audioContext.state)
 
-      console.log("[v0] Creating audio nodes...")
+      if (process.env.NODE_ENV === "development") {
+        console.log("[v0] AudioContext created, state:", this.audioContext.state)
+        console.log("[v0] Creating audio nodes...")
+      }
 
-      // Create master gain
       this.masterGain = this.audioContext.createGain()
       this.masterGain.gain.value = this.settings.volume
-      console.log("[v0] Master gain created, volume:", this.settings.volume)
 
-      // Create compressor for dynamic range control
+      if (process.env.NODE_ENV === "development") {
+        console.log("[v0] Master gain created, volume:", this.settings.volume)
+      }
+
       this.compressor = this.audioContext.createDynamicsCompressor()
       this.compressor.threshold.value = -24
       this.compressor.knee.value = 30
       this.compressor.ratio.value = 12
       this.compressor.attack.value = 0.003
       this.compressor.release.value = 0.25
-      console.log("[v0] Compressor created")
 
-      // Create reverb with impulse response
+      if (process.env.NODE_ENV === "development") {
+        console.log("[v0] Compressor created")
+      }
+
       this.reverbNode = this.audioContext.createConvolver()
       await this.createReverbImpulse()
-      console.log("[v0] Reverb node created")
 
-      // Connect audio graph: reverb -> compressor -> master
+      if (process.env.NODE_ENV === "development") {
+        console.log("[v0] Reverb node created")
+      }
+
       this.reverbNode.connect(this.compressor)
       this.compressor.connect(this.masterGain)
       this.masterGain.connect(this.audioContext.destination)
-      console.log("[v0] Audio graph connected")
+
+      if (process.env.NODE_ENV === "development") {
+        console.log("[v0] Audio graph connected")
+      }
 
       this.initialized = true
-      console.log("[v0] ✅ Enhanced audio engine initialized with reverb and compression")
+
+      if (process.env.NODE_ENV === "development") {
+        console.log("[v0] ✅ Enhanced audio engine initialized with reverb and compression")
+      }
     } catch (error) {
       console.error("[v0] ❌ Failed to initialize audio engine:", error)
       console.error("[v0] Error details:", {
@@ -93,7 +111,6 @@ export class HandpanAudioEngine {
   private async createReverbImpulse() {
     if (!this.audioContext || !this.reverbNode) return
 
-    // Create artificial reverb impulse response
     const sampleRate = this.audioContext.sampleRate
     const length = sampleRate * 3 // 3 second reverb
     const impulse = this.audioContext.createBuffer(2, length, sampleRate)
@@ -111,27 +128,29 @@ export class HandpanAudioEngine {
 
   playNote(frequency: number, note: string, position?: { x: number; y: number }, duration?: number): void {
     if (!this.audioContext || !this.initialized) {
-      console.warn("[v0] ⚠️ Audio engine not initialized, cannot play note")
-      console.warn("[v0] State:", {
-        hasContext: !!this.audioContext,
-        initialized: this.initialized,
-        contextState: this.audioContext?.state,
-      })
+      if (process.env.NODE_ENV === "development") {
+        console.warn("[v0] ⚠️ Audio engine not initialized, cannot play note")
+        console.warn("[v0] State:", {
+          hasContext: !!this.audioContext,
+          initialized: this.initialized,
+          contextState: this.audioContext?.state,
+        })
+      }
       return
     }
 
-    console.log("[v0] 🎵 Playing note:", note, "at", frequency, "Hz")
-    console.log("[v0] Audio context state:", this.audioContext.state)
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] 🎵 Playing note:", note, "at", frequency, "Hz")
+      console.log("[v0] Audio context state:", this.audioContext.state)
+    }
 
     const now = this.audioContext.currentTime
     const sustainTime = duration || this.settings.sustain * 4
 
-    // Create oscillator for fundamental frequency
     const osc = this.audioContext.createOscillator()
     osc.frequency.value = frequency
     osc.type = "sine"
 
-    // Create panner for spatial audio based on position
     const panner = this.audioContext.createStereoPanner()
     if (position) {
       // Map x position to stereo field (-1 to 1)
@@ -139,23 +158,18 @@ export class HandpanAudioEngine {
       panner.pan.value = Math.max(-1, Math.min(1, panValue))
     }
 
-    // Create main envelope gain
     const envelopeGain = this.audioContext.createGain()
 
-    // Connect oscillator with gain level
     osc.connect(envelopeGain)
 
-    // ADSR Envelope
     envelopeGain.gain.setValueAtTime(0, now)
     envelopeGain.gain.linearRampToValueAtTime(this.settings.volume * 0.8, now + this.settings.attack)
     envelopeGain.gain.exponentialRampToValueAtTime(this.settings.volume * 0.5, now + this.settings.attack + 0.1)
     envelopeGain.gain.exponentialRampToValueAtTime(0.01, now + sustainTime)
 
-    // Connect to effects
     envelopeGain.connect(panner)
     panner.connect(this.reverbNode!)
 
-    // Start and stop oscillator
     osc.start(now)
     osc.stop(now + sustainTime)
   }
@@ -163,14 +177,15 @@ export class HandpanAudioEngine {
   playChord(frequencies: number[], notes: string[], duration?: number): void {
     if (!this.audioContext || !this.initialized) return
 
-    // Play each note in the chord with slight timing offset for natural feel
     frequencies.forEach((freq, index) => {
       setTimeout(() => {
         this.playNote(freq, notes[index], undefined, duration)
       }, index * 50) // 50ms stagger
     })
 
-    console.log("[v0] Playing chord with notes:", notes.join(", "))
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] Playing chord with notes:", notes.join(", "))
+    }
   }
 
   updateSettings(settings: Partial<AudioEngineSettings>): void {
@@ -180,7 +195,9 @@ export class HandpanAudioEngine {
       this.masterGain.gain.value = settings.volume
     }
 
-    console.log("[v0] Audio settings updated:", this.settings)
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] Audio settings updated:", this.settings)
+    }
   }
 
   setVolume(value: number): void {
@@ -202,7 +219,10 @@ export class HandpanAudioEngine {
   async resume(): Promise<void> {
     if (this.audioContext && this.audioContext.state === "suspended") {
       await this.audioContext.resume()
-      console.log("[v0] Audio context resumed")
+
+      if (process.env.NODE_ENV === "development") {
+        console.log("[v0] Audio context resumed")
+      }
     }
   }
 
@@ -212,9 +232,11 @@ export class HandpanAudioEngine {
       this.audioContext = null
     }
     this.initialized = false
-    console.log("[v0] Audio engine disposed")
+
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] Audio engine disposed")
+    }
   }
 }
 
-// Singleton instance
 export const audioEngine = new HandpanAudioEngine()

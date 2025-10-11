@@ -99,14 +99,15 @@ export function SongLibrary() {
   }
 
   const startHandpanPractice = (song: Song) => {
-    console.log("[v0] 🎵 LIBRARY: Practice button clicked!")
-    console.log("[v0] Song title:", song.title)
-    console.log("[v0] Song artist:", song.artist)
-    console.log("[v0] Song chords:", song.chords)
-    console.log("[v0] Song key:", song.key)
-    console.log("[v0] Song tier:", song.tier)
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] 🎵 LIBRARY: Practice button clicked!")
+      console.log("[v0] Song title:", song.title)
+      console.log("[v0] Song artist:", song.artist)
+      console.log("[v0] Song chords:", song.chords)
+      console.log("[v0] Song key:", song.key)
+      console.log("[v0] Song tier:", song.tier)
+    }
 
-    // Store song data for handpan component to use
     localStorage.setItem(
       "currentSong",
       JSON.stringify({
@@ -118,36 +119,49 @@ export function SongLibrary() {
       }),
     )
 
-    console.log("[v0] ✅ LIBRARY: Song data stored in localStorage")
-    console.log("[v0] 🎹 LIBRARY: This should navigate to Handpan section")
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] ✅ LIBRARY: Song data stored in localStorage")
+      console.log("[v0] 🎹 LIBRARY: This should navigate to Handpan section")
+    }
 
-    // Update statistics
     const songsPlayed = Number.parseInt(localStorage.getItem("songsPlayed") || "0") + 1
     localStorage.setItem("songsPlayed", songsPlayed.toString())
-    console.log("[v0] 📊 LIBRARY: Updated songs played count:", songsPlayed)
+
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] 📊 LIBRARY: Updated songs played count:", songsPlayed)
+    }
   }
 
   const handleChordClick = (chord: string, songTitle: string) => {
-    console.log("[v0] 🎼 LIBRARY: Chord clicked!")
-    console.log("[v0] Chord:", chord)
-    console.log("[v0] From song:", songTitle)
-    console.log("[v0] This chord should be highlighted in the handpan view")
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] 🎼 LIBRARY: Chord clicked!")
+      console.log("[v0] Chord:", chord)
+      console.log("[v0] From song:", songTitle)
+      console.log("[v0] This chord should be highlighted in the handpan view")
+    }
   }
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    console.log("[v0] 🔍 LIBRARY: Search input changed:", value)
     setSearchQuery(value)
-    console.log("[v0] ✅ LIBRARY: Filtered results count:", filteredSongs.length)
+
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] 🔍 LIBRARY: Search input changed:", value)
+      console.log("[v0] ✅ LIBRARY: Filtered results count:", filteredSongs.length)
+    }
   }
 
   const handleTierFilter = (tier: string) => {
-    console.log("[v0] 🎯 LIBRARY: Tier filter clicked:", tier)
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] 🎯 LIBRARY: Tier filter clicked:", tier)
+    }
     setTierFilter(tier)
   }
 
   const handleKeyFilter = (key: string) => {
-    console.log("[v0] 🎹 LIBRARY: Key filter clicked:", key)
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] 🎹 LIBRARY: Key filter clicked:", key)
+    }
     setKeyFilter(key)
   }
 
@@ -304,7 +318,9 @@ export function SongLibrary() {
             {(tierFilter || keyFilter || popularityFilter || searchQuery) && (
               <Button
                 onClick={() => {
-                  console.log("[v0] ❌ LIBRARY: Clear filters button clicked")
+                  if (process.env.NODE_ENV === "development") {
+                    console.log("[v0] ❌ LIBRARY: Clear filters button clicked")
+                  }
                   clearAllFilters()
                 }}
                 variant="outline"
@@ -491,8 +507,10 @@ export function SongLibrary() {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => {
-                        console.log("[v0] 🔗 LIBRARY: External link clicked for:", song.title)
-                        console.log("[v0] Opening video URL:", song.videoUrl)
+                        if (process.env.NODE_ENV === "development") {
+                          console.log("[v0] 🔗 LIBRARY: External link clicked for:", song.title)
+                          console.log("[v0] Opening video URL:", song.videoUrl)
+                        }
                       }}
                     >
                       <ExternalLink className="w-4 h-4 md:w-5 md:h-5" />

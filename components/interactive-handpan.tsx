@@ -144,21 +144,29 @@ export function InteractiveHandpan() {
   useEffect(() => {
     const initAudio = async () => {
       try {
-        console.log("[v0] Initializing audio engine...")
+        if (process.env.NODE_ENV === "development") {
+          console.log("[v0] Initializing audio engine...")
+        }
         await audioEngine.initialize()
         setAudioInitialized(true)
-        console.log("[v0] ✅ Audio engine initialized successfully")
+        if (process.env.NODE_ENV === "development") {
+          console.log("[v0] ✅ Audio engine initialized successfully")
+        }
 
         const savedVolume = localStorage.getItem("handpan-volume")
         if (savedVolume) {
           const vol = Number.parseInt(savedVolume)
           setVolume(vol)
           audioEngine.setVolume(vol)
-          console.log("[v0] Restored volume from localStorage:", vol)
+          if (process.env.NODE_ENV === "development") {
+            console.log("[v0] Restored volume from localStorage:", vol)
+          }
         }
       } catch (error) {
         console.error("[v0] ❌ Failed to initialize audio:", error)
-        console.log("[v0] Audio will initialize on first user interaction")
+        if (process.env.NODE_ENV === "development") {
+          console.log("[v0] Audio will initialize on first user interaction")
+        }
       }
     }
 
@@ -190,11 +198,15 @@ export function InteractiveHandpan() {
     if (selectedPattern !== null && isPlaying) {
       const pattern = worshipPatterns[selectedPattern]
       setHighlightedNotes(pattern.notes)
-      console.log("[v0] 🎵 Pattern playing:", pattern.name)
-      console.log("[v0] 🎯 Highlighting notes:", pattern.notes)
+      if (process.env.NODE_ENV === "development") {
+        console.log("[v0] 🎵 Pattern playing:", pattern.name)
+        console.log("[v0] 🎯 Highlighting notes:", pattern.notes)
+      }
     } else {
       setHighlightedNotes([])
-      console.log("[v0] Cleared highlighted notes")
+      if (process.env.NODE_ENV === "development") {
+        console.log("[v0] Cleared highlighted notes")
+      }
     }
   }, [selectedPattern, isPlaying])
 

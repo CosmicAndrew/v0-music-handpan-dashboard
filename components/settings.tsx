@@ -14,7 +14,9 @@ export function Settings({ theme, setTheme }: SettingsProps) {
   const [autoSave, setAutoSave] = useState(true)
 
   const forceThemeChange = (themeName: "light" | "dark" | "system") => {
-    console.log(`[v0] FORCE THEME: ${themeName}`)
+    if (process.env.NODE_ENV === "development") {
+      console.log(`[v0] Theme change: ${themeName}`)
+    }
 
     const root = document.documentElement
     const body = document.body
@@ -29,7 +31,6 @@ export function Settings({ theme, setTheme }: SettingsProps) {
     let actualTheme = themeName
     if (themeName === "system") {
       actualTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-      console.log(`[v0] System theme detected: ${actualTheme}`)
     }
 
     // Multiple methods to ensure theme changes
@@ -42,34 +43,21 @@ export function Settings({ theme, setTheme }: SettingsProps) {
     if (actualTheme === "dark") {
       root.style.setProperty("--bg-color", "#1a1a1a")
       root.style.setProperty("--text-color", "#ffffff")
-      console.log("[v0] Applied dark theme CSS variables")
     } else {
       root.style.setProperty("--bg-color", "#ffffff")
       root.style.setProperty("--text-color", "#000000")
-      console.log("[v0] Applied light theme CSS variables")
     }
 
     // Save to localStorage
     localStorage.setItem("theme", themeName)
-
-    console.log("[v0] ✅ Theme forcefully applied")
-    console.log("[v0] Root classes:", root.className)
-    console.log("[v0] Body classes:", body.className)
-    console.log("[v0] Root data-theme:", root.getAttribute("data-theme"))
-    console.log("[v0] Body data-theme:", body.getAttribute("data-theme"))
 
     // Update state
     setTheme(themeName)
   }
 
   useEffect(() => {
-    console.log("[v0] 🎨 Theme change triggered!")
-    console.log("[v0] New theme value:", theme)
-
     const root = document.documentElement
     const body = document.body
-
-    console.log("[v0] Applying theme to DOM...")
 
     // Remove all theme classes
     root.classList.remove("light", "dark")
@@ -77,7 +65,6 @@ export function Settings({ theme, setTheme }: SettingsProps) {
 
     if (theme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-      console.log("[v0] System theme detected:", systemTheme)
       root.classList.add(systemTheme)
       body.classList.add(systemTheme)
       body.setAttribute("data-theme", systemTheme)
@@ -89,9 +76,6 @@ export function Settings({ theme, setTheme }: SettingsProps) {
 
     // Save to localStorage
     localStorage.setItem("theme", theme)
-    console.log("[v0] ✅ Theme applied:", theme)
-    console.log("[v0] Document classes:", root.className)
-    console.log("[v0] Body classes:", body.className)
   }, [theme])
 
   const getThemeStatus = () => {
@@ -173,8 +157,6 @@ export function Settings({ theme, setTheme }: SettingsProps) {
               <div className="grid grid-cols-3 gap-2">
                 <button
                   onClick={() => {
-                    console.log("[v0] ☀️ LIGHT THEME BUTTON CLICKED!")
-                    console.log("[v0] Changing theme to: light")
                     forceThemeChange("light")
                     if (navigator.vibrate) navigator.vibrate(10)
                   }}
@@ -196,8 +178,6 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                 </button>
                 <button
                   onClick={() => {
-                    console.log("[v0] 🌙 DARK THEME BUTTON CLICKED!")
-                    console.log("[v0] Changing theme to: dark")
                     forceThemeChange("dark")
                     if (navigator.vibrate) navigator.vibrate(10)
                   }}
@@ -219,8 +199,6 @@ export function Settings({ theme, setTheme }: SettingsProps) {
                 </button>
                 <button
                   onClick={() => {
-                    console.log("[v0] 💻 SYSTEM THEME BUTTON CLICKED!")
-                    console.log("[v0] Changing theme to: system")
                     forceThemeChange("system")
                     if (navigator.vibrate) navigator.vibrate(10)
                   }}
@@ -537,7 +515,7 @@ export function Settings({ theme, setTheme }: SettingsProps) {
             </div>
 
             <div className="space-y-3">
-              <div className="p-4 rounded-lg bg-white/20 border-2 border-white/30 backdrop-blur-sm">
+              <div className="p-4 rounded-lg bg-white/20 border-2 border-white/30 text-center backdrop-blur-sm">
                 <div className="flex items-center justify-between mb-2">
                   <span
                     className="text-sm md:text-base font-bold text-white mb-1"

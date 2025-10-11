@@ -31,7 +31,10 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   })
 
   useEffect(() => {
-    console.log("[v0] 📊 DASHBOARD: Loading user statistics")
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] 📊 DASHBOARD: Loading user statistics")
+    }
+
     const loadStats = () => {
       const practiceTime = Number.parseInt(localStorage.getItem("totalPracticeTime") || "0")
       const songsPlayed = Number.parseInt(localStorage.getItem("songsPlayed") || "0")
@@ -57,33 +60,43 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         skillLevelProgress: Math.min(100, Math.round((songsPlayed / 10) * 100)),
       })
 
-      console.log("[v0] ✅ DASHBOARD: Statistics loaded", {
-        practiceTime,
-        songsPlayed,
-        sessions,
-        avgSession,
-      })
+      if (process.env.NODE_ENV === "development") {
+        console.log("[v0] ✅ DASHBOARD: Statistics loaded", {
+          practiceTime,
+          songsPlayed,
+          sessions,
+          avgSession,
+        })
+      }
     }
     loadStats()
   }, [])
 
   const handleCardClick = (cardType: string) => {
-    console.log("[v0] 📊 DASHBOARD CARD CLICKED:", cardType)
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] 📊 DASHBOARD CARD CLICKED:", cardType)
+    }
     setExpandedCard(expandedCard === cardType ? null : cardType)
   }
 
   const handleStartPractice = () => {
-    console.log("[v0] ▶️ STARTING PRACTICE SESSION")
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] ▶️ STARTING PRACTICE SESSION")
+    }
     onNavigate("handpan")
   }
 
   const handleBrowseSongs = () => {
-    console.log("[v0] 📚 OPENING LIBRARY")
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] 📚 OPENING LIBRARY")
+    }
     onNavigate("songs")
   }
 
   const handleSetGoals = () => {
-    console.log("[v0] 🎯 OPENING GOAL SETTINGS")
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] 🎯 OPENING GOAL SETTINGS")
+    }
     // Future: Open goals modal
   }
 
@@ -144,13 +157,17 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   ]
 
   const handlePlayTrack = (track: (typeof recentlyPlayed)[0]) => {
-    console.log("[v0] ▶️ DASHBOARD: Playing track", track.title)
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] ▶️ DASHBOARD: Playing track", track.title)
+    }
 
     const newSongsPlayed = stats.songsPlayed + 1
     setStats((prev) => ({ ...prev, songsPlayed: newSongsPlayed }))
     localStorage.setItem("songsPlayed", newSongsPlayed.toString())
 
-    console.log("[v0] ✅ DASHBOARD: Statistics updated - Songs played:", newSongsPlayed)
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] ✅ DASHBOARD: Statistics updated - Songs played:", newSongsPlayed)
+    }
   }
 
   return (
@@ -348,7 +365,9 @@ export function Dashboard({ onNavigate }: DashboardProps) {
             variant="ghost"
             size="sm"
             onClick={() => {
-              console.log("[v0] 📚 DASHBOARD: View All button clicked - navigating to songs")
+              if (process.env.NODE_ENV === "development") {
+                console.log("[v0] 📚 DASHBOARD: View All button clicked - navigating to songs")
+              }
               onNavigate("songs")
             }}
             className="hidden md:flex"
@@ -395,7 +414,9 @@ export function Dashboard({ onNavigate }: DashboardProps) {
               variant="outline"
               className="w-full mt-6 bg-transparent hover:bg-muted/50"
               onClick={() => {
-                console.log("[v0] 📚 DASHBOARD: View All Songs button clicked")
+                if (process.env.NODE_ENV === "development") {
+                  console.log("[v0] 📚 DASHBOARD: View All Songs button clicked")
+                }
                 onNavigate("songs")
               }}
             >
@@ -433,7 +454,9 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           className="glass-card group cursor-pointer hover:scale-105 transition-transform fade-up"
           style={{ animationDelay: "0.5s" }}
           onClick={() => {
-            console.log("[v0] 🎵 Dashboard: Navigating to handpan")
+            if (process.env.NODE_ENV === "development") {
+              console.log("[v0] 🎵 Dashboard: Navigating to handpan")
+            }
             onNavigate("handpan")
           }}
         >
@@ -456,7 +479,9 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           className="glass-card group cursor-pointer hover:scale-105 transition-transform fade-up"
           style={{ animationDelay: "0.6s" }}
           onClick={() => {
-            console.log("[v0] 📚 Dashboard: Navigating to songs")
+            if (process.env.NODE_ENV === "development") {
+              console.log("[v0] 📚 Dashboard: Navigating to songs")
+            }
             onNavigate("songs")
           }}
         >
@@ -479,7 +504,9 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           className="glass-card group cursor-pointer hover:scale-105 transition-transform fade-up"
           style={{ animationDelay: "0.7s" }}
           onClick={() => {
-            console.log("[v0] 📖 Dashboard: Navigating to devotions")
+            if (process.env.NODE_ENV === "development") {
+              console.log("[v0] 📖 Dashboard: Navigating to devotions")
+            }
             onNavigate("devotions")
           }}
         >

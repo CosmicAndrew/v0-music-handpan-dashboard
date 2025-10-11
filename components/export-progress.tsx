@@ -28,7 +28,9 @@ export function ExportProgress() {
   ]
 
   const handleExportPlaylist = () => {
-    console.log("[v0] 📥 EXPORT: Exporting playlist...")
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] 📥 EXPORT: Exporting playlist...")
+    }
 
     const playlist = {
       name: "Sacred Handpan Worship",
@@ -48,11 +50,16 @@ export function ExportProgress() {
     link.click()
 
     URL.revokeObjectURL(url)
-    console.log("[v0] ✅ EXPORT: Playlist exported successfully")
+
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] ✅ EXPORT: Playlist exported successfully")
+    }
   }
 
   const handleExportAudio = () => {
-    console.log("[v0] 🎵 EXPORT: Audio export coming soon...")
+    if (process.env.NODE_ENV === "development") {
+      console.log("[v0] 🎵 EXPORT: Audio export coming soon...")
+    }
     alert("Audio recording export feature coming soon!")
   }
 
@@ -71,7 +78,6 @@ export function ExportProgress() {
 
       <div className="min-h-screen flex items-center justify-center px-4 py-12 relative z-10">
         <div className="max-w-6xl w-full space-y-8">
-          {/* Header */}
           <div className="text-center space-y-4 fade-up">
             <Badge variant="outline" className="glass-surface border-white/20 text-white/90">
               <Download className="w-3 h-3 mr-1" />
@@ -83,9 +89,7 @@ export function ExportProgress() {
             </p>
           </div>
 
-          {/* Export Grid */}
           <div className="grid lg:grid-cols-2 gap-8">
-            {/* Export Options Card */}
             <div
               className="cloudier-glass-elevated rounded-2xl p-8 space-y-6 fade-up"
               style={{ animationDelay: "0.1s" }}
@@ -146,7 +150,6 @@ export function ExportProgress() {
               </Button>
             </div>
 
-            {/* Progress Card */}
             <div
               className="cloudier-glass-elevated rounded-2xl p-8 space-y-6 fade-up"
               style={{ animationDelay: "0.2s" }}
@@ -156,7 +159,6 @@ export function ExportProgress() {
                 <p className="text-white/60">System status and readiness</p>
               </div>
 
-              {/* Stats */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="glass-surface rounded-xl p-6 text-center">
                   <div className="text-3xl font-bold text-white mb-1">40</div>
@@ -168,7 +170,6 @@ export function ExportProgress() {
                 </div>
               </div>
 
-              {/* Progress Items */}
               <div className="space-y-3">
                 {progressItems.map((item, index) => {
                   const Icon = item.icon
@@ -188,7 +189,6 @@ export function ExportProgress() {
                 })}
               </div>
 
-              {/* Overall Status */}
               <div className="glass-surface rounded-xl p-4 border border-green-400/30">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-green-400/20">

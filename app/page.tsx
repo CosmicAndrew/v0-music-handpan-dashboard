@@ -96,21 +96,9 @@ export default function HandpanWorshipStudio() {
   }, [theme])
 
   const handleThemeChange = (newTheme: "light" | "dark" | "system") => {
-    if (process.env.NODE_ENV === "development") {
-      console.log(`[v0] Theme changing from ${currentTheme} to ${newTheme}`)
-    }
-
     setCurrentTheme(newTheme)
     setTheme(newTheme)
     localStorage.setItem("theme", newTheme)
-
-    // Force immediate visual update
-    setTimeout(() => {
-      const applied = document.documentElement.getAttribute("data-theme")
-      if (process.env.NODE_ENV === "development") {
-        console.log(`[v0] Theme applied to DOM: ${applied}`)
-      }
-    }, 100)
   }
 
   const { isPulling, pullDistance } = usePullToRefresh(async () => {
@@ -214,15 +202,7 @@ export default function HandpanWorshipStudio() {
         e.stopPropagation()
         e.preventDefault()
       }
-      console.log("[v0] 🔄 Navigation button clicked!")
-      console.log("[v0] Current section:", activeSection)
-      console.log("[v0] Target section:", section)
-      console.log("[v0] Button click event:", e?.type || "programmatic")
-
       setActiveSection(section)
-
-      console.log("[v0] ✅ Navigation state updated to:", section)
-      console.log("[v0] Check if UI updated - activeSection should now be:", section)
 
       if (navigator.vibrate) navigator.vibrate(10)
     },

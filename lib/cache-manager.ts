@@ -42,7 +42,9 @@ export class CacheManager {
     try {
       const cacheNames = await caches.keys()
       await Promise.all(cacheNames.map((name) => caches.delete(name)))
-      console.log("[CacheManager] All caches cleared")
+      if (process.env.NODE_ENV === "development") {
+        console.log("[CacheManager] All caches cleared")
+      }
     } catch (error) {
       console.error("[CacheManager] Failed to clear caches:", error)
     }
@@ -66,7 +68,9 @@ export class CacheManager {
         cacheNames
           .filter((name) => !currentCaches.includes(name))
           .map((name) => {
-            console.log("[CacheManager] Deleting old cache:", name)
+            if (process.env.NODE_ENV === "development") {
+              console.log("[CacheManager] Deleting old cache:", name)
+            }
             return caches.delete(name)
           }),
       )
@@ -86,7 +90,9 @@ export class CacheManager {
         headers: { "Content-Type": "application/json" },
       })
       await cache.put(key, response)
-      console.log("[CacheManager] Data cached:", key)
+      if (process.env.NODE_ENV === "development") {
+        console.log("[CacheManager] Data cached:", key)
+      }
     } catch (error) {
       console.error("[CacheManager] Failed to cache data:", error)
     }
@@ -102,7 +108,9 @@ export class CacheManager {
       const response = await cache.match(key)
       if (response) {
         const data = await response.json()
-        console.log("[CacheManager] Data retrieved from cache:", key)
+        if (process.env.NODE_ENV === "development") {
+          console.log("[CacheManager] Data retrieved from cache:", key)
+        }
         return data
       }
       return null
@@ -114,7 +122,9 @@ export class CacheManager {
 
   async preloadSongLibrary(songs: any[]): Promise<void> {
     await this.cacheData("/api/songs", songs)
-    console.log("[CacheManager] Song library preloaded to cache")
+    if (process.env.NODE_ENV === "development") {
+      console.log("[CacheManager] Song library preloaded to cache")
+    }
   }
 
   async isOnline(): Promise<boolean> {
@@ -137,12 +147,13 @@ export class CacheManager {
     if (await this.isOnline()) {
       await callback()
     } else {
-      // Queue for background sync
       if ("serviceWorker" in navigator && "sync" in ServiceWorkerRegistration.prototype) {
         try {
           const registration = await navigator.serviceWorker.ready
           await registration.sync.register("sync-offline-actions")
-          console.log("[CacheManager] Background sync registered")
+          if (process.env.NODE_ENV === "development") {
+            console.log("[CacheManager] Background sync registered")
+          }
         } catch (error) {
           console.error("[CacheManager] Background sync failed:", error)
         }
