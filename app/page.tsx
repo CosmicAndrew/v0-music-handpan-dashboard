@@ -19,7 +19,7 @@ import { expandedSongLibrary } from "@/data/songLibrary"
 type Section = "dashboard" | "handpan" | "songs" | "devotions" | "settings" | "export"
 
 export default function HandpanWorshipStudio() {
-  const { resolvedTheme, setTheme, theme } = useTheme()
+  const { theme, setTheme } = useTheme()
   const [activeSection, setActiveSection] = useState<Section>("dashboard")
   const [activeCard, setActiveCard] = useState(1)
   const [isDragging, setIsDragging] = useState(false)
@@ -28,7 +28,6 @@ export default function HandpanWorshipStudio() {
   const [dragStartTime, setDragStartTime] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
   const cardsRef = useRef<HTMLDivElement>(null)
-  const [currentTheme, setCurrentTheme] = useState<"light" | "dark" | "system">("system")
 
   useEffect(() => {
     const preloadCache = async () => {
@@ -41,65 +40,6 @@ export default function HandpanWorshipStudio() {
 
     preloadCache()
   }, [])
-
-  useEffect(() => {
-    // Initialize theme from localStorage or default to system
-    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | "system" | null
-    setCurrentTheme(savedTheme || "system")
-  }, [])
-
-  useEffect(() => {
-    const applyTheme = () => {
-      const root = document.documentElement
-      const body = document.body
-
-      // Determine actual theme
-      let actualTheme = theme || "dark"
-      if (actualTheme === "system") {
-        actualTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-      }
-
-      // Force apply theme attributes
-      root.setAttribute("data-theme", actualTheme)
-      body.setAttribute("data-theme", actualTheme)
-      root.className = actualTheme
-      body.className = actualTheme
-
-      // Force update CSS custom properties
-      if (actualTheme === "light") {
-        root.style.setProperty("--text-primary", "#1f2937")
-        root.style.setProperty("--bg-card", "rgba(255, 255, 255, 0.15)")
-        root.style.setProperty("--border-color", "rgba(79, 70, 229, 0.25)")
-      } else {
-        root.style.setProperty("--text-primary", "#f5f5f5")
-        root.style.setProperty("--bg-card", "rgba(26, 26, 46, 0.8)")
-        root.style.setProperty("--border-color", "rgba(139, 92, 246, 0.2)")
-      }
-
-      if (process.env.NODE_ENV === "development") {
-        console.log(`[v0] Theme applied: ${actualTheme}, DOM updated`)
-      }
-    }
-
-    applyTheme()
-
-    // Listen for system theme changes
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
-    const handleChange = () => {
-      if (theme === "system") {
-        applyTheme()
-      }
-    }
-
-    mediaQuery.addEventListener("change", handleChange)
-    return () => mediaQuery.removeEventListener("change", handleChange)
-  }, [theme])
-
-  const handleThemeChange = (newTheme: "light" | "dark" | "system") => {
-    setCurrentTheme(newTheme)
-    setTheme(newTheme)
-    localStorage.setItem("theme", newTheme)
-  }
 
   const { isPulling, pullDistance } = usePullToRefresh(async () => {
     await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -284,7 +224,6 @@ export default function HandpanWorshipStudio() {
     <main
       ref={containerRef}
       className="app-container min-h-screen relative overflow-hidden pb-24 md:pb-0"
-      data-theme={resolvedTheme}
     >
       <OfflineIndicator />
 
@@ -574,7 +513,7 @@ export default function HandpanWorshipStudio() {
         )}
         {activeSection === "settings" && (
           <div className="section-card-3d">
-            <Settings theme={currentTheme} setTheme={handleThemeChange} />
+            <Settings theme={theme} setTheme={setTheme} />
           </div>
         )}
         {activeSection === "handpan" && (
