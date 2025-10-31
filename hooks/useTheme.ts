@@ -3,9 +3,9 @@
 import { useTheme as useNextTheme } from "next-themes"
 
 export function useTheme() {
-  const { theme, setTheme } = useNextTheme()
+  const { theme, setTheme, resolvedTheme } = useNextTheme()
 
   // Additional functionality can be added here if needed
 
-  return { theme, setTheme }
+  return { theme, setTheme, resolvedTheme }
 }
