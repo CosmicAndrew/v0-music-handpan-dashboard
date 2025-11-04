@@ -16,6 +16,10 @@ interface RecentSong {
   compatibility: "perfect" | "strong" | "creative"
 }
 
+interface RecentlyPlayedProps {
+  onNavigateToLibrary?: () => void
+}
+
 const recentlyPlayedSongs: RecentSong[] = [
   {
     id: 1,
@@ -79,7 +83,7 @@ const recentlyPlayedSongs: RecentSong[] = [
   },
 ]
 
-export function RecentlyPlayed() {
+export function RecentlyPlayed({ onNavigateToLibrary }: RecentlyPlayedProps = {}) {
   const [playingId, setPlayingId] = useState<number | null>(null)
   const [hoveredId, setHoveredId] = useState<number | null>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -166,7 +170,7 @@ export function RecentlyPlayed() {
           </div>
 
           {/* Stats Bar */}
-          <div className="glass-card rounded-2xl p-6 mt-6 text-transparent">
+          <div className="glass-card rounded-2xl p-6 mt-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="flex items-center gap-4 transition-transform duration-300 hover:scale-105">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
@@ -205,7 +209,7 @@ export function RecentlyPlayed() {
         <div className="relative mb-8">
           <div
             ref={scrollContainerRef}
-            className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide cursor-grab active:cursor-grabbing text-transparent"
+            className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide cursor-grab active:cursor-grabbing"
             style={{
               scrollBehavior: isDragging ? "auto" : "smooth",
               userSelect: "none",
@@ -346,7 +350,12 @@ export function RecentlyPlayed() {
             </div>
             <h3 className="text-2xl font-bold text-white mb-2">No Recent Plays</h3>
             <p className="text-white/80 mb-6">Start your worship journey by playing a song from the library</p>
-            <button className="studio-button primary">Browse Library</button>
+            <button
+              className="studio-button primary"
+              onClick={() => onNavigateToLibrary?.()}
+            >
+              Browse Library
+            </button>
           </div>
         )}
       </div>

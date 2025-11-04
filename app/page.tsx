@@ -568,7 +568,7 @@ export default function HandpanWorshipStudio() {
             </div>
 
             <div className="max-w-7xl mx-auto py-8 md:py-12">
-              <RecentlyPlayed />
+              <RecentlyPlayed onNavigateToLibrary={() => handleButtonClick("songs")} />
             </div>
           </div>
         )}

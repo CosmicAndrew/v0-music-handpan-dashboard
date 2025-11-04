@@ -1,27 +1,29 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter, Outfit, Crimson_Text } from "next/font/google"
+// Temporarily disabled Google Fonts due to network limitations
+// import { Inter, Outfit, Crimson_Text } from "next/font/google"
 import "./globals.css"
 import { Suspense } from "react"
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-})
+// Use system font fallbacks
+// const inter = Inter({
+//   subsets: ["latin"],
+//   variable: "--font-inter",
+//   display: "swap",
+// })
 
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
-  display: "swap",
-})
+// const outfit = Outfit({
+//   subsets: ["latin"],
+//   variable: "--font-outfit",
+//   display: "swap",
+// })
 
-const crimsonText = Crimson_Text({
-  weight: ["400", "600", "700"],
-  subsets: ["latin"],
-  variable: "--font-crimson",
-  display: "swap",
-})
+// const crimsonText = Crimson_Text({
+//   weight: ["400", "600", "700"],
+//   subsets: ["latin"],
+//   variable: "--font-crimson",
+//   display: "swap",
+// })
 
 export const metadata: Metadata = {
   title: "Sacred Handpan Worship Studio - 432 Hz",
@@ -48,7 +50,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${outfit.variable} ${inter.variable} ${crimsonText.variable}`}>
+    <html lang="en">
       <head>
         <meta name="theme-color" content="#0f0f23" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
