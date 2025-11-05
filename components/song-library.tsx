@@ -514,8 +514,8 @@ export function SongLibrary() {
                       }}
                     >
                       <ExternalLink className="w-4 h-4 md:w-5 md:h-5" />
-                      <span className="hidden sm:inline">Add to Setlist</span>
-                      <span className="sm:hidden">Add</span>
+                      <span className="hidden sm:inline">Watch Video</span>
+                      <span className="sm:hidden">Watch</span>
                     </a>
                   </Button>
                 </div>

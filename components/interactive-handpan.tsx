@@ -131,6 +131,7 @@ export function InteractiveHandpan() {
   const recordingStartTimeRef = useRef<number>(0)
   const [showInfo, setShowInfo] = useState(false)
   const [audioInitialized, setAudioInitialized] = useState(false)
+  const [frequencyTuning, setFrequencyTuning] = useState<"432hz" | "440hz">("432hz")
 
   const patternTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -799,9 +800,13 @@ export function InteractiveHandpan() {
               {/* Frequency Tuning */}
               <div>
                 <label className="text-sm font-medium mb-2 block">Frequency Tuning</label>
-                <select className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm">
-                  <option>432Hz (Sacred)</option>
-                  <option>440Hz (Standard)</option>
+                <select
+                  value={frequencyTuning}
+                  onChange={(e) => setFrequencyTuning(e.target.value as "432hz" | "440hz")}
+                  className="w-full px-4 py-3 rounded-lg bg-white/95 dark:bg-white/90 text-gray-900 font-medium border-2 border-white/30 shadow-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                >
+                  <option value="432hz">432Hz (Sacred)</option>
+                  <option value="440hz">440Hz (Standard)</option>
                 </select>
               </div>
 
